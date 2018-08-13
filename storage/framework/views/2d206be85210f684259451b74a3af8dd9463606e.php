@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title><?php echo e(config('app.name', 'Laravel')); ?></title>
+    <title>FACIN | Facturación e Inventario</title>
 
     <!-- Scripts -->
     <script src="<?php echo e(asset('js/app.js')); ?>" defer></script>
@@ -19,15 +19,45 @@
 
     <!-- Styles -->
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
+	
+	
+	
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Bootstrap Core CSS -->
+<link href="<?php echo e(asset('css/bootstrap.css')); ?>" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link href="<?php echo e(asset('css/style.css')); ?>" rel='stylesheet' type='text/css' />
+<!-- font CSS -->
+<!-- font-awesome icons -->
+<link href="<?php echo e(asset('css/font-awesome.css')); ?>" rel="stylesheet"> 
+<!-- //font-awesome icons -->
+ <!-- js-->
+<script src="<?php echo e(asset('js/jquery-1.11.1.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/modernizr.custom.js')); ?>"></script>
+<!--webfonts-->
+<link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+<!--//webfonts--> 
+<!--animate-->
+<link href="<?php echo e(asset('css/animate.css')); ?>" rel="stylesheet" type="text/css" media="all">
+<script src="<?php echo e(asset('js/wow.min.js')); ?>"></script>
+	<script>
+		 new WOW().init();
+	</script>
+<!--//end-animate-->
+<!-- Metis Menu -->
+<script src="<?php echo e(asset('js/metisMenu.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/custom.js')); ?>"></script>
+<link href="<?php echo e(asset('css/custom.css')); ?>" rel="stylesheet">
+<!--//Metis Menu -->
+	
 </head>
-<body>
-    <div id="app">
+<body class="cbp-spmenu-push">
+    <div class="main-content">
+	
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="<?php echo e(url('/')); ?>">
-                    <?php echo e(config('app.name', 'Laravel')); ?>
 
-                </a>
+                <a class="navbar-brand" href="<?php echo e(url('/welcome')); ?>"><img href="<?php echo e(asset('images/Logo.png')); ?>"></img></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="<?php echo e(__('Toggle navigation')); ?>">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -42,12 +72,8 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         <?php if(auth()->guard()->guest()): ?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?php echo e(route('login')); ?>"><?php echo e(__('Login')); ?></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?php echo e(route('register')); ?>"><?php echo e(__('Register')); ?></a>
-                            </li>
+                            <li><a class="navbar-brand" href="<?php echo e(route('login')); ?>">Inicio de Sesión</a></li>
+                            <li><a class="navbar-brand" href="<?php echo e(route('register')); ?>">Registrarse</a></li>
                         <?php else: ?>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -73,9 +99,34 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main style="background-size: cover; background-image: url('<?php echo e(asset('images/Fondo.png')); ?>');" class="py-4">
             <?php echo $__env->yieldContent('content'); ?>
         </main>
     </div>
+	<script src="<?php echo e(asset('js/classie.js')); ?>"></script>
+		<script>
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				showLeftPush = document.getElementById( 'showLeftPush' ),
+				body = document.body;
+				
+			showLeftPush.onclick = function() {
+				classie.toggle( this, 'active' );
+				classie.toggle( body, 'cbp-spmenu-push-toright' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+				disableOther( 'showLeftPush' );
+			};
+			
+			function disableOther( button ) {
+				if( button !== 'showLeftPush' ) {
+					classie.toggle( showLeftPush, 'disabled' );
+				}
+			}
+		</script>
+	<!--scrolling js-->
+	<script src="<?php echo e(asset('js/jquery.nicescroll.js')); ?>"></script>
+	<script src="<?php echo e(asset('js/scripts.js')); ?>"></script>
+	<!--//scrolling js-->
+	<!-- Bootstrap Core JavaScript -->
+   <script src="<?php echo e(asset('js/bootstrap.js')); ?>"> </script>
 </body>
 </html>

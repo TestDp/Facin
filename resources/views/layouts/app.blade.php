@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>FACIN | Facturación e Inventario</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -19,13 +19,45 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+	
+	
+	
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Bootstrap Core CSS -->
+<link href="{{ asset('css/bootstrap.css') }}" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link href="{{ asset('css/style.css') }}" rel='stylesheet' type='text/css' />
+<!-- font CSS -->
+<!-- font-awesome icons -->
+<link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet"> 
+<!-- //font-awesome icons -->
+ <!-- js-->
+<script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
+<script src="{{ asset('js/modernizr.custom.js') }}"></script>
+<!--webfonts-->
+<link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+<!--//webfonts--> 
+<!--animate-->
+<link href="{{ asset('css/animate.css') }}" rel="stylesheet" type="text/css" media="all">
+<script src="{{ asset('js/wow.min.js') }}"></script>
+	<script>
+		 new WOW().init();
+	</script>
+<!--//end-animate-->
+<!-- Metis Menu -->
+<script src="{{ asset('js/metisMenu.min.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
+<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+<!--//Metis Menu -->
+	
 </head>
-<body>
-    <div id="app">
+<body class="cbp-spmenu-push">
+    <div class="main-content">
+	
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
 
-                <a class="navbar-brand" href="{{ url('/welcome') }}">FACIN</a>
+                <a class="navbar-brand" href="{{ url('/welcome') }}"><img href="{{ asset('images/Logo.png') }}"></img></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -66,9 +98,34 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main style="background-size: cover; background-image: url('{{ asset('images/Fondo.png') }}');" class="py-4">
             @yield('content')
         </main>
     </div>
+	<script src="{{ asset('js/classie.js') }}"></script>
+		<script>
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				showLeftPush = document.getElementById( 'showLeftPush' ),
+				body = document.body;
+				
+			showLeftPush.onclick = function() {
+				classie.toggle( this, 'active' );
+				classie.toggle( body, 'cbp-spmenu-push-toright' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+				disableOther( 'showLeftPush' );
+			};
+			
+			function disableOther( button ) {
+				if( button !== 'showLeftPush' ) {
+					classie.toggle( showLeftPush, 'disabled' );
+				}
+			}
+		</script>
+	<!--scrolling js-->
+	<script src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+	<script src="{{ asset('js/scripts.js') }}"></script>
+	<!--//scrolling js-->
+	<!-- Bootstrap Core JavaScript -->
+   <script src="{{ asset('js/bootstrap.js') }}"> </script>
 </body>
 </html>
