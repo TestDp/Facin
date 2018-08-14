@@ -22,8 +22,6 @@ class CrearTablaProductos extends Migration
             $table->string('Imagen_Producto');
             $table->integer('Categoria_id')->unsigned();
             $table->foreign('Categoria_id')->references('id')->on('Tbl_Categorias');
-            $table->integer('Proveedor_id')->unsigned();
-            $table->foreign('Proveedor_id')->references('id')->on('Tbl_Proveedores');
             $table->timestamps();
         });
     }
