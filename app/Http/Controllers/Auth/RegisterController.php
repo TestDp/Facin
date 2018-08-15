@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Facin\Datos\Modelos\MEmpresa\Empresa;
+use Facin\Datos\Modelos\MEmpresa\Sede;
+use Facin\Datos\Modelos\MSistema\Rol;
+use http\Env\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -65,12 +69,37 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'last_name' => $data['last_name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        $empresa = Empresa::create([
+            'NitEmpresa'=> $data['NitEmpresa'],
+            'TipoDocumento'=> 'CC',
+            'IdentificacionRepresentante'=> $data['IdentificacionRepresentante'],
+            'RazonSocial'=> $data['RazonSocial'],
+            'Direccion'=> $data['Direccion'],
+            'Telefono'=> $data['Telefono'],
+            'CorreoElectronico'=> $data['CorreoElectronico'],
+            'SitioWeb'=> $data['SitioWeb'],
+            'EsActiva'=> 0,
+            'LogoEmpresa'=> 'Imagen logo Empresa'
+        ]);
+        $sede = Sede::create([
+            'Nombre' => 'Sede '.$data['RazonSocial'],
+            'Direccion' => $data['Direccion'],
+            'Telefono' => $data['Telefono'],
+            'Empresa_id' =>$empresa->id
+        ]);
+
+        $user
+            ->roles()
+            ->attach(Rol::where('Nombre', 'Admin')->first());
+
+        return $user;
     }
+
 }

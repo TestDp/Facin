@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Facin\Datos\Modelos\MEmpresa\Sede;
+use Facin\Datos\Modelos\MSistema\Rol;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -15,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','last_name','username', 'email', 'password'
+        'name','last_name','username', 'email', 'password','Sede_id'
     ];
 
     /**
@@ -30,7 +32,11 @@ class User extends Authenticatable
     public function roles()
     {
         return $this
-            ->belongsToMany('Facin\Datos\Modelos\MSistema\Rol')
+            ->belongsToMany(Rol::class,'Tbl_Roles_Por_Usuarios','user_id','Rol_id')
             ->withTimestamps();
+    }
+    public function Sede()
+    {
+        return $this->belongsTo(Sede::class);
     }
 }
