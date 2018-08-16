@@ -72,8 +72,8 @@
 							<a href="index.html" class="active"><i class="fa fa-home nav_icon"></i>Dashboard</a>
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-cogs nav_icon"></i>Components <span class="nav-badge">12</span> <span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level collapse">
+							<a href="#ulInventario" data-toggle="collapse"><i class="fa fa-cogs nav_icon"></i>Inventario <span class="nav-badge">12</span> <span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse" id="ulInventario">
 								<li>
 									<a href="grids.html">Grid System</a>
 								</li>

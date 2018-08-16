@@ -19,7 +19,7 @@ class Sede extends  Model
 
     public function Empresa()
     {
-        return $this->belongsTo(Empresa::class);
+        return $this->belongsTo(Empresa::class,'Empresa_id');
     }
 
     public function Usuarios(){

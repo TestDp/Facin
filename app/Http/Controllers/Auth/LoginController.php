@@ -55,4 +55,10 @@ class LoginController extends Controller
     {
         return 'login';
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if($user->Sede->Empresa->EsActiva==0)
+            return redirect('/welcome');
+    }
 }

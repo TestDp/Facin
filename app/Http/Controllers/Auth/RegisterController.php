@@ -8,6 +8,7 @@ use Facin\Datos\Modelos\MEmpresa\Empresa;
 use Facin\Datos\Modelos\MEmpresa\Sede;
 use Facin\Datos\Modelos\MSistema\Rol;
 use http\Env\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -58,6 +59,8 @@ class RegisterController extends Controller
             'username' => 'required|max:15|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'CorreoElectronico'=>'required|string|email|max:255',
+            'SitioWeb' =>'required|string|url|max:255'
         ]);
     }
 
@@ -69,37 +72,44 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'last_name' => $data['last_name'],
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-        $empresa = Empresa::create([
-            'NitEmpresa'=> $data['NitEmpresa'],
-            'TipoDocumento'=> 'CC',
-            'IdentificacionRepresentante'=> $data['IdentificacionRepresentante'],
-            'RazonSocial'=> $data['RazonSocial'],
-            'Direccion'=> $data['Direccion'],
-            'Telefono'=> $data['Telefono'],
-            'CorreoElectronico'=> $data['CorreoElectronico'],
-            'SitioWeb'=> $data['SitioWeb'],
-            'EsActiva'=> 0,
-            'LogoEmpresa'=> 'Imagen logo Empresa'
-        ]);
-        $sede = Sede::create([
-            'Nombre' => 'Sede '.$data['RazonSocial'],
-            'Direccion' => $data['Direccion'],
-            'Telefono' => $data['Telefono'],
-            'Empresa_id' =>$empresa->id
-        ]);
-
-        $user
-            ->roles()
-            ->attach(Rol::where('Nombre', 'Admin')->first());
-
-        return $user;
+        DB::beginTransaction();
+        try {
+            $empresa = Empresa::create([
+                'NitEmpresa'=> $data['NitEmpresa'],
+                'TipoDocumento'=> 'CC',
+                'IdentificacionRepresentante'=> $data['IdentificacionRepresentante'],
+                'RazonSocial'=> $data['RazonSocial'],
+                'Direccion'=> $data['Direccion'],
+                'Telefono'=> $data['Telefono'],
+                'CorreoElectronico'=> $data['CorreoElectronico'],
+                'SitioWeb'=> $data['SitioWeb'],
+                'EsActiva'=> 0,
+                'LogoEmpresa'=> 'Imagen logo Empresa'
+            ]);
+            $sede = Sede::create([
+                'Nombre' => 'Sede '.$data['RazonSocial'],
+                'Direccion' => $data['Direccion'],
+                'Telefono' => $data['Telefono'],
+                'Empresa_id' =>$empresa->id
+            ]);
+            $user = User::create([
+                'name' => $data['name'],
+                'last_name' => $data['last_name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'Sede_id' =>$sede->id
+            ]);
+            $user
+                ->roles()
+                ->attach(Rol::where('Nombre', 'Admin')->first());
+            DB::commit();
+            return $user;
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            DB::rollback();
+            return ['respuesta' => false, 'error' => $error];
+        }
     }
 
 }

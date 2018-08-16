@@ -37,6 +37,6 @@ class User extends Authenticatable
     }
     public function Sede()
     {
-        return $this->belongsTo(Sede::class);
+        return $this->belongsTo(Sede::class,'Sede_id');
     }
 }
