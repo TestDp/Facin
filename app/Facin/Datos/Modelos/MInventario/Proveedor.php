@@ -14,5 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 class Proveedor extends Model
 {
     protected $table = 'Tbl_Proveedores';
-    protected $fillable =['Nombre','Descripcion'];
+    protected $fillable =['Nombre','Apellidos','Nit','Identificacion','Descripcion','CorreoElectronico',
+        'Telefono','Celular','Terminos_De_Pago'];
 }

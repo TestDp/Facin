@@ -22,3 +22,7 @@ Route::get('/welcome', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('crearProveedor', 'MInventario\ProveedorController@CrearProveedor')->name('crearProveedor');//cargar la vista para crear un proveedor
+Route::post('guardarProveedor', 'MInventario\ProveedorController@GuardarProveedor')->name('guardarProveedor');//Guardar la informacion del proveedor
+Route::get('proveedores', 'MInventario\ProveedorController@ObtenerProveedores')->name('proveedores');//cargar la lista de proveedores
