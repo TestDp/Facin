@@ -9,6 +9,8 @@
 namespace Facin\Datos\Modelos\MEmpresa;
 
 
+use Facin\Datos\Modelos\MInventario\Categoria;
+use Facin\Datos\Modelos\MInventario\Proveedor;
 use Illuminate\Database\Eloquent\Model;
 
 class Empresa extends Model
@@ -19,5 +21,13 @@ class Empresa extends Model
 
     public function Sedes(){
         return $this->hasMany(Sede::class,'Empresa_id','id');
+    }
+
+    public function Proveedores(){
+        return $this->hasMany(Proveedor::class,'Empresa_id','id');
+    }
+
+    public function Categorias(){
+        return $this->hasMany(Categoria::class,'Empresa_id','id');
     }
 }

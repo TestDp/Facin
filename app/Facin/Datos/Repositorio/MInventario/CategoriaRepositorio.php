@@ -2,25 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: DPS-C
- * Date: 21/08/2018
- * Time: 1:17 PM
+ * Date: 24/08/2018
+ * Time: 9:54 PM
  */
 
 namespace Facin\Datos\Repositorio\MInventario;
 
 
-use Facin\Datos\Modelos\MInventario\Proveedor;
+use Facin\Datos\Modelos\MInventario\Categoria;
 use Illuminate\Support\Facades\DB;
 
-class ProveedorRepositorio
+class CategoriaRepositorio
 {
-
-    public  function GuardarProveedor($request)
+    public  function GuardarCategoria($Categoria)
     {
         DB::beginTransaction();
         try {
-            $proveedor = new Proveedor($request);
-            $proveedor->save();
+            $categoria = new Categoria($Categoria);
+            $categoria->save();
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -31,8 +30,8 @@ class ProveedorRepositorio
         }
     }
 
-    public  function  ObtenerListaProveedores($idEmpreesa)
+    public  function  ObtenerListaCategorias($idEmpreesa)
     {
-        return Proveedor::where('Empresa_id', '=', $idEmpreesa)->get();;
+        return Categoria::where('Empresa_id', '=', $idEmpreesa)->get();
     }
 }

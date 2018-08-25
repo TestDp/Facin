@@ -3,6 +3,7 @@
 @section('content')
     <form id="formProveedor">
         <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" id="Empresa_id" name="Empresa_id" >
         <div class="container">
             <div class="row justify-content-center">
                 <div class="panel">
@@ -10,43 +11,55 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Nombre</label>
+                                Nombre
                                 <input id="Nombre" name="Nombre" type="text" class="form-control">
                             </div>
                             <div class="col-md-4">
-                                <label>Apellidos</label>
+                                Apellidos
                                 <input id="Apellidos" name="Apellidos" type="text" class="form-control">
                             </div>
                             <div class="col-md-4">
-                                <label>Nit</label>
+                                Nit
                                 <input id="Nit" name="Nit" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Identificación</label>
+                                Tipo Documento
+                                <select id="TipoDocumento_id" name="TipoDocumento_id"  class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    @foreach($listDoc as $tipo)
+                                        <option value="{{ $tipo->id }}">{{ $tipo->Nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                Identificación
                                 <input id="Identificacion" name="Identificacion" type="text" class="form-control">
                             </div>
                             <div class="col-md-4">
-                                <label>Correco Electrónico</label>
+                                Correco Electrónico
                                 <input id="CorreoElectronico" name="CorreoElectronico" type="text" class="form-control">
                             </div>
-                            <div class="col-md-4">
-                                <label>Teléfono</label>
-                                <input id="Telefono" name="Telefono" type="text" class="form-control">
-                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Celular</label>
+                                Teléfono
+                                <input id="Telefono" name="Telefono" type="text" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                Celular
                                 <input id="Celular" name="Celular" type="text" class="form-control">
                             </div>
                             <div class="col-md-4">
-                                <label>Terminos de Pago</label>
+                                Terminos de Pago
                                 <input id="Terminos_De_Pago" name="Terminos_De_Pago" type="text" class="form-control">
                             </div>
-                            <div class="col-md-4">
-                                <label>Descripción</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                Descripción
                                 <input id="Descripcion" name="Descripcion" type="text" class="form-control">
                             </div>
                         </div>

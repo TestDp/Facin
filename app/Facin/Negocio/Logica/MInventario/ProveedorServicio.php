@@ -23,8 +23,8 @@ class ProveedorServicio
         return $this->proveedorRepositorio->GuardarProveedor($request);
     }
 
-    public  function  ObtenerListaProveedores()
+    public  function  ObtenerListaProveedores($idEmpreesa)
     {
-        return $this->proveedorRepositorio->ObtenerListaProveedores();
+        return $this->proveedorRepositorio->ObtenerListaProveedores($idEmpreesa);
     }
 }
