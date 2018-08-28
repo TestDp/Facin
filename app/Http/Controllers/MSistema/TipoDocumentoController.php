@@ -34,7 +34,7 @@ class TipoDocumentoController extends Controller
         }else return view('MSistema/TipoDocumento/crearTipoDocumento');
     }
 
-    //Metodo para el tipo de documento
+    //Metodo para guardar el tipo de documento
     public  function GuardarTipoDocumento(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin']);

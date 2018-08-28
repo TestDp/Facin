@@ -4,7 +4,7 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="panel">
+            <div class="panel panel-success">
                 <div class="panel-heading"><h3>Tipos de Documentos</h3></div>
                 <div class="panel-body">
                     <table class="table">

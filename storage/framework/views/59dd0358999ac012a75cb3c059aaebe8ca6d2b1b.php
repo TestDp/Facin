@@ -151,7 +151,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="CorreoElectronico" class="col-md-4 col-form-label text-md-right"><?php echo e(__('Correo Electrónico')); ?></label>
+                            <label for="CorreoElectronico" class="col-md-4 col-form-label text-md-right"><?php echo e(__('Correo Corporativo')); ?></label>
 
                             <div class="col-md-6">
                                 <input id="CorreoElectronico" type="text" class="form-control<?php echo e($errors->has('CorreoElectronico') ? ' is-invalid' : ''); ?>" name="CorreoElectronico" value="<?php echo e(old('CorreoElectronico')); ?>" required autofocus>

@@ -10,6 +10,7 @@ namespace Facin\Datos\Modelos\MEmpresa;
 
 
 use App\User;
+use Facin\Datos\Modelos\MInventario\Almacen;
 use Illuminate\Database\Eloquent\Model;
 
 class Sede extends  Model
@@ -24,5 +25,9 @@ class Sede extends  Model
 
     public function Usuarios(){
         return $this->hasMany(User::class,'Sede_id','id');
+    }
+
+    public function Almacenes(){
+        return $this->hasMany(Almacen::class,'Sede_id','id');
     }
 }

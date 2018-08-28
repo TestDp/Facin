@@ -4,7 +4,7 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="panel">
+            <div class="panel panel-success">
                 <div class="panel-heading"><h3>Proveedores</h3></div>
                 <div class="panel-body">
                     <table class="table">
@@ -29,7 +29,12 @@
                         @endforeach
                         </tbody>
                     </table>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button onclick="ajaxRenderSectionCrearProveedor()" type="button" class="btn btn-success">Nuevo Proveedor</button>
+                        </div>
 
+                    </div>
                 </div>
             </div>
 

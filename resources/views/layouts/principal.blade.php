@@ -36,7 +36,8 @@
     <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
     <!-- //font-awesome icons -->
     <!-- js-->
-    <script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
+     <script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
+
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <!--webfonts-->
     <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic'
@@ -65,6 +66,10 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <!--//Metis Menu -->
 
+
+    <!-- js de los plugins-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </head>
 <body class="cbp-spmenu-push">
 <div class="main-content">
@@ -77,18 +82,18 @@
                         <a href="index.html" class="active"><i class="fa fa-home nav_icon"></i>Dashboard</a>
                     </li>
                     <li>
-                        <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-cogs nav_icon"></i>Inventario
-                            <span class="nav-badge">12</span> <span class="fa arrow"></span></a>
+                        <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Inventario
+                             <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" id="ulInventario">
                             <li>
                                 <a href="#ulInventarioProductos" data-toggle="collapse">Productos <span
                                             class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level collapse" id="ulInventarioProductos">
                                     <li>
-                                        <a href="#">Lista Productos</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaProductos()">Lista Productos</a>
                                     </li>
                                     <li>
-                                        <a href="#">Crear Producto</a>
+                                        <a href="#" onclick="ajaxRenderSectionCrearProducto()">Crear Producto</a>
                                     </li>
                                 </ul>
                             </li>
@@ -102,8 +107,6 @@
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionCrearProveedor()">Crear Proveedor</a>
                                     </li>
-
-                                    <li>
                                 </ul>
                             </li>
                             <li>
@@ -116,7 +119,6 @@
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionCrearCategoria()">Crear Categoria</a>
                                     </li>
-                                    </li>
                                 </ul>
                                 <!-- /nav-second-level -->
                             </li>
@@ -125,40 +127,55 @@
                                             class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level collapse" id="ulInventarioAlmacenes">
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaCategorias()">Lista Almacenes</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaAlmacenes()">Lista Almacenes</a>
                                     </li>
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionCrearCategoria()">Crear Almacenes</a>
+                                        <a href="#" onclick="ajaxRenderSectionCrearAlmacen()">Crear Almacen</a>
                                     </li>
-                                    </li>
+
                                 </ul>
                                 <!-- /nav-second-level -->
                             </li>
                         </ul>
                     @if(Auth::user()->hasRole('SuperAdmin'))
-                    <li class="">
-                        <a href="#ulAdministrador" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Administrador<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" id="ulAdministrador">
-                            <li>
-                                <a href="#ulTiposDocumentos" data-toggle="collapse">Tipo de Documentos<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level collapse" id="ulTiposDocumentos">
-                                    <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()">Tipos</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onclick="ajaxRenderSectionCrearTipoDocumento()">Crear Tipo</a>
-                                    </li>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="typography.html">Ciudades</a>
-                            </li>
-                        </ul>
-                        <!-- /nav-second-level -->
-                    </li>
-                    @endif
-                    <li>
+                        <li class="">
+                            <a href="#ulAdministrador" data-toggle="collapse"><i class="fa fa-cogs nav_icon"></i>Administrador<span
+                                        class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="ulAdministrador">
+                                <li>
+                                    <a href="#ulTiposDocumentos" data-toggle="collapse">Tipo de Documentos<span
+                                                class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level collapse" id="ulTiposDocumentos">
+                                        <li>
+                                            <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()">Tipos</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" onclick="ajaxRenderSectionCrearTipoDocumento()">Crear Tipo</a>
+                                        </li>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#ulUnidadMedida" data-toggle="collapse">Unidad de medida<span
+                                                class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level collapse" id="ulUnidadMedida">
+                                        <li>
+                                            <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidades</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" onclick="ajaxRenderSectionCrearUnidad()">Crear Unidad</a>
+                                        </li>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="typography.html">Ciudades</a>
+                                </li>
+                            </ul>
+                            <!-- /nav-second-level -->
+                        </li>
+                @endif
+                <!--  <li>
                         <a href="widgets.html"><i class="fa fa-th-large nav_icon"></i>Widgets <span
                                     class="nav-badge-btm">08</span></a>
                     </li>
@@ -172,7 +189,7 @@
                                 <a href="compose.html">Compose email</a>
                             </li>
                         </ul>
-                        <!-- //nav-second-level -->
+
                     </li>
                     <li>
                         <a href="tables.html"><i class="fa fa-table nav_icon"></i>Tables <span
@@ -188,7 +205,7 @@
                                 <a href="validation.html">Validation</a>
                             </li>
                         </ul>
-                        <!-- //nav-second-level -->
+
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-file-text-o nav_icon"></i>Pages<span class="nav-badge-btm">02</span><span
@@ -204,12 +221,12 @@
                                 <a href="blank-page.html">Blank Page</a>
                             </li>
                         </ul>
-                        <!-- //nav-second-level -->
+
                     </li>
                     <li>
                         <a href="charts.html" class="chart-nav"><i class="fa fa-bar-chart nav_icon"></i>Charts <span
                                     class="nav-badge-btm pull-right">new</span></a>
-                    </li>
+                    </li>-->
                 </ul>
                 <!-- //sidebar-collapse -->
             </nav>
@@ -316,6 +333,12 @@
 <!-- js de la apliacion-->
 <script src="{{ asset('js/MInventario/Proveedor.js') }}"></script>
 <script src="{{ asset('js/MInventario/Categoria.js') }}"></script>
+<script src="{{ asset('js/MInventario/Almacen.js') }}"></script>
+<script src="{{ asset('js/MInventario/Producto.js') }}"></script>
 <script src="{{ asset('js/MSistema/TipoDocumento.js') }}"></script>
+<script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
+
+
+
 </body>
 </html>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AgregarCampoSedeId extends Migration
+class CrearTablaAlmacenes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class AgregarCampoSedeId extends Migration
      */
     public function up()
     {
-        Schema::table('Tbl_Productos', function (Blueprint $table) {
+        Schema::create('Tbl_Almacenes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string("Nombre");
+            $table->string('Ubicacion');
             $table->integer('Sede_id')->unsigned();
             $table->foreign('Sede_id')->references('id')->on('Tbl_Sedes');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +30,6 @@ class AgregarCampoSedeId extends Migration
      */
     public function down()
     {
-        Schema::table('Tbl_Productos', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('Tbl_Almacenes');
     }
 }

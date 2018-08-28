@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="panel panel-success">
-                <div class="panel-heading"><h3>Categorias</h3></div>
+                <div class="panel-heading"><h3>Almacen</h3></div>
                 <div class="panel-body">
                     <table class="table">
                         <thead>
@@ -16,18 +16,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($listCategorias as $categoria)
+                        @foreach($listAlmacenes as $almacen)
                             <tr>
-                                <th scope="row">{{$categoria->id}}</th>
-                                <td>{{$categoria->Nombre}}</td>
-                                <td>{{$categoria->Descripcion}}</td>
+                                <th scope="row">{{$almacen->id}}</th>
+                                <td>{{$almacen->Nombre}}</td>
+                                <td>{{$almacen->Ubicacion}}</td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
                     <div class="row">
                         <div class="col-md-4">
-                            <button onclick="ajaxRenderSectionCrearCategoria()" type="button" class="btn btn-success">Nueva Categoria</button>
+                            <button onclick="ajaxRenderSectionCrearAlmacen()" type="button" class="btn btn-success">Nuevo Almacen</button>
                         </div>
 
                     </div>
