@@ -9,24 +9,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>FACIN | Facturación e Inventario</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
-    <!-- Styles -->
-
-
-    <script type="application/x-javascript"> addEventListener("load", function () {
-            setTimeout(hideURLbar, 0);
-        }, false);
-
-        function hideURLbar() {
-            window.scrollTo(0, 1);
-        } </script>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('css/bootstrap.css') }}" rel='stylesheet' type='text/css'/>
     <!-- Custom CSS -->
@@ -36,7 +23,7 @@
     <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
     <!-- //font-awesome icons -->
     <!-- js-->
-     <script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
 
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <!--webfonts-->
@@ -46,29 +33,11 @@
     <!--animate-->
     <link href="{{ asset('css/animate.css') }}" rel="stylesheet" type="text/css" media="all">
     <script src="{{ asset('js/wow.min.js') }}"></script>
-    <script>
-        new WOW().init();
-    </script>
-    <!--//end-animate-->
-    <!-- chart -->
-    <script src="{{ asset('js/Chart.js') }}"></script>
-    <!-- //chart -->
-    <!--Calender-->
-    <link rel="stylesheet" href="{{ asset('css/clndr.css') }}" type="text/css"/>
-    <script src="{{ asset('js/underscore-min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/moment-2.2.1.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/clndr.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/site.js') }}" type="text/javascript"></script>
-    <!--End Calender-->
     <!-- Metis Menu -->
-    <script src="{{ asset('js/metisMenu.min.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    <!--//Metis Menu -->
-
-
-    <!-- js de los plugins-->
+    <!-- sweet plugins-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
 </head>
 <body class="cbp-spmenu-push">
@@ -85,6 +54,9 @@
                         <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Inventario
                              <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" id="ulInventario">
+                            <li>
+                                <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Actualizar inventario</a>
+                            </li>
                             <li>
                                 <a href="#ulInventarioProductos" data-toggle="collapse">Productos <span
                                             class="fa arrow"></span></a>
@@ -331,12 +303,13 @@
 <script src="{{ asset('js/bootstrap.js') }}"></script>
 
 <!-- js de la apliacion-->
+<script src="{{ asset('js/MSistema/TipoDocumento.js') }}"></script>
+<script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
 <script src="{{ asset('js/MInventario/Proveedor.js') }}"></script>
 <script src="{{ asset('js/MInventario/Categoria.js') }}"></script>
 <script src="{{ asset('js/MInventario/Almacen.js') }}"></script>
 <script src="{{ asset('js/MInventario/Producto.js') }}"></script>
-<script src="{{ asset('js/MSistema/TipoDocumento.js') }}"></script>
-<script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
+<script src="{{ asset('js/MInventario/Inventario.js') }}"></script>
 
 
 

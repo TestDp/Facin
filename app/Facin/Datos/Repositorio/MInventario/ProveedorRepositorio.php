@@ -33,6 +33,6 @@ class ProveedorRepositorio
 
     public  function  ObtenerListaProveedores($idEmpreesa)
     {
-        return Proveedor::where('Empresa_id', '=', $idEmpreesa)->get();;
+        return Proveedor::where('Empresa_id', '=', $idEmpreesa)->get();
     }
 }

@@ -1,10 +1,10 @@
 var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE SE ESTA CORRIENDO LA APP
 
-//Funcion para cargar la vista de crear proveedor
-function ajaxRenderSectionCrearProducto() {
+//Funcion para cargar la vista para actualizar el inventario
+function ajaxRenderSectionActualizarInventario() {
     $.ajax({
         type: 'GET',
-        url: urlBase +'crearProducto',
+        url: urlBase +'actualizarInventario',
         dataType: 'json',
         success: function (data) {
             $('#principalPanel').empty().append($(data));
@@ -21,20 +21,21 @@ function ajaxRenderSectionCrearProducto() {
 }
 
 
+
 //Metodo para guarda la informacion del producto retorna la vista con todos los provedores
-function GuardarProducto() {
-    var form = $("#formProducto");
+function GuardarInventario() {
+    var form = $("#formInventario");
     var token = $("#_token").val()
     $.ajax({
         type: 'POST',
-        url: urlBase +'guardarProducto',
+        url: urlBase +'guardarInventario',
         dataType: 'json',
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
             swal({
                 title: "Transaccción exitosa!",
-                text: "El producto fue grabado con exito!",
+                text: "El inventario fue actualizado con exito!",
                 icon: "success",
                 button: "OK",
             });
@@ -43,7 +44,7 @@ function GuardarProducto() {
         error: function (data) {
             swal({
                 title: "Transacción con error!",
-                text: "No fue posible grabar el producto!",
+                text: "No fue posible actualizar  el inventario!",
                 icon: "error",
                 button: "OK",
             });
@@ -55,31 +56,4 @@ function GuardarProducto() {
             }
         }
     });
-}
-
-
-//Funcion para mostrar la lista de categorias
-function ajaxRenderSectionListaProductos() {
-    $.ajax({
-        type: 'GET',
-        url: urlBase +'productos',
-        dataType: 'json',
-        success: function (data) {
-            $('#principalPanel').empty().append($(data));
-        },
-        error: function (data) {
-            var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
-        }
-    });
-}
-
-function CalcularPrecioConIva() {
-    $("#PrecioConIva").val("");
-    precio = parseFloat($("#PrecioSinIva").val()) + (parseFloat($("#PrecioSinIva").val())*0.19);
-    $("#PrecioConIva").val(precio);
 }

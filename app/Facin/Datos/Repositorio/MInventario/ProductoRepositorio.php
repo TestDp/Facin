@@ -23,17 +23,14 @@ class ProductoRepositorio
         try {
             $producto = new Producto($request->all());
             $producto->save();
-            $productoXProveedor = new ProductoPorProveedor();
-            $productoXProveedor->Producto_id =  $producto->id;
-            $productoXProveedor->Proveedor_id = $request->Proveedor_id;
-            $productoXProveedor->Cantidad = $request->CantidadProveedor;
-            $productoXProveedor->save();
-            $precioDeCompra = new PrecioDeCompra();
-            $precioDeCompra->Cantidad = $request->CantidadProveedor;
-            $precioDeCompra->Precio = $request->PrecioProveedor;
-            $precioDeCompra->NumFacturaProvedor = $request->NumFacturaProveedor;
-            $precioDeCompra->ProductoPorProveedor_id = $productoXProveedor->id;
-            $precioDeCompra->save();
+            foreach ($request->Proveedor_id as $idProveedor){
+                $productoXProveedor = new ProductoPorProveedor();
+                $productoXProveedor->Producto_id =  $producto->id;
+                $productoXProveedor->Proveedor_id = $idProveedor;
+                $productoXProveedor->Cantidad = 0;
+                $productoXProveedor->save();
+            }
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

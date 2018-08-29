@@ -56,11 +56,11 @@
                         <div class="row">
                             <div class="col-md-4">
                                 Precio Sin IVA
-                                <input id="PrecioSinIva" name="PrecioSinIva" type="text" class="form-control">
+                                <input id="PrecioSinIva" name="PrecioSinIva" onkeyup="CalcularPrecioConIva()" type="text" class="form-control">
                             </div>
                             <div class="col-md-4">
                                 Precio Con IVA
-                                <input id="PrecioSinIva" name="PrecioSinIva" type="text" class="form-control">
+                                <input id="PrecioConIva" name="PrecioConIva" type="text" class="form-control" disabled>
                             </div>
                             <div class="col-md-4">
                                 Precio venta
@@ -68,45 +68,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-4">
+                                Proveedores
+                                <select id="Proveedor_id" name="Proveedor_id[]"  class="form-control" multiple name="language">
+                                    <option value="">Seleccionar</option>
+                                    @foreach($listProveedores as $provedor)
+                                        <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-8">
                                 Imagen producto
                                 <input id="ImagenProducto" name="ImagenProducto" type="file" class="form-control">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="panel panel-warning">
-                                <div class="panel-heading">PROVEEDOR</div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            Nombre
-                                            <select id="Proveedor_id" name="Proveedor_id"  class="form-control">
-                                                <option value="">Seleccionar</option>
-                                                @foreach($listProveedores as $provedor)
-                                                    <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            Cantidad
-                                            <input id="CantidadProveedor" name="CantidadProveedor" type="text" class="form-control">
-                                        </div>
-                                        <div class="col-md-4">
-                                            Precio de Compra
-                                            <input id="PrecioProveedor" name="PrecioProveedor" type="text" class="form-control">
-                                        </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            Número de factura
-                                            <input id="NumFacturaProveedor" name="NumFacturaProveedor" type="text" class="form-control">
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <button onclick="GuardarProducto()" type="button" class="btn btn-success">Crear Producto</button>
@@ -121,4 +97,19 @@
         </div>
     </form>
 
+    <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/jquery-3.1.1.js') }}"></script>
+    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastsearch.js') }}"></script>
+    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastselect.js') }}"></script>
+
+    <script type="text/javascript">
+        // Material Select Initialization
+        $(document).ready(function() {
+            $('#Proveedor_id').fastselect({
+                    placeholder: 'Seleccione los proveedores',
+                    searchPlaceholder: 'Buscar opciones'
+            });
+        });
+
+    </script>
 @endsection
