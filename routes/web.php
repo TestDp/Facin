@@ -50,12 +50,12 @@ Route::get('almacenes', 'MInventario\AlmacenController@ObtenerAlmacenes')->name(
 
 //CONTROLADOR PRODUCTO
 Route::get('crearProducto', 'MInventario\ProductoController@CrearProducto')->name('crearProducto');//cargar la vista para crear un producto
-Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del almacen
-Route::get('productos', 'MInventario\ProductoController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los almacenes
+Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del producto
+Route::get('productos', 'MInventario\ProductoController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los producto
 
 //CONTROLADOR INVENTARIO
 Route::get('actualizarInventario', 'MInventario\InventarioController@ActualizarInvetario')->name('actualizarInventario');//cargar la vista para actulizar el inventario o la cantidad de un producto
 Route::post('guardarInventario', 'MInventario\InventarioController@GuardarInventario')->name('guardarInventario');//actualizar el inventario de en la base de datos
-Route::get('productos', 'MInventario\InventarioController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los almacenes
+//Route::get('productos', 'MInventario\InventarioController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los almacenes
 
 

@@ -27,7 +27,7 @@
                     </table>
                     <div class="row">
                         <div class="col-md-4">
-                            <button onclick="ajaxRenderSectionCrearCategoria()" type="button" class="btn btn-success">Nueva Producto</button>
+                            <button onclick="ajaxRenderSectionCrearProducto()" type="button" class="btn btn-success">Nueva Producto</button>
                         </div>
 
                     </div>

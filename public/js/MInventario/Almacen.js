@@ -2,11 +2,13 @@ var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE
 
 //Funcion para cargar la vista de crear categoria
 function ajaxRenderSectionCrearAlmacen() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'crearAlmacen',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
@@ -23,7 +25,8 @@ function ajaxRenderSectionCrearAlmacen() {
 //Metodo para guarda la informacion del almacen  y retorna la vista con todos los almacenes
 function GuardarAlmacen() {
     var form = $("#formAlmacen");
-    var token = $("#_token").val()
+    var token = $("#_token").val();
+    PopupPosition();
     $.ajax({
         type: 'POST',
         url: urlBase +'guardarAlmacen',
@@ -31,6 +34,7 @@ function GuardarAlmacen() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
                 text: "El almacen fue grabado con exito!",
@@ -58,11 +62,13 @@ function GuardarAlmacen() {
 
 //Funcion para mostrar la lista de categorias
 function ajaxRenderSectionListaAlmacenes() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'almacenes',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {

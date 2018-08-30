@@ -11,19 +11,25 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
-                                Nombre
-                                <input id="Nombre" name="Nombre" type="text" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                Apellidos
-                                <input id="Apellidos" name="Apellidos" type="text" class="form-control">
+                                Razón Social
+                                <input id="RazonSocial" name="RazonSocial" type="text" class="form-control">
                             </div>
                             <div class="col-md-4">
                                 Nit
                                 <input id="Nit" name="Nit" type="text" class="form-control">
                             </div>
+                            <div class="col-md-4">
+                                Nombre
+                                <input id="Nombre" name="Nombre" type="text" class="form-control">
+                            </div>
+
+
                         </div>
                         <div class="row">
+                            <div class="col-md-4">
+                                Apellidos
+                                <input id="Apellidos" name="Apellidos" type="text" class="form-control">
+                            </div>
                             <div class="col-md-4">
                                 Tipo Documento
                                 <select id="TipoDocumento_id" name="TipoDocumento_id"  class="form-control">
@@ -34,16 +40,16 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                Identificación
+                                Número documento
                                 <input id="Identificacion" name="Identificacion" type="text" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                Correco Electrónico
-                                <input id="CorreoElectronico" name="CorreoElectronico" type="text" class="form-control">
                             </div>
 
                         </div>
                         <div class="row">
+                            <div class="col-md-4">
+                                Correo Electrónico
+                                <input id="CorreoElectronico" name="CorreoElectronico" type="text" class="form-control">
+                            </div>
                             <div class="col-md-4">
                                 Teléfono
                                 <input id="Telefono" name="Telefono" type="text" class="form-control">
@@ -52,13 +58,14 @@
                                 Celular
                                 <input id="Celular" name="Celular" type="text" class="form-control">
                             </div>
-                            <div class="col-md-4">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
                                 Terminos de Pago
                                 <input id="Terminos_De_Pago" name="Terminos_De_Pago" type="text" class="form-control">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 Descripción
                                 <input id="Descripcion" name="Descripcion" type="text" class="form-control">
                             </div>

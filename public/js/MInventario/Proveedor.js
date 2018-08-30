@@ -2,11 +2,13 @@ var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE
 
 //Funcion para cargar la vista de crear proveedor
 function ajaxRenderSectionCrearProveedor() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'crearProveedor',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
@@ -23,7 +25,8 @@ function ajaxRenderSectionCrearProveedor() {
 //Metodo para guarda la informacion del proveedores y retorna la vista con todos los provedores
 function GuardarProveedor() {
     var form = $("#formProveedor");
-    var token = $("#_token").val()
+    var token = $("#_token").val();
+    PopupPosition();
     $.ajax({
         type: 'POST',
         url: urlBase +'guardarProveedor',
@@ -31,6 +34,7 @@ function GuardarProveedor() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
                 text: "El proveedor fue grabado con exito!",
@@ -58,11 +62,13 @@ function GuardarProveedor() {
 
 //Funcion para mostrar la lista de proveedores
 function ajaxRenderSectionListaProveedores() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'proveedores',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {

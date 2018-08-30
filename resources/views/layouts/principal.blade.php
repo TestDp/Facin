@@ -42,7 +42,6 @@
 </head>
 <body class="cbp-spmenu-push">
 <div class="main-content">
-
     <div class=" sidebar" role="navigation">
         <div class="navbar-collapse">
             <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
@@ -52,7 +51,7 @@
                     </li>
                     <li>
                         <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Inventario
-                             <span class="fa arrow"></span></a>
+                            <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse" id="ulInventario">
                             <li>
                                 <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Actualizar inventario</a>
@@ -261,9 +260,11 @@
 
     <div id="page-wrapper">
         <div class="main-page">
-            <div id="principalPanel">
-                @yield('content')
-            </div>
+                <div id="capa_loading" class="capa_loading" style="display:none;">Procesando...</div>
+                <div id="_loading" class="_loading" style="display:none;"><img class="img_loading" src="{{ asset('images/loader.gif') }}" /><br></div>
+                <div id="principalPanel">
+                    @yield('content')
+                </div>
         </div>
     </div>
 </div>
@@ -310,6 +311,7 @@
 <script src="{{ asset('js/MInventario/Almacen.js') }}"></script>
 <script src="{{ asset('js/MInventario/Producto.js') }}"></script>
 <script src="{{ asset('js/MInventario/Inventario.js') }}"></script>
+<script src="{{ asset('js/Transversal/generales.js') }}"></script>
 
 
 

@@ -2,11 +2,13 @@ var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE
 
 //Funcion para cargar la vista de crear tipo documento
 function ajaxRenderSectionCrearTipoDocumento() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'crearTipoDocumento',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
@@ -23,7 +25,8 @@ function ajaxRenderSectionCrearTipoDocumento() {
 //Metodo para guarda la informacion del tipo de documento y retorna la vista con todos los tipos de documentos
 function GuardarTipoDocumento() {
     var form = $("#formTipoDocumento");
-    var token = $("#_token").val()
+    var token = $("#_token").val();
+    PopupPosition();
     $.ajax({
         type: 'POST',
         url: urlBase +'guardarTipoDocumento',
@@ -31,6 +34,7 @@ function GuardarTipoDocumento() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "transaccción exitosa!",
                 text: "El tipo de documento fue grabado con exito!",
@@ -58,11 +62,13 @@ function GuardarTipoDocumento() {
 
 //Funcion para mostrar la lista de proveedores
 function ajaxRenderSectionListaTiposDocumentos() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'tiposDocumentos',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {

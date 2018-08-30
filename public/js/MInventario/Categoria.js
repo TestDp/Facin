@@ -2,11 +2,13 @@ var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE
 
 //Funcion para cargar la vista de crear categoria
 function ajaxRenderSectionCrearCategoria() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'crearCategoria',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
@@ -22,6 +24,7 @@ function ajaxRenderSectionCrearCategoria() {
 
 //Metodo para guarda la informacion de la categoria y retorna la vista con todos las categorias
 function GuardarCategoria() {
+    PopupPosition();
     var form = $("#formCategoria");
     var token = $("#_token").val()
     $.ajax({
@@ -31,6 +34,7 @@ function GuardarCategoria() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
                 text: "La categoria fue grabada con exito!",
@@ -58,11 +62,13 @@ function GuardarCategoria() {
 
 //Funcion para mostrar la lista de categorias
 function ajaxRenderSectionListaCategorias() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'categorias',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {

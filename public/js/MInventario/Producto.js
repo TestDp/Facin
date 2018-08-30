@@ -2,11 +2,13 @@ var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE
 
 //Funcion para cargar la vista de crear proveedor
 function ajaxRenderSectionCrearProducto() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'crearProducto',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
@@ -24,7 +26,8 @@ function ajaxRenderSectionCrearProducto() {
 //Metodo para guarda la informacion del producto retorna la vista con todos los provedores
 function GuardarProducto() {
     var form = $("#formProducto");
-    var token = $("#_token").val()
+    var token = $("#_token").val();
+    PopupPosition();
     $.ajax({
         type: 'POST',
         url: urlBase +'guardarProducto',
@@ -32,6 +35,7 @@ function GuardarProducto() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
                 text: "El producto fue grabado con exito!",
@@ -60,11 +64,13 @@ function GuardarProducto() {
 
 //Funcion para mostrar la lista de categorias
 function ajaxRenderSectionListaProductos() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'productos',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {

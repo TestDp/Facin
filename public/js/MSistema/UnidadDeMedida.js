@@ -2,11 +2,13 @@ var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE
 
 //Funcion para cargar la vista de crear tipo documento
 function ajaxRenderSectionCrearUnidad() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'crearUnidad',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
@@ -23,6 +25,7 @@ function ajaxRenderSectionCrearUnidad() {
 
 //Metodo para guarda la informacion de la unidad retorna la vista con todas las unidades
 function GuardarUnidad() {
+    PopupPosition();
     var form = $("#formUnidad");
     var token = $("#_token").val()
     $.ajax({
@@ -32,6 +35,7 @@ function GuardarUnidad() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
                 text: "La unidad de medidad fue grabada con exito!",
@@ -59,11 +63,13 @@ function GuardarUnidad() {
 
 //Funcion para mostrar la lista de unidades
 function ajaxRenderSectionListaUnidades() {
+    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'unidades',
         dataType: 'json',
         success: function (data) {
+            OcultarPopupposition();
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
