@@ -164,7 +164,7 @@ Multiple mode
 ----------------------------------------------------------------------------------------------------*/
 .fstChoiceItem {
   display: inline-block;
-  font-size: 1.2em;
+  font-size: 12px !important;
   position: relative;
   margin: 0 0.41667em 0.41667em 0;
   padding: 0.33333em 0.33333em 0.33333em 1.5em;

@@ -88,11 +88,11 @@
 }
 
 .sidebar .nav-second-level li a {
-    padding-left: 53px;
+    padding-left: 70px;
     font-size: .9em;
 }
 .sidebar .nav-third-level li a {
-    padding-left: 52px;
+    padding-left: 95px;
 }
 @media(min-width:768px){
     .navbar-top-links .dropdown-messages,

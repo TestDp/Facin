@@ -97,6 +97,7 @@ button#showLeftPush:hover {
     z-index: 1000;
     background-color:#ff7518;
 	padding: 2em 0;
+	overflow-y: auto;
 }
 .cbp-spmenu-left {
     left: 0;
