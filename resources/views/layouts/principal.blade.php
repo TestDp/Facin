@@ -260,8 +260,8 @@
 
     <div id="page-wrapper">
         <div class="main-page">
-                <div id="capa_loading" class="capa_loading" style="display:none;">Procesando...</div>
-                <div id="_loading" class="_loading" style="display:none;"><img class="img_loading" src="{{ asset('images/loader.gif') }}" /><br></div>
+                <div id="capa_loading" class="capa_loading" style="display:none; text-align:center;">Procesando...</div>
+                <div id="_loading" class="_loading" style="display:none; text-align:center;"><img class="img_loading" src="{{ asset('images/loader.gif') }}" /><br></div>
                 <div id="principalPanel">
                     @yield('content')
                 </div>
