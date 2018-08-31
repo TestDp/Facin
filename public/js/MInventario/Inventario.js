@@ -12,6 +12,7 @@ function ajaxRenderSectionActualizarInventario() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -46,6 +47,7 @@ function GuardarInventario() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible actualizar  el inventario!",

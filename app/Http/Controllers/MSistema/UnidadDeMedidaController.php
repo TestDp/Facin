@@ -11,17 +11,22 @@ namespace App\Http\Controllers\MSistema;
 
 use App\Http\Controllers\Controller;
 use Facin\Negocio\Logica\MSistema\UnidadDeMedidaServicio;
+use Facin\Validaciones\MSistema\UnidadDeMedidaValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+
 
 class UnidadDeMedidaController extends  Controller
 {
 
     protected  $unidadDeMedidaServicio;
-    public function __construct(UnidadDeMedidaServicio $unidadDeMedidaServicio){
+    protected  $unidadDeMedidaValidaciones;
+
+    public function __construct(UnidadDeMedidaServicio $unidadDeMedidaServicio, UnidadDeMedidaValidaciones $unidadDeMedidaValidaciones){
         $this->middleware('auth');
         $this->unidadDeMedidaServicio = $unidadDeMedidaServicio;
+        $this->unidadDeMedidaValidaciones = $unidadDeMedidaValidaciones;
     }
 
     //Metodo para cargar  la vista de crear una unidad de medida
@@ -39,6 +44,7 @@ class UnidadDeMedidaController extends  Controller
     public  function GuardarUnidad(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin']);
+        $this->unidadDeMedidaValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->unidadDeMedidaServicio->GuardarUnidad($request);
             if($repuesta == true){

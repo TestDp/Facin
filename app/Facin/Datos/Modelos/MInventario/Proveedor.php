@@ -17,7 +17,7 @@ class Proveedor extends Model
 {
     protected $table = 'Tbl_Proveedores';
     protected $fillable =['Nombre','Apellidos','Nit','Identificacion','Descripcion','CorreoElectronico',
-        'Telefono','Celular','Terminos_De_Pago','Empresa_id','TipoDocumento_id'];
+        'Telefono','Celular','Terminos_De_Pago','Empresa_id','TipoDocumento_id','RazonSocial'];
 
     public function Empresa()
     {

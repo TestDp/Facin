@@ -15,6 +15,7 @@ use Facin\Negocio\Logica\MInventario\CategoriaServicio;
 use Facin\Negocio\Logica\MInventario\ProductoServicio;
 use Facin\Negocio\Logica\MInventario\ProveedorServicio;
 use Facin\Negocio\Logica\MSistema\UnidadDeMedidaServicio;
+use Facin\Validaciones\MInventario\ProductoValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -27,16 +28,18 @@ class ProductoController extends  Controller
     protected  $almacenServicio;
     protected  $categoriaServicio;
     protected  $unidadDeMedidaServicio;
+    protected  $productoValidaciones;
 
     public function __construct(ProveedorServicio $proveedorServicio,AlmacenServicio $almacenServicio,
                                 CategoriaServicio $categoriaServicio,UnidadDeMedidaServicio $unidadDeMedidaServicio,
-                                ProductoServicio $productoServicio){
+                                ProductoServicio $productoServicio,ProductoValidaciones $productoValidaciones){
         $this->middleware('auth');
         $this->proveedorServicio = $proveedorServicio;
         $this->almacenServicio = $almacenServicio;
         $this->categoriaServicio = $categoriaServicio;
         $this->unidadDeMedidaServicio = $unidadDeMedidaServicio;
         $this->productoServicio = $productoServicio;
+        $this->productoValidaciones = $productoValidaciones;
     }
 
     //Metodo para cargar  la vista de crear producto
@@ -63,6 +66,7 @@ class ProductoController extends  Controller
     public  function GuardarProducto(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $this->productoValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->productoServicio->GuardarProducto($request);
             if($repuesta == true){

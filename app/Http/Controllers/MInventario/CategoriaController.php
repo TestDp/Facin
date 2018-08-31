@@ -11,17 +11,21 @@ namespace App\Http\Controllers\MInventario;
 
 use App\Http\Controllers\Controller;
 use Facin\Negocio\Logica\MInventario\CategoriaServicio;
+use Facin\Validaciones\MInventario\CategoriaValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 
+
 class CategoriaController extends  Controller
 {
     protected  $categoriaServicio;
-    public function __construct(CategoriaServicio $categoriaServicio){
+    protected  $categoriaValidaciones;
+    public function __construct(CategoriaServicio $categoriaServicio,CategoriaValidaciones $categoriaValidaciones){
         $this->middleware('auth');
         $this->categoriaServicio = $categoriaServicio;
+        $this->categoriaValidaciones = $categoriaValidaciones;
     }
 
     //Metodo para cargar  la vista de crear categoria
@@ -39,6 +43,8 @@ class CategoriaController extends  Controller
     public  function GuardarCategoria(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        //$this->validator($request->all())->validate();
+        $this->categoriaValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $categoria = $request->all();
             $idEmpreesa = Auth::user()->Sede->Empresa->id;
@@ -67,4 +73,6 @@ class CategoriaController extends  Controller
             return Response::json($sections['content']);
         }else return view('MInventario/Categoria/listaCategorias');
     }
+
+
 }

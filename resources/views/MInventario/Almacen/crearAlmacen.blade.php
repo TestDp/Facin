@@ -13,10 +13,12 @@
                             <div class="col-md-4">
                                 <label>Nombre</label>
                                 <input id="Nombre" name="Nombre" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorNombre"></span>
                             </div>
                             <div class="col-md-4">
                                 <label>Ubicación</label>
                                 <input id="Ubicacion" name="Ubicacion" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorUbicacion"></span>
                             </div>
                         </div>
                         <div class="row">

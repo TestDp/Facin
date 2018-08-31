@@ -12,6 +12,7 @@ function ajaxRenderSectionCrearProducto() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -45,18 +46,52 @@ function GuardarProducto() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible grabar el producto!",
                 icon: "error",
                 button: "OK",
             });
+            $("#errorCodigo").html("");
+            $("#errorNombre").html("");
+            $("#errorPrecio").html("");
+            $("#errorPrecioSinIva").html("");
+            $("#errorCantidad").html("");
+            $("#errorAlmacen_id").html("");
+            $("#errorCategoria_id").html("");
+            $("#errorUnidadDeMedida_id").html("");
+            $("#errorProveedor_id").html("");
+
             var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
+            if(errors.errors.Codigo){
+                var errorCodigo = "<strong>"+ errors.errors.Codigo+"</strong>";
+                $("#errorCodigo").append(errorCodigo);}
+            if(errors.errors.Nombre){
+                var errorNombre = "<strong>"+ errors.errors.Nombre+"</strong>";
+                $("#errorNombre").append(errorNombre);}
+            if(errors.errors.Precio){
+                var errorPrecio = "<strong>"+ errors.errors.Precio+"</strong>";
+                $("#errorPrecio").append(errorPrecio);}
+            if(errors.errors.PrecioSinIva){
+                var errorPrecioSinIva = "<strong>"+ errors.errors.PrecioSinIva+"</strong>";
+                $("#errorPrecioSinIva").append(errorPrecioSinIva);}
+            if(errors.errors.Cantidad){
+                var errorCantidad = "<strong>"+ errors.errors.Cantidad+"</strong>";
+                $("#errorCantidad").append(errorCantidad);}
+            if(errors.errors.Almacen_id){
+                var errorAlmacen_id = "<strong>"+ errors.errors.Almacen_id+"</strong>";
+                $("#errorAlmacen_id").append(errorAlmacen_id);}
+            if(errors.errors.Categoria_id){
+                var errorCategoria_id = "<strong>"+ errors.errors.Categoria_id+"</strong>";
+                $("#errorCategoria_id").append(errorCategoria_id);}
+            if(errors.errors.UnidadDeMedida_id){
+                var errorUnidadDeMedida_id = "<strong>"+ errors.errors.UnidadDeMedida_id+"</strong>";
+                $("#errorUnidadDeMedida_id").append(errorUnidadDeMedida_id);}
+            if(errors.errors.Proveedor_id){
+                var errorProveedor_id = "<strong>"+ errors.errors.Proveedor_id+"</strong>";
+                $("#errorProveedor_id").append(errorProveedor_id);}
+
         }
     });
 }
@@ -74,6 +109,7 @@ function ajaxRenderSectionListaProductos() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {

@@ -13,14 +13,17 @@
                             <div class="col-md-4">
                                 Código
                                 <input id="Codigo" name="Codigo" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorCodigo"></span>
                             </div>
                             <div class="col-md-4">
                                 Nombre
                                 <input id="Nombre" name="Nombre" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorNombre"></span>
                             </div>
                             <div class="col-md-4">
                                 Cantidad mínima
                                 <input id="Cantidad" name="Cantidad" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorCantidad"></span>
                             </div>
 
                         </div>
@@ -33,6 +36,7 @@
                                         <option value="{{ $categoria->id }}">{{ $categoria->Nombre }}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorCategoria_id"></span>
                             </div>
                             <div class="col-md-4">
                                 Unidad de Medida
@@ -42,6 +46,7 @@
                                         <option value="{{ $unidad->id }}">{{ $unidad->Unidad }}({{$unidad->Abreviatura}})</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorUnidadDeMedida_id"></span>
                             </div>
                             <div class="col-md-4">
                                 Almacen
@@ -51,12 +56,14 @@
                                         <option value="{{ $almacen->id }}">{{ $almacen->Nombre }}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorAlmacen_id"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
                                 Precio Sin IVA
                                 <input id="PrecioSinIva" name="PrecioSinIva" onkeyup="CalcularPrecioConIva()" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorPrecioSinIva"></span>
                             </div>
                             <div class="col-md-4">
                                 Precio Con IVA
@@ -65,6 +72,7 @@
                             <div class="col-md-4">
                                 Precio venta
                                 <input id="Precio" name="Precio" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorPrecio"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -76,6 +84,7 @@
                                         <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
                             </div>
                             <div class="col-md-8">
                                 Imagen producto

@@ -12,14 +12,17 @@
                             <div class="col-md-4">
                                 <label>Unidad</label>
                                 <input id="Unidad" name="Unidad" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorUnidad"></span>
                             </div>
                             <div class="col-md-4">
                                 <label>Abreviatura</label>
                                 <input id="Abreviatura" name="Abreviatura" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorAbreviatura"></span>
                             </div>
                             <div class="col-md-4">
                                 <label>Descripción</label>
                                 <input id="Descripcion" name="Descripcion" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorDescripcion"></span>
                             </div>
                         </div>
                         <div class="row">

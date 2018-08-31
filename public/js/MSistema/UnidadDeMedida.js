@@ -12,6 +12,7 @@ function ajaxRenderSectionCrearUnidad() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -45,18 +46,26 @@ function GuardarUnidad() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible grabar la unidad de medida!",
                 icon: "error",
                 button: "OK",
             });
+            $("#errorUnidad").html("");
+            $("#errorAbreviatura").html("");
+            $("#errorDescripcion").html("");
             var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
+            if(errors.errors.Unidad){
+                var errorUnidad = "<strong>"+ errors.errors.Unidad+"</strong>";
+                $("#errorUnidad").append(errorUnidad);}
+            if(errors.errors.Abreviatura){
+                var errorAbreviatura = "<strong>"+ errors.errors.Abreviatura+"</strong>";
+                $("#errorAbreviatura").append(errorAbreviatura);}
+            if(errors.errors.Descripcion){
+                var errorDescripcion = "<strong>"+ errors.errors.Descripcion+"</strong>";
+                $("#errorDescripcion").append(errorDescripcion);}
         }
     });
 }
@@ -73,6 +82,7 @@ function ajaxRenderSectionListaUnidades() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {

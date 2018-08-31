@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MInventario;
 use App\Http\Controllers\Controller;
 use Facin\Negocio\Logica\MInventario\ProveedorServicio;
 use Facin\Negocio\Logica\MSistema\TipoDocumentoServicio;
+use Facin\Validaciones\MInventario\ProveedorValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -14,10 +15,13 @@ class ProveedorController extends Controller
 {
     protected  $proveedorServicio;
     protected  $TipoDocumentoServicio;
-    public function __construct(ProveedorServicio $proveedorServicio,TipoDocumentoServicio $TipoDocumentoServicio){
+    protected $proveedorValidaciones;
+    public function __construct(ProveedorServicio $proveedorServicio,TipoDocumentoServicio $TipoDocumentoServicio,
+                                ProveedorValidaciones $proveedorValidaciones){
         $this->middleware('auth');
         $this->proveedorServicio = $proveedorServicio;
         $this->TipoDocumentoServicio = $TipoDocumentoServicio;
+        $this->proveedorValidaciones = $proveedorValidaciones;
     }
     //Metodo para cargar retornar la vista de crear proveedor
     public function CrearProveedor(Request $request)
@@ -35,6 +39,7 @@ class ProveedorController extends Controller
     public  function GuardarProveedor(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $this->proveedorValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $proveedor= $request->all();
             $idEmpreesa = Auth::user()->Sede->Empresa->id;

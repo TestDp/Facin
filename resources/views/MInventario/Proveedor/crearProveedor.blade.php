@@ -13,14 +13,17 @@
                             <div class="col-md-4">
                                 Razón Social
                                 <input id="RazonSocial" name="RazonSocial" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorRazonSocial"></span>
                             </div>
                             <div class="col-md-4">
                                 Nit
                                 <input id="Nit" name="Nit" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorNit"></span>
                             </div>
                             <div class="col-md-4">
                                 Nombre
                                 <input id="Nombre" name="Nombre" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorNombre"></span>
                             </div>
 
 
@@ -29,6 +32,7 @@
                             <div class="col-md-4">
                                 Apellidos
                                 <input id="Apellidos" name="Apellidos" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorApellidos"></span>
                             </div>
                             <div class="col-md-4">
                                 Tipo Documento
@@ -38,10 +42,12 @@
                                         <option value="{{ $tipo->id }}">{{ $tipo->Nombre }}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorTipoDocumento_id"></span>
                             </div>
                             <div class="col-md-4">
                                 Número documento
                                 <input id="Identificacion" name="Identificacion" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorIdentificacion"></span>
                             </div>
 
                         </div>
@@ -49,14 +55,17 @@
                             <div class="col-md-4">
                                 Correo Electrónico
                                 <input id="CorreoElectronico" name="CorreoElectronico" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorCorreoElectronico"></span>
                             </div>
                             <div class="col-md-4">
                                 Teléfono
                                 <input id="Telefono" name="Telefono" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorTelefono"></span>
                             </div>
                             <div class="col-md-4">
                                 Celular
                                 <input id="Celular" name="Celular" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorCelular"></span>
                             </div>
 
                         </div>
@@ -64,10 +73,12 @@
                             <div class="col-md-6">
                                 Terminos de Pago
                                 <input id="Terminos_De_Pago" name="Terminos_De_Pago" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorTerminos_De_Pago"></span>
                             </div>
                             <div class="col-md-6">
                                 Descripción
                                 <input id="Descripcion" name="Descripcion" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorDescripcion"></span>
                             </div>
                         </div>
                         <div class="row">

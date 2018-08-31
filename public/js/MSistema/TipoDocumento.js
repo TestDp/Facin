@@ -44,18 +44,22 @@ function GuardarTipoDocumento() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible grabar el tipo de documento!",
                 icon: "error",
                 button: "OK",
             });
+            $("#errorNombre").html("");
+            $("#errorDescripcion").html("");
             var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
+            if(errors.errors.Nombre){
+                var errorNombre = "<strong>"+ errors.errors.Nombre+"</strong>";
+                $("#errorNombre").append(errorNombre);}
+            if(errors.errors.Descripcion){
+                var errorDescripcion = "<strong>"+ errors.errors.Descripcion+"</strong>";
+                $("#errorDescripcion").append(errorDescripcion);}
         }
     });
 }
@@ -72,6 +76,7 @@ function ajaxRenderSectionListaTiposDocumentos() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {

@@ -8,8 +8,8 @@
 
 namespace App\Http\Controllers\MSistema;
 
-
 use App\Http\Controllers\Controller;
+use Facin\Validaciones\MSistema\TipoDocumentoValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -18,9 +18,11 @@ use Facin\Negocio\Logica\MSistema\TipoDocumentoServicio;
 class TipoDocumentoController extends Controller
 {
     protected  $TipoDocumentoServicio;
-    public function __construct(TipoDocumentoServicio $TipoDocumentoServicio){
+    protected $tipoDocumentoValidaciones;
+    public function __construct(TipoDocumentoServicio $TipoDocumentoServicio,TipoDocumentoValidaciones $tipoDocumentoValidaciones){
         $this->middleware('auth');
         $this->TipoDocumentoServicio = $TipoDocumentoServicio;
+        $this->tipoDocumentoValidaciones = $tipoDocumentoValidaciones;
     }
 
     //Metodo para cargar retornar la vista de crear el tipo de documento
@@ -38,6 +40,7 @@ class TipoDocumentoController extends Controller
     public  function GuardarTipoDocumento(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin']);
+        $this->tipoDocumentoValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->TipoDocumentoServicio->GuardarTipoDocumento($request);
             if($repuesta == true){

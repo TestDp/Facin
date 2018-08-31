@@ -12,6 +12,7 @@ function ajaxRenderSectionCrearProveedor() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -44,18 +45,58 @@ function GuardarProveedor() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible grabar el proveedor!",
                 icon: "error",
                 button: "OK",
             });
+            $("#errorNombre").html("");
+            $("#errorApellidos").html("");
+            $("#errorNit").html("");
+            $("#errorIdentificacion").html("");
+            $("#errorCorreoElectronico").html("");
+            $("#errorTelefono").html("");
+            $("#errorCelular").html("");
+            $("#errorTerminos_De_Pago").html("");
+            $("#errorTipoDocumento_id").html("");
+            $("#errorRazonSocial").html("");
+            $("#errorDescripcion").html("");
             var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
+            if(errors.errors.Nombre){
+                var errorNombre = "<strong>"+ errors.errors.Nombre+"</strong>";
+                $("#errorNombre").append(errorNombre);}
+            if(errors.errors.Apellidos){
+                var errorApellidos = "<strong>"+ errors.errors.Apellidos+"</strong>";
+                $("#errorApellidos").append(errorApellidos);}
+            if(errors.errors.Nit){
+                var errorNit = "<strong>"+ errors.errors.Nit+"</strong>";
+                $("#errorNit").append(errorNit);}
+            if(errors.errors.Identificacion){
+                var errorIdentificacion = "<strong>"+ errors.errors.Identificacion+"</strong>";
+                $("#errorIdentificacion").append(errorIdentificacion);}
+            if(errors.errors.CorreoElectronico){
+                var errorCorreoElectronico = "<strong>"+ errors.errors.CorreoElectronico+"</strong>";
+                $("#errorCorreoElectronico").append(errorCorreoElectronico);}
+            if(errors.errors.Telefono){
+                var errorTelefono = "<strong>"+ errors.errors.Telefono+"</strong>";
+                $("#errorTelefono").append(errorTelefono);}
+            if(errors.errors.Celular){
+                var errorCelular = "<strong>"+ errors.errors.Celular+"</strong>";
+                $("#errorCelular").append(errorCelular);}
+            if(errors.errors.Terminos_De_Pago){
+                var errorTerminos_De_Pago = "<strong>"+ errors.errors.Terminos_De_Pago+"</strong>";
+                $("#errorTerminos_De_Pago").append(errorTerminos_De_Pago);}
+            if(errors.errors.TipoDocumento_id){
+                var errorTipoDocumento_id = "<strong>"+ errors.errors.TipoDocumento_id+"</strong>";
+                $("#errorTipoDocumento_id").append(errorTipoDocumento_id);}
+            if(errors.errors.RazonSocial){
+                var errorRazonSocial = "<strong>"+ errors.errors.RazonSocial+"</strong>";
+                $("#errorRazonSocial").append(errorRazonSocial);}
+            if(errors.errors.Descripcion){
+                var errorDescripcion = "<strong>"+ errors.errors.Descripcion+"</strong>";
+                $("#errorDescripcion").append(errorDescripcion);}
         }
     });
 }
@@ -72,6 +113,7 @@ function ajaxRenderSectionListaProveedores() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {

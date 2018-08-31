@@ -12,6 +12,7 @@ function ajaxRenderSectionCrearAlmacen() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -44,6 +45,7 @@ function GuardarAlmacen() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible grabar el almacen!",
@@ -51,11 +53,15 @@ function GuardarAlmacen() {
                 button: "OK",
             });
             var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
+            $("#errorNombre").html("");
+            $("#errorUbicacion").html("");
+            var errors = data.responseJSON;
+            if(errors.errors.Nombre){
+                var errorNombre = "<strong>"+ errors.errors.Nombre+"</strong>";
+                $("#errorNombre").append(errorNombre);}
+            if(errors.errors.Ubicacion){
+                var errorUbicacion = "<strong>"+ errors.errors.Ubicacion+"</strong>";
+                $("#errorUbicacion").append(errorUbicacion);}
         }
     });
 }
@@ -72,6 +78,7 @@ function ajaxRenderSectionListaAlmacenes() {
             $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {

@@ -10,6 +10,7 @@ namespace App\Http\Controllers\MInventario;
 
 
 use Facin\Negocio\Logica\MInventario\AlmacenServicio;
+use Facin\Validaciones\MInventario\AlmacenValidaciones;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -20,9 +21,12 @@ class AlmacenController extends  Controller
 {
 
     protected  $almacenServicio;
-    public function __construct(AlmacenServicio $almacenServicio){
+    protected  $almacenValidaciones;
+
+    public function __construct(AlmacenServicio $almacenServicio,AlmacenValidaciones $almacenValidaciones){
         $this->middleware('auth');
         $this->almacenServicio = $almacenServicio;
+        $this->almacenValidaciones = $almacenValidaciones;
     }
 
     //Metodo para cargar  la vista de crear el almacen
@@ -40,6 +44,7 @@ class AlmacenController extends  Controller
     public  function GuardarAlmacen(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $this->almacenValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $almacen = $request->all();
             $idSede = Auth::user()->Sede->id;
