@@ -25,7 +25,11 @@
                         @endforeach
                         </tbody>
                     </table>
-
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button onclick="ajaxRenderSectionCrearTipoDocumento()" type="button" class="btn btn-success">Nueva Tipo</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

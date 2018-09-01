@@ -15,9 +15,15 @@ class TipoDocumentoValidaciones
 
     public function ValidarFormularioCrear(array $data)
     {
+        $mensajes = $this->mensajesFormularioCrear();
         return Validator::make($data, [
             'Nombre' => 'required|string|max:255',
             'Descripcion' => 'required|max:255'
-        ]);
+        ],$mensajes);
+    }
+
+    public  function  mensajesFormularioCrear(){
+        return ['Nombre.required' => 'El nombre es obligatorio',
+                'Descripcion.required' => 'La descripción es obligatoria'];
     }
 }

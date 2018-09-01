@@ -17,6 +17,7 @@
                                         <option value="{{ $producto->id }}">{{ $producto->Nombre }}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorProducto_id"></span>
                             </div>
                             <div class="col-md-6">
                                 Proveedor
@@ -26,20 +27,24 @@
                                         <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
                                     @endforeach
                                 </select>
+                                <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
                                 Cantidad
                                 <input id="Cantidad" name="Cantidad" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorCantidad"></span>
                             </div>
                             <div class="col-md-4">
                                 Precio de Compra
                                 <input id="Precio" name="Precio" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorPrecio"></span>
                             </div>
                             <div class="col-md-4">
                                 Número de factura
                                 <input id="NumFacturaProvedor" name="NumFacturaProvedor" type="text" class="form-control">
+                                <span class="invalid-feedback" role="alert" id="errorNumFacturaProvedor"></span>
                             </div>
                         </div>
                         <div class="row">

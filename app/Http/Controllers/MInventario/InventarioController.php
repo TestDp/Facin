@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Facin\Negocio\Logica\MInventario\InventarioServicio;
 use Facin\Negocio\Logica\MInventario\ProductoServicio;
 use Facin\Negocio\Logica\MInventario\ProveedorServicio;
+use Facin\Validaciones\MInventario\InventarioValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -25,13 +26,15 @@ class InventarioController extends  Controller
     protected  $productoServicio;
     protected  $proveedorServicio;
     protected  $inventarioServicio;
+    protected  $inventarioValidaciones;
 
     public function __construct(ProveedorServicio $proveedorServicio,ProductoServicio $productoServicio,
-                                InventarioServicio $inventarioServicio){
+                                InventarioServicio $inventarioServicio,InventarioValidaciones $inventarioValidaciones){
         $this->middleware('auth');
         $this->proveedorServicio = $proveedorServicio;
         $this->productoServicio = $productoServicio;
         $this->inventarioServicio = $inventarioServicio;
+        $this->inventarioValidaciones = $inventarioValidaciones;
     }
 
     //Metodo para cargar  la vista de para acutalizar la cantidad del producto
@@ -53,6 +56,7 @@ class InventarioController extends  Controller
     public  function GuardarInventario(Request $request)
     {
         $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $this->inventarioValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->inventarioServicio->GuardarInventario($request);
             if($repuesta == true){

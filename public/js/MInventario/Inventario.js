@@ -54,12 +54,28 @@ function GuardarInventario() {
                 icon: "error",
                 button: "OK",
             });
+            $("#errorProducto_id").html("");
+            $("#errorPrecio").html("");
+            $("#errorCantidad").html("");
+            $("#errorProveedor_id").html("");
+            $("#errorNumFacturaProvedor").html("");
+
             var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
+            if(errors.errors.Producto_id){
+                var errorProducto_id= "<strong>"+ errors.errors.Producto_id+"</strong>";
+                $("#errorProducto_id").append(errorProducto_id);}
+            if(errors.errors.Precio){
+                var errorPrecio = "<strong>"+ errors.errors.Precio+"</strong>";
+                $("#errorPrecio").append(errorPrecio);}
+            if(errors.errors.Cantidad){
+                var errorCantidad = "<strong>"+ errors.errors.Cantidad+"</strong>";
+                $("#errorCantidad").append(errorCantidad);}
+            if(errors.errors.Proveedor_id){
+                var errorProveedor_id = "<strong>"+ errors.errors.Proveedor_id+"</strong>";
+                $("#errorProveedor_id").append(errorProveedor_id);}
+            if(errors.errors.NumFacturaProvedor){
+                var errorNumFacturaProvedor = "<strong>"+ errors.errors.NumFacturaProvedor+"</strong>";
+                $("#errorNumFacturaProvedor").append(errorNumFacturaProvedor);}
         }
     });
 }

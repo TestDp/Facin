@@ -57,46 +57,42 @@
                                 <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Actualizar inventario</a>
                             </li>
                             <li>
-                                <a href="#ulInventarioProductos" data-toggle="collapse">Productos <span
-                                            class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level collapse" id="ulInventarioProductos">
+                                <a href="#" onclick="ajaxRenderSectionListaProductos()">Productos </a>
+                               <!-- <ul class="nav nav-third-level collapse" id="ulInventarioProductos">
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaProductos()">Lista Productos</a>
                                     </li>
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionCrearProducto()">Crear Producto</a>
                                     </li>
-                                </ul>
+                                </ul>-->
                             </li>
                             <li>
-                                <a href="#ulInventarioProveedores" data-toggle="collapse">Proveedores <span
-                                            class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level collapse" id="ulInventarioProveedores">
+                                <a href="#" onclick="ajaxRenderSectionListaProveedores()">Proveedores </a>
+                               <!-- <ul class="nav nav-third-level collapse" id="ulInventarioProveedores">
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaProveedores()">Lista Provedores</a>
                                     </li>
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionCrearProveedor()">Crear Proveedor</a>
                                     </li>
-                                </ul>
+                                </ul>-->
                             </li>
                             <li>
-                                <a href="#ulInventarioCategorias" data-toggle="collapse">Categorias <span
-                                            class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level collapse" id="ulInventarioCategorias">
+                                <a href="#" onclick="ajaxRenderSectionListaCategorias()">Categorias </a>
+                               <!-- <ul class="nav nav-third-level collapse" id="ulInventarioCategorias">
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaCategorias()">Lista Categorias</a>
                                     </li>
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionCrearCategoria()">Crear Categoria</a>
                                     </li>
-                                </ul>
-                                <!-- /nav-second-level -->
+                                </ul>-->
+
                             </li>
                             <li>
-                                <a href="#ulInventarioAlmacenes" data-toggle="collapse">Almacenes <span
-                                            class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level collapse" id="ulInventarioAlmacenes">
+                                <a href="#" onclick="ajaxRenderSectionListaAlmacenes()">Almacenes </a>
+                                <!--<ul class="nav nav-third-level collapse" id="ulInventarioAlmacenes">
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaAlmacenes()">Lista Almacenes</a>
                                     </li>
@@ -104,7 +100,7 @@
                                         <a href="#" onclick="ajaxRenderSectionCrearAlmacen()">Crear Almacen</a>
                                     </li>
 
-                                </ul>
+                                </ul>-->
                                 <!-- /nav-second-level -->
                             </li>
                         </ul>
@@ -114,9 +110,8 @@
                                         class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" id="ulAdministrador">
                                 <li>
-                                    <a href="#ulTiposDocumentos" data-toggle="collapse">Tipo de Documentos<span
-                                                class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level collapse" id="ulTiposDocumentos">
+                                    <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de Documentos</a>
+                                  <!--  <ul class="nav nav-third-level collapse" id="ulTiposDocumentos">
                                         <li>
                                             <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()">Tipos</a>
                                         </li>
@@ -124,12 +119,11 @@
                                             <a href="#" onclick="ajaxRenderSectionCrearTipoDocumento()">Crear Tipo</a>
                                         </li>
                                         </li>
-                                    </ul>
+                                    </ul>-->
                                 </li>
                                 <li>
-                                    <a href="#ulUnidadMedida" data-toggle="collapse">Unidad de medida<span
-                                                class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level collapse" id="ulUnidadMedida">
+                                    <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidad de medida</a>
+                                <!--    <ul class="nav nav-third-level collapse" id="ulUnidadMedida">
                                         <li>
                                             <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidades</a>
                                         </li>
@@ -137,7 +131,7 @@
                                             <a href="#" onclick="ajaxRenderSectionCrearUnidad()">Crear Unidad</a>
                                         </li>
                                         </li>
-                                    </ul>
+                                    </ul>-->
                                 </li>
                                 <li>
                                     <a href="typography.html">Ciudades</a>

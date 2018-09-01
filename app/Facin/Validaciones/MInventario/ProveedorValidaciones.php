@@ -15,6 +15,7 @@ class ProveedorValidaciones
 
     public function ValidarFormularioCrear(array $data)
     {
+        $mensajes = $this->mensajesFormularioCrear();
         return Validator::make($data, [
             'RazonSocial' => 'required|string|max:255',
             'Nit' => 'required|max:255',
@@ -27,6 +28,20 @@ class ProveedorValidaciones
             'Celular' => 'required|max:255',
             'Terminos_De_Pago' => 'required|max:255',
             'Descripcion' => 'required|max:255'
-        ]);
+        ],$mensajes);
+    }
+
+    public  function  mensajesFormularioCrear(){
+        return ['RazonSocial.required' => 'La razon social es obligatoria',
+                'Nit.required' => 'El Nit es obligatorio',
+                'Nombre.required' => 'El nombre es obligatorio',
+                'Apellidos.required' => 'EL apellido es obligatorio',
+                'TipoDocumento_id.required' => 'El tipo de documento es obligatorio',
+                'Identificacion.required' => 'EL número de documento es obligatorio',
+                'CorreoElectronico.required' => 'EL correo es obligatorio',
+                'Telefono.required' => 'EL telefono es obligatorio',
+                'Celular.required' => 'El celular es obligatorio',
+                'Terminos_De_Pago.required' => 'Los terminos son obligatorios',
+                'Descripcion.required' => 'La descripción es obligatoria'];
     }
 }
