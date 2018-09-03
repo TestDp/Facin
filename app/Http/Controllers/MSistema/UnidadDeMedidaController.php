@@ -32,7 +32,8 @@ class UnidadDeMedidaController extends  Controller
     //Metodo para cargar  la vista de crear una unidad de medida
     public function CrearUnidad(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $view = View::make('MSistema/UnidadDeMedida/crearUnidad');
         if($request->ajax()){
             $sections = $view->renderSections();
@@ -43,7 +44,8 @@ class UnidadDeMedidaController extends  Controller
     //Metodo para guardar la unidad
     public  function GuardarUnidad(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->unidadDeMedidaValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->unidadDeMedidaServicio->GuardarUnidad($request);
@@ -61,7 +63,8 @@ class UnidadDeMedidaController extends  Controller
 
     //Metodo para obtener toda  la lista de unidades de medida del producto
     public  function ObtenerUnidades(Request $request){
-        $request->user()->authorizeRoles(['SuperAdmin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidades();
         $view = View::make('MSistema/UnidadDeMedida/listaUnidades')->with('listUnidades',$unidades);
         if($request->ajax()){

@@ -46,98 +46,55 @@
         <div class="navbar-collapse">
             <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
                 <ul class="nav" id="side-menu">
-                    <li>
-                        <a href="index.html" class="active"><i class="fa fa-home nav_icon"></i>Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Inventario
-                            <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse" id="ulInventario">
-                            <li>
-                                <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Actualizar inventario</a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="ajaxRenderSectionListaProductos()">Productos </a>
-                               <!-- <ul class="nav nav-third-level collapse" id="ulInventarioProductos">
+                    @if(Auth::user()->buscarRecurso('Inventario'))
+                        <li>
+                            <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Inventario
+                                <span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="ulInventario">
+                                @if(Auth::user()->buscarRecurso('ActualizarInventario'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaProductos()">Lista Productos</a>
+                                        <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Actualizar inventario</a>
                                     </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Productos'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionCrearProducto()">Crear Producto</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaProductos()">Productos</a>
                                     </li>
-                                </ul>-->
-                            </li>
-                            <li>
-                                <a href="#" onclick="ajaxRenderSectionListaProveedores()">Proveedores </a>
-                               <!-- <ul class="nav nav-third-level collapse" id="ulInventarioProveedores">
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Proveedores'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaProveedores()">Lista Provedores</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaProveedores()">Proveedores </a>
                                     </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Categorias'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionCrearProveedor()">Crear Proveedor</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaCategorias()">Categorias </a>
                                     </li>
-                                </ul>-->
-                            </li>
-                            <li>
-                                <a href="#" onclick="ajaxRenderSectionListaCategorias()">Categorias </a>
-                               <!-- <ul class="nav nav-third-level collapse" id="ulInventarioCategorias">
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Almacenes'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaCategorias()">Lista Categorias</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaAlmacenes()">Almacenes </a>
                                     </li>
-                                    <li>
-                                        <a href="#" onclick="ajaxRenderSectionCrearCategoria()">Crear Categoria</a>
-                                    </li>
-                                </ul>-->
-
-                            </li>
-                            <li>
-                                <a href="#" onclick="ajaxRenderSectionListaAlmacenes()">Almacenes </a>
-                                <!--<ul class="nav nav-third-level collapse" id="ulInventarioAlmacenes">
-                                    <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaAlmacenes()">Lista Almacenes</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onclick="ajaxRenderSectionCrearAlmacen()">Crear Almacen</a>
-                                    </li>
-
-                                </ul>-->
-                                <!-- /nav-second-level -->
-                            </li>
-                        </ul>
-                    @if(Auth::user()->hasRole('SuperAdmin'))
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if(Auth::user()->buscarRecurso('Administrador'))
                         <li class="">
                             <a href="#ulAdministrador" data-toggle="collapse"><i class="fa fa-cogs nav_icon"></i>Administrador<span
                                         class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" id="ulAdministrador">
-                                <li>
-                                    <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de Documentos</a>
-                                  <!--  <ul class="nav nav-third-level collapse" id="ulTiposDocumentos">
-                                        <li>
-                                            <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()">Tipos</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" onclick="ajaxRenderSectionCrearTipoDocumento()">Crear Tipo</a>
-                                        </li>
-                                        </li>
-                                    </ul>-->
-                                </li>
-                                <li>
-                                    <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidad de medida</a>
-                                <!--    <ul class="nav nav-third-level collapse" id="ulUnidadMedida">
-                                        <li>
-                                            <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidades</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" onclick="ajaxRenderSectionCrearUnidad()">Crear Unidad</a>
-                                        </li>
-                                        </li>
-                                    </ul>-->
-                                </li>
-                                <li>
-                                    <a href="typography.html">Ciudades</a>
-                                </li>
+                                @if(Auth::user()->buscarRecurso('TiposDeDocumentos'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de Documentos</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('UnidadesDeMedida'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidad de medida</a>
+                                    </li>
+                                @endif
                             </ul>
-                            <!-- /nav-second-level -->
                         </li>
                 @endif
                 <!--  <li>
@@ -254,11 +211,11 @@
 
     <div id="page-wrapper">
         <div class="main-page">
-                <div id="capa_loading" class="capa_loading" style="display:none; text-align:center;">Procesando...</div>
-                <div id="_loading" class="_loading" style="display:none; text-align:center;"><img class="img_loading" src="{{ asset('images/loader.gif') }}" /><br></div>
-                <div id="principalPanel">
-                    @yield('content')
-                </div>
+            <div id="capa_loading" class="capa_loading" style="display:none; text-align:center;">Procesando...</div>
+            <div id="_loading" class="_loading" style="display:none; text-align:center;"><img class="img_loading" src="{{ asset('images/loader.gif') }}" /><br></div>
+            <div id="principalPanel">
+                @yield('content')
+            </div>
         </div>
     </div>
 </div>

@@ -68,6 +68,30 @@ class User extends Authenticatable
         return false;
     }
 
+    public  function buscarRecurso($recurso)
+    {
+        $roles = $this->roles()->get();
+        foreach ($roles as $rol)
+        {
+            if ($rol->recursos()->where('Nombre', $recurso)->first()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public  function AutorizarUrlRecurso($urlrecurso)
+    {
+        $roles = $this->roles()->get();
+        foreach ($roles as $rol)
+        {
+            if ($rol->recursos()->where('UrlRecurso', $urlrecurso)->first()) {
+                return true;
+            }
+        }
+        abort(401, 'Esta acción no está autorizada.');
+    }
+
     public function Sede()
     {
         return $this->belongsTo(Sede::class,'Sede_id');

@@ -45,7 +45,8 @@ class ProductoController extends  Controller
     //Metodo para cargar  la vista de crear producto
     public function CrearProducto(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $idSede = Auth::user()->Sede->id;
         $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
@@ -65,7 +66,8 @@ class ProductoController extends  Controller
     //Metodo para guarda el producto
     public  function GuardarProducto(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->productoValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->productoServicio->GuardarProducto($request);
@@ -85,7 +87,8 @@ class ProductoController extends  Controller
 
     //Metodo para obtener toda  la lista de productos por empresa
     public  function ObtenerProductosEmpresa(Request $request){
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
         $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);

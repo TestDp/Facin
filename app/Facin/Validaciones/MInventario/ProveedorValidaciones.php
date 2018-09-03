@@ -32,16 +32,17 @@ class ProveedorValidaciones
     }
 
     public  function  mensajesFormularioCrear(){
-        return ['RazonSocial.required' => 'La razon social es obligatoria',
+        return ['RazonSocial.required' => 'La razón social es obligatoria',
                 'Nit.required' => 'El Nit es obligatorio',
                 'Nombre.required' => 'El nombre es obligatorio',
                 'Apellidos.required' => 'EL apellido es obligatorio',
                 'TipoDocumento_id.required' => 'El tipo de documento es obligatorio',
                 'Identificacion.required' => 'EL número de documento es obligatorio',
                 'CorreoElectronico.required' => 'EL correo es obligatorio',
-                'Telefono.required' => 'EL telefono es obligatorio',
+                'CorreoElectronico.email' => 'El correo debe tener un formato válido',
+                'Telefono.required' => 'EL teléfono es obligatorio',
                 'Celular.required' => 'El celular es obligatorio',
-                'Terminos_De_Pago.required' => 'Los terminos son obligatorios',
+                'Terminos_De_Pago.required' => 'Los términos son obligatorios',
                 'Descripcion.required' => 'La descripción es obligatoria'];
     }
 }

@@ -31,7 +31,8 @@ class CategoriaController extends  Controller
     //Metodo para cargar  la vista de crear categoria
     public function CrearCategoria(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $view = View::make('MInventario/Categoria/crearCategoria');
         if($request->ajax()){
             $sections = $view->renderSections();
@@ -42,8 +43,8 @@ class CategoriaController extends  Controller
     //Metodo para guarda la categoria
     public  function GuardarCategoria(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
-        //$this->validator($request->all())->validate();
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->categoriaValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $categoria = $request->all();
@@ -64,7 +65,8 @@ class CategoriaController extends  Controller
 
     //Metodo para obtener toda  las categorias
     public  function ObtenerCategorias(Request $request){
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $categorias = $this->categoriaServicio->ObtenerListaCategorias($idEmpreesa);
         $view = View::make('MInventario/Categoria/listaCategorias')->with('listCategorias',$categorias);

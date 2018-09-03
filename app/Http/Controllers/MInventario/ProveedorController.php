@@ -26,7 +26,8 @@ class ProveedorController extends Controller
     //Metodo para cargar retornar la vista de crear proveedor
     public function CrearProveedor(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $tiposDoc = $this->TipoDocumentoServicio->ObtenerListaTipoDocumentos();
         $view = View::make('MInventario/Proveedor/crearProveedor')->with('listDoc',$tiposDoc);
         if($request->ajax()){
@@ -38,7 +39,8 @@ class ProveedorController extends Controller
     //Metodo para guarda el proveedor
     public  function GuardarProveedor(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->proveedorValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $proveedor= $request->all();
@@ -59,7 +61,8 @@ class ProveedorController extends Controller
 
     //Metodo para obtener toda  la lista de proveedores
     public  function ObtenerProveedores(Request $request){
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
         $view = View::make('MInventario/Proveedor/listaProveedores')->with('listProveedores',$proveedores);

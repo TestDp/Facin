@@ -25,10 +25,11 @@ class TipoDocumentoController extends Controller
         $this->tipoDocumentoValidaciones = $tipoDocumentoValidaciones;
     }
 
-    //Metodo para cargar retornar la vista de crear el tipo de documento
+    //Metodo para cargar  la vista de crear el tipo de documento
     public function CrearTipoDocumento(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $view = View::make('MSistema/TipoDocumento/crearTipoDocumento');
         if($request->ajax()){
             $sections = $view->renderSections();
@@ -39,7 +40,8 @@ class TipoDocumentoController extends Controller
     //Metodo para guardar el tipo de documento
     public  function GuardarTipoDocumento(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->tipoDocumentoValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->TipoDocumentoServicio->GuardarTipoDocumento($request);
@@ -57,7 +59,8 @@ class TipoDocumentoController extends Controller
 
     //Metodo para obtener toda  la lista de tipos de documentos
     public  function ObtenerTiposDocumentos(Request $request){
-        $request->user()->authorizeRoles(['SuperAdmin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $tiposDoc = $this->TipoDocumentoServicio->ObtenerListaTipoDocumentos();
         $view = View::make('MSistema/TipoDocumento/listaDocumentos')->with('listDoc',$tiposDoc);
         if($request->ajax()){

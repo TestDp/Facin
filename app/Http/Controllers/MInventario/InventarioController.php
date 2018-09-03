@@ -40,7 +40,8 @@ class InventarioController extends  Controller
     //Metodo para cargar  la vista de para acutalizar la cantidad del producto
     public function ActualizarInvetario(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
@@ -55,7 +56,8 @@ class InventarioController extends  Controller
     //Metodo para guarda el inventario o actualizar la cantidad de un producto por proveedor
     public  function GuardarInventario(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->inventarioValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $repuesta = $this->inventarioServicio->GuardarInventario($request);

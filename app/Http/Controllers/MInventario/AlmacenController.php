@@ -32,7 +32,8 @@ class AlmacenController extends  Controller
     //Metodo para cargar  la vista de crear el almacen
     public function CrearAlmacen(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $view = View::make('MInventario/Almacen/crearAlmacen');
         if($request->ajax()){
             $sections = $view->renderSections();
@@ -43,7 +44,8 @@ class AlmacenController extends  Controller
     //Metodo para guarda la categoria
     public  function GuardarAlmacen(Request $request)
     {
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $this->almacenValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $almacen = $request->all();
@@ -64,7 +66,8 @@ class AlmacenController extends  Controller
 
     //Metodo para obtener todos los almacenes
     public  function ObtenerAlmacenes(Request $request){
-        $request->user()->authorizeRoles(['SuperAdmin','Admin']);
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
         $idSede = Auth::user()->Sede->id;
         $almacenes = $this->almacenServicio->ObtenerListaAlmacen($idSede);
         $view = View::make('MInventario/Almacen/listaAlmacenes')->with('listAlmacenes',$almacenes);

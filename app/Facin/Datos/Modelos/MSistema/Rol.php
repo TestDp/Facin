@@ -23,4 +23,12 @@ class Rol extends  Model
             ->belongsToMany(User::class,'Tbl_Roles_Por_Usuarios','Rol_id','user_id')
             ->withTimestamps();
     }
+
+    public function recursos()
+    {
+        return $this
+            ->belongsToMany(RecursoSistema::class,'Tbl_Recursos_Sistemas_Por_Rol','Rol_id','RecursoSistema_id')
+            ->withTimestamps();
+    }
+
 }
