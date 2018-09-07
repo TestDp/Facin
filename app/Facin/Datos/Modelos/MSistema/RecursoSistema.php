@@ -16,7 +16,7 @@ class RecursoSistema extends  Model
 {
 
     protected $table = 'Tbl_Recursos_Sistemas';
-    protected $fillable =['Nombre','Descripcion','UrlRecurso'];
+    protected $fillable =['Nombre','Descripcion','UrlRecurso','RecursoSistemaPadre_id'];
 
     public function roles()
     {

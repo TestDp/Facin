@@ -1,6 +1,14 @@
 @extends('layouts.principal')
 
 @section('content')
+    <style type="text/css">
+        ul#menu_arbol li {
+            padding: 0 10px;
+        }
+        ul#menu_arbol ul {
+            margin-left: 5px;
+        }
+    </style>
     <form id="formRol">
         <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
         <input type="hidden" id="Empresa_id" name="Empresa_id" >
@@ -23,24 +31,25 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Descripción</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($listRecursos as $recurso)
-                                        <tr>
-                                            <th scope="row"> <input name="idRecurso[]" type="checkbox" value="{{$recurso->id}}"></th>
-                                            <td>{{$recurso->Nombre}}</td>
-                                            <td>{{$recurso->Descripcion}}</td>
-                                        </tr>
+                                <ul id="menu_arbol" >
+                                    @foreach($listRecursos as $recursoPadre)
+                                        @if($recursoPadre->RecursoSistemaPadre_id == null)
+                                            <li name="liPadre">
+                                               <input name="idRecurso[]" type="checkbox" value="{{$recursoPadre->id}}" onclick="checkRecursosHijos(this)">
+                                                <a href="#ul{{$recursoPadre->id}}" data-toggle="collapse">{{$recursoPadre->Nombre}}</a>
+                                                <ul class="nav nav-second-level collapse" id="ul{{$recursoPadre->id}}" name="ulhijo">
+                                                    @foreach($listRecursos as $recurso)
+                                                        @if($recurso->RecursoSistemaPadre_id == $recursoPadre->id)
+                                                            <li>
+                                                                <input name="idRecurso[]" type="checkbox" value="{{$recurso->id}}" onclick="checkRecursoPadre(this)">{{$recurso->Nombre}}
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
                                     @endforeach
-                                    </tbody>
-                                </table>
+                                </ul>
                             </div>
                         </div>
                         <div class="row">

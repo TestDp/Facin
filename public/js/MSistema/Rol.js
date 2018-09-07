@@ -87,3 +87,36 @@ function ajaxRenderSectionListaRoles() {
         }
     });
 }
+
+function checkRecursosHijos(element){
+    if($(element).prop( "checked" )) {
+        $(element).closest('li[name=liPadre]').find('input[name*=idRecurso]').each(function (ind, check) {
+            if (!$(check).prop("checked")) {
+                $(check).prop("checked", "checked")
+            }
+        });
+    }else{
+        $(element).closest('li[name=liPadre]').find('input[name*=idRecurso]').each(function (ind, check) {
+            $(check).prop("checked", false);
+        });
+    }
+}
+
+function checkRecursoPadre(element){
+    if($(element).prop( "checked")) {
+        $(element).closest('li[name=liPadre]').children('input[name*=idRecurso]').each(function (ind, check) {
+                $(check).prop("checked", "checked");
+        });
+    }else{
+        var respuesta = true;
+        $(element).closest('ul[name=ulhijo]').find('input[name*=idRecurso]').each(function (ind, check) {
+            if ($(check).prop("checked")) {
+                respuesta = false;
+            }
+
+        });
+        if(respuesta){
+            $(element).closest('li[name=liPadre]').children('input[name*=idRecurso]').prop("checked",false);
+        }
+    }
+}

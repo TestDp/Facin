@@ -29,9 +29,14 @@ class UsuarioValidaciones
         return ['name.required' => 'El nombre es obligatorio',
                 'last_name.required' => 'El apellido es obligatorio',
                 'username.required' => 'El usuario es obligatorio',
+                'username.unique' => 'El usuario ya se encuentra registrado',
                 'email.required' => 'El correo electrónico es obligatorio',
+                'email.unique' => 'El correo electrónico ya se encuentra registrado',
                 'password.required' => 'La contraseña es obligatoria',
+                'password.confirmed' => 'Las contraseñas no son iguales',
                 'Roles_id.required' => 'Los roles son obligatorios',
-                'Sede_id.required' => 'La sede es obligatoria'];
+                'Sede_id.required' => 'La sede es obligatoria',
+
+                ];
     }
 }
