@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 class Rol extends  Model
 {
     protected $table = 'Tbl_Roles';
-    protected $fillable =['Nombre','Descripcion'];
+    protected $fillable =['Nombre','Descripcion','Empresa_id'];
 
     public function users()
     {

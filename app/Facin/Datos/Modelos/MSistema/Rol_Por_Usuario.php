@@ -9,7 +9,9 @@
 namespace Facin\Datos\Modelos\MSistema;
 
 
-class Rol_Por_Usuario
+use Illuminate\Database\Eloquent\Model;
+
+class Rol_Por_Usuario extends Model
 {
     protected $table = 'Tbl_Roles_Por_Usuarios';
     protected $fillable =['Rol_id','users_id'];

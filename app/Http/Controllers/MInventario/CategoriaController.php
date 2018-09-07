@@ -58,7 +58,7 @@ class CategoriaController extends  Controller
                 return Response::json($sections['content']);
             }
             else{
-                return $this->proveedorServicio->GuardarProveedor($request);
+                return $this->categoriaServicio->GuardarCategoria($request);
             }
         }else return view('MInventario/Categoria/listaCategorias');
     }

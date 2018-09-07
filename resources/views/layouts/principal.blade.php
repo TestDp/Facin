@@ -79,8 +79,31 @@
                             </ul>
                         </li>
                     @endif
+                    @if(Auth::user()->buscarRecurso('Empresa'))
+                        <li>
+                            <a href="#ulEmpresa" data-toggle="collapse"><i class="fa fa-table nav_icon"></i>Empresa<span
+                                        class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="ulEmpresa">
+                                @if(Auth::user()->buscarRecurso('Sedes'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaSedes()" >Sedes</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Usuarios'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaUsuarios()">Usuarios</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Roles'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaRoles()">Roles</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                     @if(Auth::user()->buscarRecurso('Administrador'))
-                        <li class="">
+                        <li>
                             <a href="#ulAdministrador" data-toggle="collapse"><i class="fa fa-cogs nav_icon"></i>Administrador<span
                                         class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" id="ulAdministrador">
@@ -257,11 +280,14 @@
 <!-- js de la apliacion-->
 <script src="{{ asset('js/MSistema/TipoDocumento.js') }}"></script>
 <script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
+<script src="{{ asset('js/MSistema/Rol.js') }}"></script>
+<script src="{{ asset('js/MSistema/Usuario.js') }}"></script>
 <script src="{{ asset('js/MInventario/Proveedor.js') }}"></script>
 <script src="{{ asset('js/MInventario/Categoria.js') }}"></script>
 <script src="{{ asset('js/MInventario/Almacen.js') }}"></script>
 <script src="{{ asset('js/MInventario/Producto.js') }}"></script>
 <script src="{{ asset('js/MInventario/Inventario.js') }}"></script>
+<script src="{{ asset('js/MEmpresa/Sede.js') }}"></script>
 <script src="{{ asset('js/Transversal/generales.js') }}"></script>
 
 

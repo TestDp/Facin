@@ -55,7 +55,6 @@ class ProductoController extends  Controller
         $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidades();
         $view = View::make('MInventario/Producto/crearProducto',
             array('listProveedores'=>$proveedores,'listAlmacenes'=>$almacenes,'listCategorias'=>$categorias,'listUnidades'=>$unidades));
-            //->with('listProveedores',$proveedores,'listAlmacenes',$almacenes);
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);

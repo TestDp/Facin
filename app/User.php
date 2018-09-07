@@ -80,6 +80,29 @@ class User extends Authenticatable
         return false;
     }
 
+    public  function ListaRecursos()
+    {
+        $roles = $this->roles()->get();
+        $recursosRol = array();
+        foreach ($roles as $rol)
+        {
+            $recursos = $rol->recursos()->get();
+            foreach ($recursos as $recurso){
+                $existe = true;
+                foreach ($recursosRol as $recursoRol){
+                    if($recursoRol->id == $recurso->id){
+                        $existe = false;
+                        break;
+                    }
+                }
+                if($existe){
+                    $recursosRol[]=$recurso;
+                }
+            }
+        }
+        return $recursosRol;
+    }
+
     public  function AutorizarUrlRecurso($urlrecurso)
     {
         $roles = $this->roles()->get();

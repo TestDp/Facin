@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Facin\Datos\Modelos\MEmpresa\Empresa;
 use Facin\Datos\Modelos\MEmpresa\Sede;
 use Facin\Datos\Modelos\MSistema\Rol;
+use Facin\Datos\Modelos\MSistema\Rol_Por_Usuario;
 use http\Env\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -111,5 +112,7 @@ class RegisterController extends Controller
             return ['respuesta' => false, 'error' => $error];
         }
     }
+
+
 
 }
