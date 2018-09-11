@@ -24,7 +24,6 @@ class UsuarioRepositorio
             ->where('Tbl_Empresas.id', '=', $idEmpresa)
             ->where('users.id','<>',$idUsuario)
             ->get();
-
         return $users;
     }
 }

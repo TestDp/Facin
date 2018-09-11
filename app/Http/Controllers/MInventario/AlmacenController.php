@@ -49,11 +49,12 @@ class AlmacenController extends  Controller
         $this->almacenValidaciones->ValidarFormularioCrear($request->all())->validate();
         if($request->ajax()){
             $almacen = $request->all();
+            $idEmpresa = Auth::user()->Sede->Empresa->id;
             $idSede = Auth::user()->Sede->id;
             $almacen['Sede_id'] = $idSede;
             $repuesta = $this->almacenServicio->GuardarAlmacen($almacen);
             if($repuesta == true){
-                $almacenes = $this->almacenServicio->ObtenerListaAlmacen($idSede);
+                $almacenes = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpresa);
                 $view = View::make('MInventario/Almacen/listaAlmacenes')->with('listAlmacenes',$almacenes);
                 $sections = $view->renderSections();
                 return Response::json($sections['content']);
@@ -68,8 +69,8 @@ class AlmacenController extends  Controller
     public  function ObtenerAlmacenes(Request $request){
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
-        $idSede = Auth::user()->Sede->id;
-        $almacenes = $this->almacenServicio->ObtenerListaAlmacen($idSede);
+        $idEmpresa = Auth::user()->Sede->Empresa->id;
+        $almacenes = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpresa);
         $view = View::make('MInventario/Almacen/listaAlmacenes')->with('listAlmacenes',$almacenes);
         if($request->ajax()){
             $sections = $view->renderSections();

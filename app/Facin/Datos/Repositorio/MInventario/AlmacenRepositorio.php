@@ -31,8 +31,19 @@ class AlmacenRepositorio
         }
     }
 
-    public  function  ObtenerListaAlmacen($idSede)
+    public  function  ObtenerListaAlmacenXSede($idSede)
     {
         return Almacen::where('Sede_id', '=', $idSede)->get();
+    }
+
+    public  function  ObtenerListaAlmacenXEmpresa($idEmpresa)
+    {
+        $almacenes = DB::table('Tbl_Almacenes')
+            ->join('Tbl_Sedes', 'Tbl_Sedes.id', '=', 'Tbl_Almacenes.Sede_id')
+            ->join('Tbl_Empresas', 'Tbl_Empresas.id', '=', 'Tbl_Sedes.Empresa_id')
+            ->select('Tbl_Almacenes.*')
+            ->where('Tbl_Empresas.id', '=', $idEmpresa)
+            ->get();
+        return $almacenes;
     }
 }

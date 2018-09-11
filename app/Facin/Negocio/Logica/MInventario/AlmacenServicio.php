@@ -23,8 +23,13 @@ class AlmacenServicio
         return $this->almacenRepositorio->GuardarAlmacen($almacen);
     }
 
-    public  function  ObtenerListaAlmacen($idSede)
+    public  function  ObtenerListaAlmacenXSede($idSede)
     {
         return $this->almacenRepositorio->ObtenerListaAlmacen($idSede);
+    }
+
+    public  function  ObtenerListaAlmacenXEmpresa($idEmpresa)
+    {
+        return $this->almacenRepositorio->ObtenerListaAlmacenXEmpresa($idEmpresa);
     }
 }

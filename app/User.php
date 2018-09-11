@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ResetPasswordNotification;
 use Facin\Datos\Modelos\MEmpresa\Sede;
 use Facin\Datos\Modelos\MSistema\Rol;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','last_name','username', 'email', 'password','Sede_id'
+        'name','last_name','username', 'email', 'password','Sede_id','CodigoConfirmacion','CorreoConfirmado'
     ];
 
     /**
@@ -29,6 +30,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
     public function roles()
     {
         return $this

@@ -7,10 +7,11 @@ use App\Http\Controllers\Controller;
 use Facin\Datos\Modelos\MEmpresa\Empresa;
 use Facin\Datos\Modelos\MEmpresa\Sede;
 use Facin\Datos\Modelos\MSistema\Rol;
-use Facin\Datos\Modelos\MSistema\Rol_Por_Usuario;
-use http\Env\Request;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -44,6 +45,20 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return: redirecciona al usuario al inicio de sesión
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+        return redirect('/')->with('mensaje', true);
     }
 
     /**
@@ -84,7 +99,7 @@ class RegisterController extends Controller
                 'Telefono'=> $data['Telefono'],
                 'CorreoElectronico'=> $data['CorreoElectronico'],
                 'SitioWeb'=> $data['SitioWeb'],
-                'EsActiva'=> 0,
+                'EsActiva'=> 1,
                 'LogoEmpresa'=> 'Imagen logo Empresa'
             ]);
             $sede = Sede::create([
@@ -93,18 +108,23 @@ class RegisterController extends Controller
                 'Telefono' => $data['Telefono'],
                 'Empresa_id' =>$empresa->id
             ]);
+            $data['CodigoConfirmacion'] = str_random(25);
             $user = User::create([
                 'name' => $data['name'],
                 'last_name' => $data['last_name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'Sede_id' =>$sede->id
+                'Sede_id' =>$sede->id,
+                'CodigoConfirmacion' => $data['CodigoConfirmacion']
             ]);
             $user
                 ->roles()
                 ->attach(Rol::where('Nombre', 'Admin')->first());
             DB::commit();
+            Mail::send('Correos.ConfirmarCorreo', $data, function($message) use ($data) {
+                $message->to($data['email'], $data['name'])->subject('Por favor confirma tu correo');
+            });
             return $user;
         } catch (\Exception $e) {
             $error = $e->getMessage();

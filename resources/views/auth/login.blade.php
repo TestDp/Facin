@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 			<div class="main-page login-page ">
 				<div class="widget-shadow">
 					<div class="login-top">

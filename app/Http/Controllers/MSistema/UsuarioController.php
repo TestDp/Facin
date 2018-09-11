@@ -101,4 +101,19 @@ class UsuarioController extends  Controller
             return Response::json($sections['content']);
         }else return view('MSistema/Usuario/listaUsuarios');
     }
+
+    //Funcion para verificar el correo del usuario registrado
+    public function verifarCorreo($code)
+    {
+        $user = User::where('CodigoConfirmacion', $code)->first();
+
+        if (! $user)
+            return redirect('/');
+
+        $user->CorreoConfirmado = true;
+        $user->CodigoConfirmacion = null;
+        $user->save();
+
+        return redirect('/home')->with('notification', 'Has confirmado correctamente tu correo!');
+    }
 }
