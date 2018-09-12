@@ -3987,3 +3987,18 @@ h4.title3 {
 }
 }
 /*--//responsive-design---*/
+._loading{
+	background-color: rgb(255, 255, 255, 0.7);
+	text-align: center;
+	position: absolute;
+	left: 150px !important;
+	width: 100%;
+	height: 100%;
+}
+
+.capa_loading{
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+}
