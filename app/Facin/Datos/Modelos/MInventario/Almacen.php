@@ -23,7 +23,7 @@ class Almacen extends  Model
     }
 
     public function Productos(){
-        return $this->hasMany(ProductoPorProveedor::class,'Almacen_id','id');
+        return $this->hasMany(Producto::class,'Almacen_id','id');
     }
 
 }

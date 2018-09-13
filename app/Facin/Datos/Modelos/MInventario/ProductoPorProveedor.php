@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductoPorProveedor extends Model
 {
     protected $table = 'Tbl_Productos_Por_Proveedores';
-    protected $fillable =['Cantidad','Producto_id','Proveedor_id'];
+    protected $fillable =['Cantidad','Producto_id','Proveedor_id','CantidadMinima'];
 
     public function PreciosDeCompra(){
         return $this->hasMany(PrecioDeCompra::class,'ProductoPorProveedor_id','id');

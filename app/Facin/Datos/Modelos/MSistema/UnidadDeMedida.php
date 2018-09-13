@@ -9,6 +9,7 @@
 namespace Facin\Datos\Modelos\MSistema;
 
 
+use Facin\Datos\Modelos\MInventario\Producto;
 use Facin\Datos\Modelos\MInventario\ProductoPorProveedor;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ class UnidadDeMedida extends  Model
     protected $fillable =['Unidad','Abreviatura','Descripcion'];
 
     public function Productos(){
-        return $this->hasMany(ProductoPorProveedor::class,'UnidadDeMedida_id','id');
+        return $this->hasMany(Producto::class,'UnidadDeMedida_id','id');
     }
 
 }

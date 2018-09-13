@@ -44,6 +44,11 @@ Route::post('guardarUsuario', 'MSistema\UsuarioController@GuardarUsuarioEmpresa'
 Route::get('usuarios', 'MSistema\UsuarioController@ObtenerUsuarios')->name('usuarios');//Obtiene la lista de usuarios
 Route::get('/register/verify/{code}', 'MSistema\UsuarioController@verifarCorreo'); //verificar correo electronico
 
+//CONTROLADOR TIPODEPRODUCTOS
+Route::get('crearTipoProducto', 'MSistema\TipoDeProductoController@CrearTipoDeProducto')->name('crearTipoProducto');//cargar la vista para crear un tipo de producto
+Route::post('guardarTipoProducto', 'MSistema\TipoDeProductoController@GuardarTipoProducto')->name('guardarTipoProducto');//Guardar la informacion del usuario
+Route::get('tiposProductos', 'MSistema\TipoDeProductoController@ObtenerTiposProductos')->name('tiposProductos');//Obtiene la lista de tipos de productos
+
 //CONTROLADOR PROVEEDOR
 Route::get('crearProveedor', 'MInventario\ProveedorController@CrearProveedor')->name('crearProveedor');//cargar la vista para crear un proveedor
 Route::post('guardarProveedor', 'MInventario\ProveedorController@GuardarProveedor')->name('guardarProveedor');//Guardar la informacion del proveedor

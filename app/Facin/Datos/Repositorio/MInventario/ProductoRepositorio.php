@@ -28,6 +28,7 @@ class ProductoRepositorio
                 $productoXProveedor->Producto_id =  $producto->id;
                 $productoXProveedor->Proveedor_id = $idProveedor;
                 $productoXProveedor->Cantidad = 0;
+                $productoXProveedor->CantidadMinima = 0;
                 $productoXProveedor->save();
             }
 

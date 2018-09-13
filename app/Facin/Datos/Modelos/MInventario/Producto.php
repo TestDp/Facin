@@ -9,6 +9,7 @@
 namespace Facin\Datos\Modelos\MInventario;
 
 
+use Facin\Datos\Modelos\MSistema\TipoDeProducto;
 use Facin\Datos\Modelos\MSistema\UnidadDeMedida;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,8 +18,8 @@ class Producto extends Model
     protected $table = 'Tbl_Productos';
 
     //Cantidad: es la cantidad minimma para mantener en el inventario
-    protected $fillable =['Codigo','Nombre','Precio','PrecioSinIva','Cantidad',
-        'ImagenProducto','Almacen_id','Categoria_id','UnidadDeMedida_id'];
+    protected $fillable =['Codigo','Nombre','Precio','PrecioSinIva','ImagenProducto',
+                          'Almacen_id','Categoria_id','UnidadDeMedida_id','TipoDeProducto_id'];
 
     public function Almacen()
     {
@@ -37,5 +38,18 @@ class Producto extends Model
 
     public function ProductsoPorProveedores(){
         return $this->hasMany(ProductoPorProveedor::class,'Producto_id','id');
+    }
+
+    public function TipoDeProducto()
+    {
+        return $this->belongsTo(TipoDeProducto::class,'TipoDeProducto_id');
+    }
+
+    public function GruposDeProductosPrincipales(){
+        return $this->hasMany(GrupoDeProductos::class,'ProductoPrincipal_id','id');
+    }
+
+    public function GruposDeProductosSecundario(){
+        return $this->hasMany(GrupoDeProductos::class,'ProductoSecundario_id','id');
     }
 }

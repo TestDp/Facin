@@ -117,6 +117,11 @@
                                         <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidad de medida</a>
                                     </li>
                                 @endif
+                                    @if(Auth::user()->buscarRecurso('TiposProductos'))
+                                        <li>
+                                            <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de productos</a>
+                                        </li>
+                                    @endif
                             </ul>
                         </li>
                 @endif
@@ -276,8 +281,6 @@
 <!--scrolling js-->
 <script src="{{ asset('js/jquery.nicescroll.js') }}"></script>
 <script src="{{ asset('js/scripts.js') }}"></script>
-<!--//scrolling js-->
-<!-- Bootstrap Core JavaScript -->
 <script src="{{ asset('js/bootstrap.js') }}"></script>
 
 <!-- js de la apliacion-->
@@ -285,6 +288,7 @@
 <script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
 <script src="{{ asset('js/MSistema/Rol.js') }}"></script>
 <script src="{{ asset('js/MSistema/Usuario.js') }}"></script>
+<script src="{{ asset('js/MSistema/TipoProducto.js') }}"></script>
 <script src="{{ asset('js/MInventario/Proveedor.js') }}"></script>
 <script src="{{ asset('js/MInventario/Categoria.js') }}"></script>
 <script src="{{ asset('js/MInventario/Almacen.js') }}"></script>

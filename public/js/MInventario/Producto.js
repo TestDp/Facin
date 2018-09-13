@@ -57,7 +57,7 @@ function GuardarProducto() {
             $("#errorNombre").html("");
             $("#errorPrecio").html("");
             $("#errorPrecioSinIva").html("");
-            $("#errorCantidad").html("");
+            $("#errorTipoDeProducto_id").html("");
             $("#errorAlmacen_id").html("");
             $("#errorCategoria_id").html("");
             $("#errorUnidadDeMedida_id").html("");
@@ -76,9 +76,9 @@ function GuardarProducto() {
             if(errors.errors.PrecioSinIva){
                 var errorPrecioSinIva = "<strong>"+ errors.errors.PrecioSinIva+"</strong>";
                 $("#errorPrecioSinIva").append(errorPrecioSinIva);}
-            if(errors.errors.Cantidad){
-                var errorCantidad = "<strong>"+ errors.errors.Cantidad+"</strong>";
-                $("#errorCantidad").append(errorCantidad);}
+            if(errors.errors.TipoDeProducto_id){
+                var errorTipoDeProducto_id = "<strong>"+ errors.errors.TipoDeProducto_id+"</strong>";
+                $("#errorTipoDeProducto_id").append(errorTipoDeProducto_id);}
             if(errors.errors.Almacen_id){
                 var errorAlmacen_id = "<strong>"+ errors.errors.Almacen_id+"</strong>";
                 $("#errorAlmacen_id").append(errorAlmacen_id);}
@@ -124,4 +124,29 @@ function CalcularPrecioConIva() {
     $("#PrecioConIva").val("");
     precio = parseFloat($("#PrecioSinIva").val()) + (parseFloat($("#PrecioSinIva").val())*0.19);
     $("#PrecioConIva").val(precio);
+}
+
+function agregarProducto() {
+     var opcion= $('#ListaProductos').find('option:selected');//obtenemos la opcion seleccionada
+     var tr ='<tr>';
+       tr= tr+ '<td><input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/>'+opcion.text()+'</td>'
+       tr= tr +'<td><input id="Cantidad" name="Cantidad" type="number" class="form-control"></td>'
+       tr=tr+'<td><a onclick="RemoverProducto(this)"><span class="glyphicon glyphicon-remove"></span></a></td></tr>';
+    $('#productosSeleccionados').append(tr);
+}
+
+function mostrarYOcultarPanelAgregarProductos() {
+   if( $('#EsCombo').prop( "checked" ))//Preguntamos si el checkbo EsCombo esta seleccionado para mostrar o ocultar el panel de productos
+   {
+       $("#divProveedores").attr('hidden','hidden');
+       $("#divProductos").removeAttr('hidden');
+   }
+   else{
+       $("#divProductos").attr('hidden','hidden');
+       $("#divProveedores").removeAttr('hidden');
+   }
+}
+
+function RemoverProducto(element) {
+    $(element).closest('tr').remove();
 }

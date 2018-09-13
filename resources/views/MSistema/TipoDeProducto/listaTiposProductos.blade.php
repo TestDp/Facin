@@ -5,9 +5,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="panel panel-success">
-                <div class="panel-heading"><h3>Tipos de Documentos</h3></div>
+                <div class="panel-heading"><h3>Tipos de Producto</h3></div>
                 <div class="panel-body">
-                    <table  style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaTipoDocumentos">
+                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaTipoProductos">
                         <thead>
                         <tr>
                             <th scope="col">Id</th>
@@ -16,7 +16,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($listDoc as $tipo)
+                        @foreach($listTiposProductos as $tipo)
                             <tr>
                                 <th scope="row">{{$tipo->id}}</th>
                                 <td>{{$tipo->Nombre}}</td>
@@ -27,8 +27,9 @@
                     </table>
                     <div class="row">
                         <div class="col-md-4">
-                            <button onclick="ajaxRenderSectionCrearTipoDocumento()" type="button" class="btn btn-success">Nueva Tipo</button>
+                            <button onclick="ajaxRenderSectionCrearTipoProducto()" type="button" class="btn btn-success">Crear nuevo</button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -42,7 +43,7 @@
     <script type="text/javascript">
         // Material Select Initialization
         $(document).ready(function() {
-            $('#tablaTipoDocumentos').DataTable({
+            $('#tablaTipoProductos').DataTable({
                 dom: 'B<"clear">lfrtip',
                 buttons: {
                     name: 'primary',
@@ -66,5 +67,4 @@
         });
 
     </script>
-
 @endsection
