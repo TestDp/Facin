@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 Producto
-                                <select id="Producto_id" name="Producto_id"  class="form-control"  name="language">
+                                <select id="Producto_id" name="Producto_id"  class="form-control"  name="language" onchange="ConsultarInfoProducto()">
                                     <option value="">Seleccionar</option>
                                     @foreach($listProductos as $producto)
                                         <option value="{{ $producto->id }}">{{ $producto->Nombre }}</option>
@@ -22,19 +22,41 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4">
+                                Cantidad Actual
+                                <h4 id="cantidadActualLabel"></h4>
+                                <input id="CantidadActual" name="CantidadActual" type="hidden" class="form-control">
+                            </div>
+                            <div class="col-md-4">
                                 Cantidad
-                                <input id="Cantidad" name="Cantidad" type="text" class="form-control">
+                                <input id="Cantidad" name="Cantidad" type="number" class="form-control" onkeyup="calcularCantidadFinal()">
+                                <span class="invalid-feedback" role="alert" id="errorCantidad"></span>
+                            </div>
+                            <div class="col-md-4">
+                                Cantidad final
+                                <h4 id="cantidadFinal"></h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                Precio de Venta
+                                <input id="PrecioVenta" name="PrecioVenta" type="number" class="form-control">
                                 <span class="invalid-feedback" role="alert" id="errorCantidad"></span>
                             </div>
                             <div class="col-md-4">
                                 Precio de Compra por unidad
-                                <input id="Precio" name="Precio" type="text" class="form-control">
+                                <input id="Precio" name="Precio" type="number" class="form-control">
                                 <span class="invalid-feedback" role="alert" id="errorPrecio"></span>
                             </div>
                             <div class="col-md-4">
                                 Número de factura
                                 <input id="NumFacturaProvedor" name="NumFacturaProvedor" type="text" class="form-control">
                                 <span class="invalid-feedback" role="alert" id="errorNumFacturaProvedor"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                Comentarios/Observaciones
+                                <textarea id="Comentarios" name="Comentarios" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="row">

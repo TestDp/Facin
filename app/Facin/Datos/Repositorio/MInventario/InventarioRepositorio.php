@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\DB;
 class InventarioRepositorio
 {
 
-    //parametros:$precioDeCompra(modelo PrecioDeCompra) $productoXProveedor(modelo ProductoPorProveedor)
-    public  function GuardarInventario($precioDeCompra,$productoXProveedor)
+    //parametros:$precioDeCompra(modelo PrecioDeCompra), $productoXProveedor(modelo ProductoPorProveedor),$producto(modelo de producto)
+    public  function GuardarInventario($precioDeCompra,$productoXProveedor,$producto)
     {
         DB::beginTransaction();
         try {
             $precioDeCompra->save();
             $productoXProveedor->save();
+            $producto->save();
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -30,15 +31,6 @@ class InventarioRepositorio
             return $error;
         }
     }
-    //Parametros:Pk tabla de producto($idProducto) Pk tabla de proveedor($idProveedor)
-    public function ObtenerProductoXProveedor($idProducto,$idProveedor)
-    {
-        return ProductoPorProveedor::where('Producto_id','=',$idProducto)->where('Proveedor_id','=',$idProveedor)->get()->first();
-    }
 
-    //Parametros:Pk tabla de producto($idProducto)
-    public function ObtenerProductoProveedorIdproducto($idProducto)
-    {
-        return ProductoPorProveedor::where('Producto_id','=',$idProducto)->get()->first();
-    }
+
 }

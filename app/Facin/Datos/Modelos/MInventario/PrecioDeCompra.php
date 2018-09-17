@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrecioDeCompra extends Model
 {
     protected $table = 'Tbl_Precios_De_Compra';
-    protected $fillable =['Cantidad','Precio','NumFacturaProvedor','ProductoPorProveedor_id'];
+    protected $fillable =['Cantidad','Precio','NumFacturaProvedor','ProductoPorProveedor_id','Comentarios'];
 
     public function ProductoPorProveedor()
     {

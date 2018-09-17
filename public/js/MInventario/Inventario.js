@@ -79,3 +79,38 @@ function GuardarInventario() {
         }
     });
 }
+
+
+//función para obtener la información de un producto consultada por el id o pk del producto
+function ConsultarInfoProducto() {
+    var idProducto = $('#Producto_id').val()
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'infoProducto/'+idProducto,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $("#cantidadActualLabel").html(data.Cantidad);
+            $("#CantidadActual").val(data.Cantidad);
+            $("#PrecioVenta").val(data.producto.Precio);
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
+function calcularCantidadFinal() {
+    var cantidadActual = parseFloat($("#CantidadActual").val());
+    var cantidad = parseFloat($("#Cantidad").val());
+    var cantidadFinal = cantidad + cantidadActual;
+    $("#cantidadFinal").html(cantidadFinal);
+
+}

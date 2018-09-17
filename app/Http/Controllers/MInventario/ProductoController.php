@@ -55,7 +55,6 @@ class ProductoController extends  Controller
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $idSede = Auth::user()->Sede->id;
         $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
         $almacenes = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpreesa);
         $categorias = $this->categoriaServicio->ObtenerListaCategorias($idEmpreesa);
@@ -109,5 +108,10 @@ class ProductoController extends  Controller
             $sections = $view->renderSections();
             return Response::json($sections['content']);
         }else return view('MInventario/Producto/listaProductos');
+    }
+
+    //Metodo que me retornar una lista de productosPorProveedor filtrado por el id o pk del producto
+    public function ObtenerProductoProveedor($idProducto){
+        return response()->json($this->productoServicio->ObtenerProductoProveedorIdproducto($idProducto));
     }
 }

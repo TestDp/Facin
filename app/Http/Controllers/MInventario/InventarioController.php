@@ -43,17 +43,16 @@ class InventarioController extends  Controller
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
         $view = View::make('MInventario/Inventario/actualizarInventario',
-            array('listProveedores'=>$proveedores,'listProductos'=>$productos));
+            array('listProductos'=>$productos));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);
         }else return view('MInventario/Inventario/actualizarInventario');
     }
 
-    //Metodo para guarda el inventario o actualizar la cantidad de un producto por proveedor
+    //Metodo para guarda el inventario o ajustar la cantidad de un producto por proveedor
     public  function GuardarInventario(Request $request)
     {
         $urlinfo= $request->getPathInfo();
@@ -63,7 +62,7 @@ class InventarioController extends  Controller
             $repuesta = $this->inventarioServicio->GuardarInventario($request);
             if($repuesta == true){
                 $idEmpreesa = Auth::user()->Sede->Empresa->id;
-                $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+                $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
                 $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
                 $sections = $view->renderSections();
                 return Response::json($sections['content']);

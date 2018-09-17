@@ -34,4 +34,12 @@ class ProductoServicio
     public function ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa){
         return $this->productoRepositorio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
     }
+
+    public function ObtenerProductoXProveedor($idProducto,$idProveedor){
+        return $this->productoRepositorio->ObtenerProductoXProveedor($idProducto,$idProveedor);
+    }
+
+    public function ObtenerProductoProveedorIdproducto($idProducto){
+        return $this->productoRepositorio->ObtenerProductoProveedorIdproducto($idProducto);
+    }
 }

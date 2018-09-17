@@ -54,6 +54,7 @@ class ProductoRepositorio
         }
     }
 
+    //me retorna un lista de producto filtrado por el id de la empresa
     public function ObtenerListaProductoPorEmpresa($idEmpreesa)
     {
         $productos = Producto::all();
@@ -65,6 +66,7 @@ class ProductoRepositorio
         return $ListaProductosEmpresa;
     }
 
+    //retorna una lista de prodcutoPorProveedor filtrado por el id de la empresa
     public function ObtenerProductoPorEmpresaYProveedor($idEmpreesa)
     {
         $productos = ProductoPorProveedor::all();
@@ -76,6 +78,7 @@ class ProductoRepositorio
         return $ListaProductosEmpresa;
     }
 
+    //me retorna un lista de producto que no es combo filtrado por el id de la empresa
     public function ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa)
     {
         $productos = Producto::where('EsCombo','<>',1)->get();
@@ -86,4 +89,27 @@ class ProductoRepositorio
         }
         return $ListaProductosEmpresa;
     }
+
+    //Parametros:Pk tabla de producto($idProducto) Pk tabla de proveedor($idProveedor)
+    //retorna: un productoPorProveedor filtrado por el id o pk del producto y id o pk del producto
+    public function ObtenerProductoXProveedor($idProducto,$idProveedor)
+    {
+        return ProductoPorProveedor::where('Producto_id','=',$idProducto)->where('Proveedor_id','=',$idProveedor)->get()->first();
+    }
+
+    //Parametros:Pk tabla de producto($idProducto)
+    //retorna: un productoPorProveedor filtrado por el id o pk del producto
+    public function ObtenerProductoProveedorIdproducto($idProducto)
+    {
+        $productoProvvedor = ProductoPorProveedor::where('Producto_id','=',$idProducto)->get()->first();
+        $productoProvvedor->Producto;
+        return $productoProvvedor;
+    }
+
+    //Parametros:Pk tabla de producto($idProducto)
+    //retorna:un producto filtrado por el id o pk del producto
+    public function ObtenerProducto($idProducto){
+        return Producto::find($idProducto);
+    }
+
 }
