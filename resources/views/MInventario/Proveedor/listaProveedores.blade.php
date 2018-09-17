@@ -7,33 +7,36 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Proveedores</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProveedores">
-                        <thead>
-                        <tr>
-                            <th scope="col">Razón Social</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Nit</th>
-                            <th scope="col">Celular</th>
-                            <th scope="col">Telefono</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listProveedores as $proveedor)
-                            <tr>
-                                <th scope="row">{{$proveedor->RazonSocial}}</th>
-                                <td>{{$proveedor->Nombre}} {{$proveedor->Apellidos}}</td>
-                                <td>{{$proveedor->Nit}}</td>
-                                <td>{{$proveedor->Celular}}</td>
-                                <td>{{$proveedor->Telefono}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearProveedor()" type="button" class="btn btn-success">Nuevo Proveedor</button>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProveedores">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Razón Social</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Nit</th>
+                                    <th scope="col">Celular</th>
+                                    <th scope="col">Telefono</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listProveedores as $proveedor)
+                                    <tr>
+                                        <th scope="row">{{$proveedor->RazonSocial}}</th>
+                                        <td>{{$proveedor->Nombre}} {{$proveedor->Apellidos}}</td>
+                                        <td>{{$proveedor->Nit}}</td>
+                                        <td>{{$proveedor->Celular}}</td>
+                                        <td>{{$proveedor->Telefono}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,27 +7,32 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Productos</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProductos">
-                        <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Precio</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listProductos as $producto)
-                            <tr>
-                                <td>{{$producto->Nombre}}</td>
-                                <td>{{$producto->Precio}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
-                            <button onclick="ajaxRenderSectionCrearProducto()" type="button" class="btn btn-success">Nueva Producto</button>
+                            <button onclick="ajaxRenderSectionCrearProducto()" type="button" class="btn btn-success">Nuevo Producto</button>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProductos">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Precio Unidad</th>
+                                    <th scope="col">stock(Cantidad)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listProductos as $producto)
+                                    <tr>
+                                        <td>{{$producto->Producto->Nombre}}</td>
+                                        <td>{{$producto->Producto->Precio}}</td>
+                                        <td>{{$producto->Cantidad}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

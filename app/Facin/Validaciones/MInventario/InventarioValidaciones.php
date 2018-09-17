@@ -18,7 +18,6 @@ class InventarioValidaciones
         $mensajes = $this->mensajesFormularioCrear();
         return Validator::make($data, [
             'Producto_id' => 'required|string|max:255',
-            'Proveedor_id' => 'required|max:255',
             'Precio' => 'required|max:255',
             'Cantidad' => 'required|max:255',
             'NumFacturaProvedor' => 'required|max:255'
@@ -28,7 +27,6 @@ class InventarioValidaciones
 
     public  function  mensajesFormularioCrear(){
         return ['Producto_id.required' => 'El producto es obligatorio',
-            'Proveedor_id.required' => 'El proveedor es obligatorio',
             'Precio.required' => 'El precio de compra es obligatorio',
             'Cantidad.required' => 'La cantidad minima es obligatoria',
             'NumFacturaProvedor.required' => 'El número de factura es obligatoria'

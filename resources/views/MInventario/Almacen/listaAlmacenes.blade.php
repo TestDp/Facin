@@ -7,27 +7,30 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Almacenes</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaAlmacenes">
-                        <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Descripcion</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listAlmacenes as $almacen)
-                            <tr>
-                                <td>{{$almacen->Nombre}}</td>
-                                <td>{{$almacen->Ubicacion}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearAlmacen()" type="button" class="btn btn-success">Nuevo Almacen</button>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaAlmacenes">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Descripcion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listAlmacenes as $almacen)
+                                    <tr>
+                                        <td>{{$almacen->Nombre}}</td>
+                                        <td>{{$almacen->Ubicacion}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

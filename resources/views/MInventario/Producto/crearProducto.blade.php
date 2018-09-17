@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-md-1">
                                 Combo
-                                <input type="checkbox" class="form-control" id="EsCombo" onclick="mostrarYOcultarPanelAgregarProductos()" />
+                                <input type="checkbox" value="1" class="form-control" id="EsCombo" name="EsCombo" onclick="mostrarYOcultarPanelAgregarProductos()" />
                             </div>
                             <div class="col-md-3">
                                 Código
@@ -87,7 +87,7 @@
                         <div class="row" id="divProveedores">
                             <div class="col-md-12">
                                 Proveedores
-                                <select id="Proveedor_id" name="Proveedor_id[]"  class="form-control"  name="language">
+                                <select id="Proveedor_id" name="Proveedor_id"  class="form-control"  name="language">
                                     <option value="">Seleccionar</option>
                                     @foreach($listProveedores as $provedor)
                                         <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
@@ -106,7 +106,7 @@
                                             <select id="ListaProductos" name="ListaProductos"  class="form-control"  name="language">
                                                 <option value="">Seleccionar</option>
                                                 @foreach($listProductos as $productos)
-                                                    <option value="{{ $productos->id }}">{{ $productos->Nombre }}</option>
+                                                    <option value="{{ $productos->id }}" data-num="{{ $productos->PrecioSinIva }}">{{ $productos->Nombre }}</option>
                                                 @endforeach
                                             </select>
                                             <button onclick="agregarProducto()" type="button" class="btn btn-success">agregar Producto</button>
@@ -138,7 +138,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <button onclick="GuardarProducto()" type="button" class="btn btn-success">Crear Producto</button>
+                            <button onclick="validarCamposFormCrearProducto()" type="button" class="btn btn-success">Crear Producto</button>
                         </div>
 
                     </div>

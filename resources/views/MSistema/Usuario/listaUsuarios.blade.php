@@ -7,31 +7,34 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Usuarios</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaUsuarios">
-                        <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Usuario</th>
-                            <th scope="col">Correo</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listUsuarios as $usuario)
-                            <tr>
-                                <th scope="row">{{$usuario->id}}</th>
-                                <td>{{$usuario->name}} {{$usuario->last_name}}</td>
-                                <td>{{$usuario->username}}</td>
-                                <td>{{$usuario->email}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearUsuario()" type="button" class="btn btn-success">Nuevo Usuario</button>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaUsuarios">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Correo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listUsuarios as $usuario)
+                                    <tr>
+                                        <th scope="row">{{$usuario->id}}</th>
+                                        <td>{{$usuario->name}} {{$usuario->last_name}}</td>
+                                        <td>{{$usuario->username}}</td>
+                                        <td>{{$usuario->email}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

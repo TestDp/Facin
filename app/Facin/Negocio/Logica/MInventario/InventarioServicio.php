@@ -22,7 +22,7 @@ class InventarioServicio
 
     public  function GuardarInventario($request){
         $precioDeCompra = new PrecioDeCompra($request->all());
-        $productoXProveedor = $this->inventarioRepositorio->ObtenerProductoXProveedor($request->Producto_id,$request->Proveedor_id);
+        $productoXProveedor = $this->inventarioRepositorio->ObtenerProductoProveedorIdproducto($request->Producto_id);
         $productoXProveedor->Cantidad = $productoXProveedor->Cantidad + $request->Cantidad;
         $precioDeCompra->ProductoPorProveedor_id = $productoXProveedor->id;
         return $this->inventarioRepositorio->GuardarInventario($precioDeCompra,$productoXProveedor);

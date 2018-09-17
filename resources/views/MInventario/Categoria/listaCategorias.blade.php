@@ -7,27 +7,30 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Categorías</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaCategorias">
-                        <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Descripcion</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listCategorias as $categoria)
-                            <tr>
-                                <td>{{$categoria->Nombre}}</td>
-                                <td>{{$categoria->Descripcion}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearCategoria()" type="button" class="btn btn-success">Nueva Categoria</button>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaCategorias">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Descripcion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listCategorias as $categoria)
+                                    <tr>
+                                        <td>{{$categoria->Nombre}}</td>
+                                        <td>{{$categoria->Descripcion}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

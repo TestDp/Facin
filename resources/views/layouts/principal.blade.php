@@ -53,7 +53,7 @@
                             <ul class="nav nav-second-level collapse" id="ulInventario">
                                 @if(Auth::user()->buscarRecurso('ActualizarInventario'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Actualizar inventario</a>
+                                        <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Ajustar inventario</a>
                                     </li>
                                 @endif
                                 @if(Auth::user()->buscarRecurso('Productos'))

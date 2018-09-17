@@ -7,29 +7,33 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Sedes</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaSedes">
-                        <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Direccion</th>
-                            <th scope="col">Telefono</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listSedes as $sede)
-                            <tr>
-                                <th scope="row">{{$sede->id}}</th>
-                                <td >{{$sede->Nombre}}</td>
-                                <td>{{$sede->Direccion}}</td>
-                                <td>{{$sede->Telefono}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearSede()" type="button" class="btn btn-success">Nueva Sede</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaSedes">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Direccion</th>
+                                    <th scope="col">Telefono</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listSedes as $sede)
+                                    <tr>
+                                        <th scope="row">{{$sede->id}}</th>
+                                        <td >{{$sede->Nombre}}</td>
+                                        <td>{{$sede->Direccion}}</td>
+                                        <td>{{$sede->Telefono}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

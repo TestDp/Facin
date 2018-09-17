@@ -7,29 +7,33 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Unidades de medida</h3></div>
                 <div class="panel-body">
-                    <table  style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaUnidadesMedida">
-                        <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Unidad</th>
-                            <th scope="col">Abreviatura</th>
-                            <th scope="col">Descripción</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listUnidades as $unidad)
-                            <tr>
-                                <th scope="row">{{$unidad->id}}</th>
-                                <td >{{$unidad->Unidad}}</td>
-                                <td>{{$unidad->Abreviatura}}</td>
-                                <td>{{$unidad->Descripcion}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearUnidad()" type="button" class="btn btn-success">Nueva Unidad</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table  style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaUnidadesMedida">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Unidad</th>
+                                    <th scope="col">Abreviatura</th>
+                                    <th scope="col">Descripción</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listUnidades as $unidad)
+                                    <tr>
+                                        <th scope="row">{{$unidad->id}}</th>
+                                        <td >{{$unidad->Unidad}}</td>
+                                        <td>{{$unidad->Abreviatura}}</td>
+                                        <td>{{$unidad->Descripcion}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

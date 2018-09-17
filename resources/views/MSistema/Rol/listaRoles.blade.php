@@ -7,27 +7,30 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Roles</h3></div>
                 <div class="panel-body">
-                    <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaRoles">
-                        <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Descripcion</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($listRoles as $roles)
-                            <tr>
-                                <td>{{$roles->Nombre}}</td>
-                                <td>{{$roles->Descripcion}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
                     <div class="row">
                         <div class="col-md-4">
                             <button onclick="ajaxRenderSectionCrearRol()" type="button" class="btn btn-success">Nuevo Rol</button>
                         </div>
-
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaRoles">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Descripcion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listRoles as $roles)
+                                    <tr>
+                                        <td>{{$roles->Nombre}}</td>
+                                        <td>{{$roles->Descripcion}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

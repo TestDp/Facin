@@ -35,4 +35,10 @@ class InventarioRepositorio
     {
         return ProductoPorProveedor::where('Producto_id','=',$idProducto)->where('Proveedor_id','=',$idProveedor)->get()->first();
     }
+
+    //Parametros:Pk tabla de producto($idProducto)
+    public function ObtenerProductoProveedorIdproducto($idProducto)
+    {
+        return ProductoPorProveedor::where('Producto_id','=',$idProducto)->get()->first();
+    }
 }

@@ -23,9 +23,34 @@ function ajaxRenderSectionCrearProducto() {
     });
 }
 
+//funcion para validar los campos espcialmente los dinamicos
+function validarCamposFormCrearProducto()
+{
+    if( $('#EsCombo').prop( "checked" ))//Preguntamos si el checkbo EsCombo esta seleccionado para eliminar el contenido para que no se vaya en request
+    {
+        if(validarCamposDinamicos($('#productosSeleccionados'),'Cantidad','input','*'))
+        {
+            $("#divProveedores").html('');
+            GuardarProducto();
+        }else{
+            swal({
+                title: "Transacción con error!",
+                text: "No fue posible grabar el producto!",
+                icon: "error",
+                button: "OK",
+            });
+        }
+
+    }
+    else{
+        $("#divProductos").html('');
+        GuardarProducto();
+    }
+}
 
 //Metodo para guarda la informacion del producto retorna la vista con todos los provedores
 function GuardarProducto() {
+
     var form = $("#formProducto");
     var token = $("#_token").val();
     PopupPosition();
@@ -120,33 +145,78 @@ function ajaxRenderSectionListaProductos() {
     });
 }
 
+//Funcion para calcualr el precion con iva tomar el valor del campo precio sin iva o costo
 function CalcularPrecioConIva() {
     $("#PrecioConIva").val("");
     precio = parseFloat($("#PrecioSinIva").val()) + (parseFloat($("#PrecioSinIva").val())*0.19);
     $("#PrecioConIva").val(precio);
 }
 
+//funcion para agregar o un producto al tabla productos cuando se esta creando un producto tipo combo
 function agregarProducto() {
-     var opcion= $('#ListaProductos').find('option:selected');//obtenemos la opcion seleccionada
-     var tr ='<tr>';
-       tr= tr+ '<td><input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/>'+opcion.text()+'</td>'
-       tr= tr +'<td><input id="Cantidad" name="Cantidad" type="number" class="form-control"></td>'
-       tr=tr+'<td><a onclick="RemoverProducto(this)"><span class="glyphicon glyphicon-remove"></span></a></td></tr>';
-    $('#productosSeleccionados').append(tr);
+    var opcion= $('#ListaProductos').find('option:selected');//obtenemos la opcion seleccionada
+    if(opcion.val() !=''){
+        if(!buscarProductoSecundario(opcion.val()))
+        {
+            var tr ='<tr>';
+            tr= tr+ '<td><input id="ProductoSecundario_id" name="ProductoSecundario_id[]" type="hidden" value="'+opcion.val()+'"/>'+opcion.text()+'</td>'
+            tr= tr +'<td><input id="Cantidad" name="Cantidad[]" type="number" class="form-control" data-num="'+opcion.data('num')+'" onkeyup="MostrarCostoProductoCombo()"/></td>'
+            tr=tr+'<td><a onclick="RemoverProducto(this)"><span class="glyphicon glyphicon-remove"></span></a></td></tr>';
+            $('#productosSeleccionados').append(tr);
+
+        }else{
+            swal({
+                title: "Operación incorrecta!",
+                text: "El producto ya fue seleccionado!",
+                icon: "error",
+                button: "OK",
+            });
+        }
+    }
 }
 
+//funcio que permite ocultar o mostrar el panel de productos si se va a crear o no un producto tipo combo
 function mostrarYOcultarPanelAgregarProductos() {
-   if( $('#EsCombo').prop( "checked" ))//Preguntamos si el checkbo EsCombo esta seleccionado para mostrar o ocultar el panel de productos
-   {
-       $("#divProveedores").attr('hidden','hidden');
-       $("#divProductos").removeAttr('hidden');
-   }
-   else{
-       $("#divProductos").attr('hidden','hidden');
-       $("#divProveedores").removeAttr('hidden');
-   }
+    if( $('#EsCombo').prop( "checked" ))//Preguntamos si el checkbo EsCombo esta seleccionado para mostrar o ocultar el panel de productos
+    {
+        $("#divProveedores").attr('hidden','hidden');
+        $("#divProductos").removeAttr('hidden');
+    }
+    else{
+        $("#divProductos").attr('hidden','hidden');
+        $("#divProveedores").removeAttr('hidden');
+    }
 }
 
+//funcion que remueve un producto del panel de productos en la creacion del producto tipo combo
 function RemoverProducto(element) {
     $(element).closest('tr').remove();
+    MostrarCostoProductoCombo();
 }
+
+//funcion para mostrar el costro de un producto en combo
+function MostrarCostoProductoCombo() {
+    var costoProductoCombo =0;
+    $("#productosSeleccionados").find('input[name*=Cantidad]').each(function (ind, input) {
+        costoProductoCombo = costoProductoCombo + CalcularCostoProductoCombo($(input).data('num'),$(input).val());
+    });
+    $("#PrecioSinIva").val(costoProductoCombo);
+    CalcularPrecioConIva();
+}
+
+//funcion para calcualr el costo de un producto en cambo, se calcula con el costo de los productos que lo comforman
+function CalcularCostoProductoCombo(costosProducto,cantidad) {
+    var costoProducto = costosProducto*cantidad;
+    return costoProducto;
+}
+
+//funcion que busca el prodcuto y  retornar verdadero si el producto ya fue seleccionado en caso contrario retorna falso
+function buscarProductoSecundario(idprodcuto){
+    var respuesta = false;
+    $("#productosSeleccionados").find('input[name*=ProductoSecundario_id]').each(function (ind, input) {
+        if(idprodcuto == $(input).val())
+            respuesta = true;
+    });
+    return respuesta;
+}
+

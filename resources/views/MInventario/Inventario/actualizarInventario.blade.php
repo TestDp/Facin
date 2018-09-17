@@ -19,16 +19,6 @@
                                 </select>
                                 <span class="invalid-feedback" role="alert" id="errorProducto_id"></span>
                             </div>
-                            <div class="col-md-6">
-                                Proveedor
-                                <select id="Proveedor_id" name="Proveedor_id"  class="form-control"  name="language">
-                                    <option value="">Seleccionar</option>
-                                    @foreach($listProveedores as $provedor)
-                                        <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
@@ -37,7 +27,7 @@
                                 <span class="invalid-feedback" role="alert" id="errorCantidad"></span>
                             </div>
                             <div class="col-md-4">
-                                Precio de Compra
+                                Precio de Compra por unidad
                                 <input id="Precio" name="Precio" type="text" class="form-control">
                                 <span class="invalid-feedback" role="alert" id="errorPrecio"></span>
                             </div>

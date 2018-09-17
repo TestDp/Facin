@@ -10,6 +10,7 @@ namespace App\Http\Controllers\MInventario;
 
 
 use App\Http\Controllers\Controller;
+use Facin\Datos\Modelos\MInventario\GrupoDeProductos;
 use Facin\Negocio\Logica\MInventario\AlmacenServicio;
 use Facin\Negocio\Logica\MInventario\CategoriaServicio;
 use Facin\Negocio\Logica\MInventario\ProductoServicio;
@@ -31,11 +32,12 @@ class ProductoController extends  Controller
     protected  $unidadDeMedidaServicio;
     protected  $productoValidaciones;
     protected  $tipoProductoServicio;
+    protected  $grupoProductos;
 
     public function __construct(ProveedorServicio $proveedorServicio,AlmacenServicio $almacenServicio,
                                 CategoriaServicio $categoriaServicio,UnidadDeMedidaServicio $unidadDeMedidaServicio,
                                 ProductoServicio $productoServicio,ProductoValidaciones $productoValidaciones,
-                                TipoDeProductoServicio $tipoProductoServicio){
+                                TipoDeProductoServicio $tipoProductoServicio,GrupoDeProductos $grupoProductos){
         $this->middleware('auth');
         $this->proveedorServicio = $proveedorServicio;
         $this->almacenServicio = $almacenServicio;
@@ -44,6 +46,7 @@ class ProductoController extends  Controller
         $this->productoServicio = $productoServicio;
         $this->productoValidaciones = $productoValidaciones;
         $this->tipoProductoServicio = $tipoProductoServicio;
+        $this->grupoProductos = $grupoProductos;
     }
 
     //Metodo para cargar  la vista de crear producto
@@ -58,7 +61,7 @@ class ProductoController extends  Controller
         $categorias = $this->categoriaServicio->ObtenerListaCategorias($idEmpreesa);
         $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidades();
         $tiposProductos = $this->tipoProductoServicio->ObtenerListaTipoProductos();
-        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
         $view = View::make('MInventario/Producto/crearProducto',
             array('listProveedores'=>$proveedores,'listAlmacenes'=>$almacenes,'listCategorias'=>$categorias,
                 'listUnidades'=>$unidades,'listTiposProductos'=>$tiposProductos,'listProductos'=>$productos));
@@ -74,7 +77,11 @@ class ProductoController extends  Controller
     {
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
-        $this->productoValidaciones->ValidarFormularioCrear($request->all())->validate();
+        if($request->EsCombo){
+            $this->productoValidaciones->ValidarFormularioCrear($request->all())->validate();
+        }else{
+            $this->productoValidaciones->ValidarFormularioCrearConProveedor($request->all())->validate();
+        }
         if($request->ajax()){
             $repuesta = $this->productoServicio->GuardarProducto($request);
             if($repuesta == true){
@@ -96,7 +103,7 @@ class ProductoController extends  Controller
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
         $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
         if($request->ajax()){
             $sections = $view->renderSections();
