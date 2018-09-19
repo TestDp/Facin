@@ -1,4 +1,11 @@
-var urlBase = "/Facin/trunk/public/"; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE SE ESTA CORRIENDO LA APP
+var urlBase = ""; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE SE ESTA CORRIENDO LA APP
+
+try {
+    urlBase = obtenerUlrBase();
+} catch (e) {
+    console.error(e.message);
+    throw new Error("El modulo transversales es requerido");
+};
 
 //Funcion para cargar la vista de crear un rol
 function ajaxRenderSectionCrearRol() {

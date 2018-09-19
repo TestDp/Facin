@@ -284,6 +284,7 @@
 <script src="{{ asset('js/bootstrap.js') }}"></script>
 
 <!-- js de la apliacion-->
+<script src="{{ asset('js/Transversal/generales.js') }}"></script>
 <script src="{{ asset('js/MSistema/TipoDocumento.js') }}"></script>
 <script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
 <script src="{{ asset('js/MSistema/Rol.js') }}"></script>
@@ -295,9 +296,6 @@
 <script src="{{ asset('js/MInventario/Producto.js') }}"></script>
 <script src="{{ asset('js/MInventario/Inventario.js') }}"></script>
 <script src="{{ asset('js/MEmpresa/Sede.js') }}"></script>
-<script src="{{ asset('js/Transversal/generales.js') }}"></script>
-
-
 
 </body>
 </html>

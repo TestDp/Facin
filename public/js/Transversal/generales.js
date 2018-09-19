@@ -1,3 +1,18 @@
+//funcion para obtener la url en al cual se esta ejecuntando la aplicación
+function obtenerUlrBase() {
+    var rootFolder = "";
+    switch (document.location.hostname) {
+        case 'http://facin.co':
+            rootFolder = '/'; break;
+        case 'localhost':
+            rootFolder = '/Facin/trunk/public/'; break;
+        default:  // set whatever you want
+    }
+    var urlBase = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + rootFolder;
+    return urlBase;
+};
+
+
 //Muestra los divs que se utilizan para mostrar
 //el efecto de espera en una petición ajax.
 function PopupPosition() {
@@ -77,7 +92,7 @@ function validarCamposDinamicos(contenedor, nameElementoAValidar, tipoElemento,t
 
 }
 
-
+//funcion para quitar las etiquetas de la validación dimamica
 function quitarlabelError(element)
 {
     var label = $(element).next("label");
