@@ -2,7 +2,7 @@
 function obtenerUlrBase() {
     var rootFolder = "";
     switch (document.location.hostname) {
-        case 'http://facin.co':
+        case 'facin.co':
             rootFolder = '/'; break;
         case 'localhost':
             rootFolder = '/Facin/trunk/public/'; break;

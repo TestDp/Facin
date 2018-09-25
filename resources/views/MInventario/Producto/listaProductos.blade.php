@@ -17,6 +17,7 @@
                             <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProductos">
                                 <thead>
                                 <tr>
+                                    <th scope="col">Código</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Precio Unidad</th>
                                     <th scope="col">stock(Cantidad)</th>
@@ -25,6 +26,7 @@
                                 <tbody>
                                 @foreach($listProductos as $producto)
                                     <tr>
+                                        <td>{{$producto->Producto->Codigo}}</td>
                                         <td>{{$producto->Producto->Nombre}}</td>
                                         <td>{{$producto->Producto->Precio}}</td>
                                         <td>{{$producto->Cantidad}}</td>

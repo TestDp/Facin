@@ -85,7 +85,7 @@ class ProductoController extends  Controller
             $repuesta = $this->productoServicio->GuardarProducto($request);
             if($repuesta == true){
                 $idEmpreesa = Auth::user()->Sede->Empresa->id;
-                $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+                $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
                 $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
                 $sections = $view->renderSections();
                 return Response::json($sections['content']);
