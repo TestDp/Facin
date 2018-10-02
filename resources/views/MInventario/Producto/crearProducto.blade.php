@@ -34,7 +34,6 @@
                                 </select>
                                 <span class="invalid-feedback" role="alert" id="errorTipoDeProducto_id"></span>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-4">

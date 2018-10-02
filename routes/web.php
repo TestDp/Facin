@@ -29,9 +29,9 @@ Route::post('guardarTipoDocumento', 'MSistema\TipoDocumentoController@GuardarTip
 Route::get('tiposDocumentos', 'MSistema\TipoDocumentoController@ObtenerTiposDocumentos')->name('tiposDocumentos');//Obtiene la lista de tipos de documentos
 
 //CONTROLADOR UNIDADDEMEDIDA
-Route::get('crearUnidad', 'MSistema\UnidadDeMedidaController@CrearUnidad')->name('crearUnidad');//cargar la vista para crear una unidad
-Route::post('guardarUnidad', 'MSistema\UnidadDeMedidaController@GuardarUnidad')->name('guardarUnidad');//Guardar la informacion de la unidad
-Route::get('unidades', 'MSistema\UnidadDeMedidaController@ObtenerUnidades')->name('unidades');//Obtiene la lista de tipos de la unidad
+Route::get('crearUnidad', 'MEmpresa\UnidadDeMedidaController@CrearUnidad')->name('crearUnidad');//cargar la vista para crear una unidad
+Route::post('guardarUnidad', 'MEmpresa\UnidadDeMedidaController@GuardarUnidad')->name('guardarUnidad');//Guardar la informacion de la unidad
+Route::get('unidades', 'MEmpresa\UnidadDeMedidaController@ObtenerUnidadesEmpresa')->name('unidades');//Obtiene la lista de tipos de la unidad
 
 //CONTROLADOR ROL
 Route::get('crearRol', 'MSistema\RolController@CrearRol')->name('crearRol');//cargar la vista para crear un rol

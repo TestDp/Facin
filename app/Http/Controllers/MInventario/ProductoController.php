@@ -16,7 +16,7 @@ use Facin\Negocio\Logica\MInventario\CategoriaServicio;
 use Facin\Negocio\Logica\MInventario\ProductoServicio;
 use Facin\Negocio\Logica\MInventario\ProveedorServicio;
 use Facin\Negocio\Logica\MSistema\TipoDeProductoServicio;
-use Facin\Negocio\Logica\MSistema\UnidadDeMedidaServicio;
+use Facin\Negocio\Logica\MEmpresa\UnidadDeMedidaServicio;
 use Facin\Validaciones\MInventario\ProductoValidaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -58,7 +58,7 @@ class ProductoController extends  Controller
         $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
         $almacenes = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpreesa);
         $categorias = $this->categoriaServicio->ObtenerListaCategorias($idEmpreesa);
-        $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidades();
+        $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidadesEmpresa($idEmpreesa);
         $tiposProductos = $this->tipoProductoServicio->ObtenerListaTipoProductos();
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
         $view = View::make('MInventario/Producto/crearProducto',

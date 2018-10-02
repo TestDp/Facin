@@ -99,6 +99,11 @@
                                         <a href="#" onclick="ajaxRenderSectionListaRoles()">Roles</a>
                                     </li>
                                 @endif
+                                @if(Auth::user()->buscarRecurso('UnidadesDeMedida'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidad de medida</a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                     @endif
@@ -112,71 +117,15 @@
                                         <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de Documentos</a>
                                     </li>
                                 @endif
-                                @if(Auth::user()->buscarRecurso('UnidadesDeMedida'))
+
+                                @if(Auth::user()->buscarRecurso('TiposProductos'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaUnidades()">Unidad de medida</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de productos</a>
                                     </li>
                                 @endif
-                                    @if(Auth::user()->buscarRecurso('TiposProductos'))
-                                        <li>
-                                            <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de productos</a>
-                                        </li>
-                                    @endif
                             </ul>
                         </li>
-                @endif
-                <!--  <li>
-                        <a href="widgets.html"><i class="fa fa-th-large nav_icon"></i>Widgets <span
-                                    class="nav-badge-btm">08</span></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-envelope nav_icon"></i>Mailbox<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="inbox.html">Inbox <span class="nav-badge-btm">05</span></a>
-                            </li>
-                            <li>
-                                <a href="compose.html">Compose email</a>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li>
-                        <a href="tables.html"><i class="fa fa-table nav_icon"></i>Tables <span
-                                    class="nav-badge">05</span></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-check-square-o nav_icon"></i>Forms<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="forms.html">Basic Forms <span class="nav-badge-btm">07</span></a>
-                            </li>
-                            <li>
-                                <a href="validation.html">Validation</a>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-file-text-o nav_icon"></i>Pages<span class="nav-badge-btm">02</span><span
-                                    class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="login.html">Login</a>
-                            </li>
-                            <li>
-                                <a href="signup.html">SignUp</a>
-                            </li>
-                            <li>
-                                <a href="blank-page.html">Blank Page</a>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li>
-                        <a href="charts.html" class="chart-nav"><i class="fa fa-bar-chart nav_icon"></i>Charts <span
-                                    class="nav-badge-btm pull-right">new</span></a>
-                    </li>-->
+                    @endif
                 </ul>
                 <!-- //sidebar-collapse -->
             </nav>
