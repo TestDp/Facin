@@ -69,6 +69,7 @@ Route::get('crearProducto', 'MInventario\ProductoController@CrearProducto')->nam
 Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del producto
 Route::get('productos', 'MInventario\ProductoController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los producto
 Route::get('infoProducto/{idProducto}','MInventario\ProductoController@ObtenerProductoProveedor')->name('infoProducto');//obtiene la informacion del producto
+Route::get('guardarEquivalencia/{idProductoP}/{idProductoS}/{cantidad}','MInventario\ProductoController@GuardarEquivalencia')->name('guardarEquivalencia');
 
 //CONTROLADOR INVENTARIO
 Route::get('actualizarInventario', 'MInventario\InventarioController@ActualizarInvetario')->name('actualizarInventario');//cargar la vista para actulizar el inventario o la cantidad de un producto
@@ -79,3 +80,7 @@ Route::post('guardarInventario', 'MInventario\InventarioController@GuardarInvent
 Route::get('crearSede', 'MEmpresa\SedeController@CrearSede')->name('crearSede');//cargar la vista para crear una sede
 Route::post('guardarSede', 'MEmpresa\SedeController@GuardarSede')->name('guardarSede');//Guardar la informacion de la sede
 Route::get('sedes', 'MEmpresa\SedeController@ObtenerSedes')->name('sedes');//Obtiene la lista de sedes
+
+//CONTROLADOR DE EQUIVALENCIAS
+Route::get('equivalenciasProducto/{idProducto}','MInventario\EquivalenciaController@ObtenerEquivalenciasProducto')->name('equivalenciasProducto');//obtiene la informacion de las equivalencias
+Route::get('eliminarEquivalencia/{idProductoP}/{idProductoS}','MInventario\EquivalenciaController@EliminarEquivalencia')->name('EliminarEquivalencia');//Elimina las equivalencias asosiadas a un producto

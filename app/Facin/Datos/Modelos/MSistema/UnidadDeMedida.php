@@ -22,4 +22,12 @@ class UnidadDeMedida extends  Model
         return $this->hasMany(Producto::class,'UnidadDeMedida_id','id');
     }
 
+    /**public function UnidadesDeMedidaPrincipales(){
+        return $this->hasMany(Equivalencia::class,'UnidadDeMedidaPrincipal_id','id');
+    }
+
+    public function UnidadesDeMedidaSecundarias(){
+        return $this->hasMany(Equivalencia::class,'UnidadDeMedidaSecundaria_id','id');
+    }**/
+
 }

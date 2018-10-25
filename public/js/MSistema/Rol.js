@@ -1,5 +1,3 @@
-cls
-
 //Funcion para cargar la vista de crear un rol
 function ajaxRenderSectionCrearRol() {
     PopupPosition();

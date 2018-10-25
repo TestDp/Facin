@@ -19,7 +19,7 @@ class Producto extends Model
 
     //Cantidad: es la cantidad minimma para mantener en el inventario
     protected $fillable =['Codigo','Nombre','Precio','PrecioSinIva','ImagenProducto',
-                          'Almacen_id','Categoria_id','UnidadDeMedida_id','TipoDeProducto_id','EsCombo'];
+                          'Almacen_id','Categoria_id','UnidadDeMedida_id','TipoDeProducto_id','EsCombo','TieneEquivalencia'];
 
     public function Almacen()
     {
@@ -51,5 +51,13 @@ class Producto extends Model
 
     public function GruposDeProductosSecundario(){
         return $this->hasMany(GrupoDeProductos::class,'ProductoSecundario_id','id');
+    }
+
+    public function EquivalenciasPrincipales(){
+        return $this->hasMany(Equivalencia::class,'ProductoPrincipal_id','id');
+    }
+
+    public function EquivalenciasSecundarias(){
+        return $this->hasMany(Equivalencia::class,'ProductoSecundario_id','id');
     }
 }

@@ -42,4 +42,9 @@ class ProductoServicio
     public function ObtenerProductoProveedorIdproducto($idProducto){
         return $this->productoRepositorio->ObtenerProductoProveedorIdproducto($idProducto);
     }
+
+    public function GuardarEquivalencia($idProductoP,$idProductoS,$cantidad)
+    {
+        return $this->productoRepositorio->GuardarEquivalencia($idProductoP,$idProductoS,$cantidad);
+    }
 }

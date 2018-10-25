@@ -18,12 +18,14 @@ class AlmacenValidaciones
         $mensajes = $this->mensajesFormularioCrear();
         return Validator::make($data, [
             'Nombre' => 'required|string|max:255',
-            'Ubicacion' => 'required|max:255'
+            'Ubicacion' => 'required|max:255',
+            'Sede_id' => 'required|max:255'
         ],$mensajes);
     }
 
     public  function  mensajesFormularioCrear(){
         return ['Nombre.required' => 'El nombre es obligatorio',
-                'Ubicacion.required' => 'La ubicación es obligatoria'];
+                'Ubicacion.required' => 'La ubicación es obligatoria',
+                'Sede_id.required' => 'La Sede es obligatoria'];
     }
 }

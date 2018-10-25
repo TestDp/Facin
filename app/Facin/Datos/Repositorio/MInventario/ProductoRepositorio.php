@@ -9,6 +9,7 @@
 namespace Facin\Datos\Repositorio\MInventario;
 
 
+use Facin\Datos\Modelos\MInventario\Equivalencia;
 use Facin\Datos\Modelos\MInventario\GrupoDeProductos;
 use Facin\Datos\Modelos\MInventario\Producto;
 use Facin\Datos\Modelos\MInventario\ProductoPorProveedor;
@@ -36,14 +37,14 @@ class ProductoRepositorio
             }
             $indCantidad=0;
             if($request->ProductoSecundario_id)//preguntamos si viene la lista ProductoSecundario_id
-            foreach ($request->ProductoSecundario_id as $idProductoSecundario){
-                $grupoProducto = new GrupoDeProductos();
-                $grupoProducto->ProductoPrincipal_id =  $producto->id;
-                $grupoProducto->ProductoSecundario_id = $idProductoSecundario;
-                $grupoProducto->Cantidad = $request->Cantidad[$indCantidad];
-                $grupoProducto->save();
-                $indCantidad++;
-            }
+                foreach ($request->ProductoSecundario_id as $idProductoSecundario){
+                    $grupoProducto = new GrupoDeProductos();
+                    $grupoProducto->ProductoPrincipal_id =  $producto->id;
+                    $grupoProducto->ProductoSecundario_id = $idProductoSecundario;
+                    $grupoProducto->Cantidad = $request->Cantidad[$indCantidad];
+                    $grupoProducto->save();
+                    $indCantidad++;
+                }
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -72,8 +73,11 @@ class ProductoRepositorio
         $productos = ProductoPorProveedor::all();
         $ListaProductosEmpresa = array();
         foreach ($productos as $productoProveedor) {
-            if($productoProveedor->Producto->Almacen->Sede->Empresa->id ==$idEmpreesa)
+            if($productoProveedor->Producto->Almacen->Sede->Empresa->id ==$idEmpreesa){
+                $productoProveedor->Producto->UnidadDeMedida;
+                //$productoProveedor->Producto->EquivalenciasPrincipales->ProductoPrincipal;
                 $ListaProductosEmpresa[]=$productoProveedor;
+            }
         }
         return $ListaProductosEmpresa;
     }
@@ -85,6 +89,7 @@ class ProductoRepositorio
         $ListaProductosEmpresa = array();
         foreach ($productos as $producto) {
             if($producto->Almacen->Sede->Empresa->id ==$idEmpreesa)
+                $producto->UnidadDeMedida;
                 $ListaProductosEmpresa[]=$producto;
         }
         return $ListaProductosEmpresa;
@@ -109,7 +114,29 @@ class ProductoRepositorio
     //Parametros:Pk tabla de producto($idProducto)
     //retorna:un producto filtrado por el id o pk del producto
     public function ObtenerProducto($idProducto){
-        return Producto::find($idProducto);
+        $Producto = Producto::find($idProducto);
+        $Producto->UnidadDeMedida;
+        return $Producto;
+    }
+
+    //Metodo que me guarda la equivalencia de un producto
+    public function GuardarEquivalencia($idProductoP,$idProductoS,$cantidad)
+    {
+        DB::beginTransaction();
+        try {
+            $equivalencia =  new Equivalencia();
+            $equivalencia->ProductoPrincipal_id = $idProductoP;
+            $equivalencia->ProductoSecundario_id = $idProductoS;
+            $equivalencia->Cantidad = $cantidad;
+            $equivalencia->save();
+            DB::commit();
+            return array('respuesta' =>true,'ProductoPpal'=>$this->ObtenerProducto($idProductoP),'ProductoSec'=>$this->ObtenerProducto($idProductoS));
+
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            DB::rollback();
+            return $error;
+        }
     }
 
 }

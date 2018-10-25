@@ -7,12 +7,12 @@ try {
     throw new Error("El modulo transversales es requerido");
 };
 
-//Funcion para cargar la vista de crear categoria
-function ajaxRenderSectionCrearAlmacen() {
+//Funcion para cargar la vista de crear tipo documento
+function ajaxRenderSectionCrearUnidad() {
     PopupPosition();
     $.ajax({
         type: 'GET',
-        url: urlBase +'crearAlmacen',
+        url: urlBase +'crearUnidad',
         dataType: 'json',
         success: function (data) {
             OcultarPopupposition();
@@ -30,14 +30,15 @@ function ajaxRenderSectionCrearAlmacen() {
     });
 }
 
-//Metodo para guarda la informacion del almacen  y retorna la vista con todos los almacenes
-function GuardarAlmacen() {
-    var form = $("#formAlmacen");
-    var token = $("#_token").val();
+
+//Metodo para guarda la informacion de la unidad retorna la vista con todas las unidades
+function GuardarUnidad() {
     PopupPosition();
+    var form = $("#formUnidad");
+    var token = $("#_token").val()
     $.ajax({
         type: 'POST',
-        url: urlBase +'guardarAlmacen',
+        url: urlBase +'guardarUnidad',
         dataType: 'json',
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
@@ -45,7 +46,7 @@ function GuardarAlmacen() {
             OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
-                text: "El almacen fue grabado con exito!",
+                text: "La unidad de medidad fue grabada con exito!",
                 icon: "success",
                 button: "OK",
             });
@@ -55,34 +56,33 @@ function GuardarAlmacen() {
             OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
-                text: "No fue posible grabar el almacen!",
+                text: "No fue posible grabar la unidad de medida!",
                 icon: "error",
                 button: "OK",
             });
+            $("#errorUnidad").html("");
+            $("#errorAbreviatura").html("");
+            $("#errorDescripcion").html("");
             var errors = data.responseJSON;
-            $("#errorNombre").html("");
-            $("#errorUbicacion").html("");
-            $("#errorSede_id").html("");
-            var errors = data.responseJSON;
-            if(errors.errors.Nombre){
-                var errorNombre = "<strong>"+ errors.errors.Nombre+"</strong>";
-                $("#errorNombre").append(errorNombre);}
-            if(errors.errors.Ubicacion){
-                var errorUbicacion = "<strong>"+ errors.errors.Ubicacion+"</strong>";
-                $("#errorUbicacion").append(errorUbicacion);}
-            if(errors.errors.Sede_id){
-                var errorSede_id = "<strong>"+ errors.errors.Sede_id+"</strong>";
-                $("#errorSede_id").append(errorSede_id);}
+            if(errors.errors.Unidad){
+                var errorUnidad = "<strong>"+ errors.errors.Unidad+"</strong>";
+                $("#errorUnidad").append(errorUnidad);}
+            if(errors.errors.Abreviatura){
+                var errorAbreviatura = "<strong>"+ errors.errors.Abreviatura+"</strong>";
+                $("#errorAbreviatura").append(errorAbreviatura);}
+            if(errors.errors.Descripcion){
+                var errorDescripcion = "<strong>"+ errors.errors.Descripcion+"</strong>";
+                $("#errorDescripcion").append(errorDescripcion);}
         }
     });
 }
 
-//Funcion para mostrar la lista de categorias
-function ajaxRenderSectionListaAlmacenes() {
+//Funcion para mostrar la lista de unidades
+function ajaxRenderSectionListaUnidades() {
     PopupPosition();
     $.ajax({
         type: 'GET',
-        url: urlBase +'almacenes',
+        url: urlBase +'unidades',
         dataType: 'json',
         success: function (data) {
             OcultarPopupposition();

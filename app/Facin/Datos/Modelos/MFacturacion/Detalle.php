@@ -14,5 +14,5 @@ use Illuminate\Database\Eloquent\Model;
 class Detalle extends Model
 {
     protected $table = 'Tbl_Detalles_Facturas';
-    protected $fillable =['SubTotal','Cantidad','Descuento','Producto_id','Factura_id'];
+    protected $fillable =['SubTotal','Cantidad','Descuento','Producto_id','Factura_id','Comentario'];
 }

@@ -46,9 +46,27 @@
         <div class="navbar-collapse">
             <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
                 <ul class="nav" id="side-menu">
+                    @if(Auth::user()->buscarRecurso('Facturacion'))
+                        <li>
+                            <a href="#ulFacturacion" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Facturación<span
+                                        class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="ulFacturacion">
+                                @if(Auth::user()->buscarRecurso('Pedidos'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()">Pedidos</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('Facturas'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Facturas</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                     @if(Auth::user()->buscarRecurso('Inventario'))
                         <li>
-                            <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-book nav_icon"></i>Inventario
+                            <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-archive nav_icon"></i>Inventario
                                 <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" id="ulInventario">
                                 @if(Auth::user()->buscarRecurso('ActualizarInventario'))
@@ -68,7 +86,7 @@
                                 @endif
                                 @if(Auth::user()->buscarRecurso('Categorias'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaCategorias()">Categorias </a>
+                                        <a href="#" onclick="ajaxRenderSectionListaCategorias()">Categorías </a>
                                     </li>
                                 @endif
                                 @if(Auth::user()->buscarRecurso('Almacenes'))
@@ -123,6 +141,16 @@
                                         <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de productos</a>
                                     </li>
                                 @endif
+                                @if(Auth::user()->buscarRecurso('EstadosFacturas'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Estados de Factura</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('TiposdeFacturas'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de Facturas</a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                     @endif
@@ -155,7 +183,7 @@
                     <li class="dropdown profile_details_drop">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <div class="profile_img">
-                                <span class="prfil-img"><img src="images/a.png" alt=""> </span>
+                               <!-- <span class="prfil-img"><img src="images/a.png" alt=""> </span>-->
                                 <div class="user-name">
                                     <p>{{ Auth::user()->name }} </p>
                                     <span>Bienvenido</span>
@@ -245,6 +273,7 @@
 <script src="{{ asset('js/MInventario/Producto.js') }}"></script>
 <script src="{{ asset('js/MInventario/Inventario.js') }}"></script>
 <script src="{{ asset('js/MEmpresa/Sede.js') }}"></script>
+<script src="{{ asset('js/MInventario/Equivalencia.js') }}"></script>
 
 </body>
 </html>

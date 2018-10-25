@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\MInventario;
 
 
+use Facin\Negocio\Logica\MEmpresa\SedeServicio;
 use Facin\Negocio\Logica\MInventario\AlmacenServicio;
 use Facin\Validaciones\MInventario\AlmacenValidaciones;
 use Illuminate\Routing\Controller;
@@ -22,11 +23,13 @@ class AlmacenController extends  Controller
 
     protected  $almacenServicio;
     protected  $almacenValidaciones;
+    protected  $sedeServicio;
 
-    public function __construct(AlmacenServicio $almacenServicio,AlmacenValidaciones $almacenValidaciones){
+    public function __construct(AlmacenServicio $almacenServicio,AlmacenValidaciones $almacenValidaciones,SedeServicio $sedeServicio){
         $this->middleware('auth');
         $this->almacenServicio = $almacenServicio;
         $this->almacenValidaciones = $almacenValidaciones;
+        $this->sedeServicio = $sedeServicio;
     }
 
     //Metodo para cargar  la vista de crear el almacen
@@ -34,7 +37,9 @@ class AlmacenController extends  Controller
     {
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
-        $view = View::make('MInventario/Almacen/crearAlmacen');
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $sedes = $this->sedeServicio->ObtenerListaSedes($idEmpreesa);
+        $view = View::make('MInventario/Almacen/crearAlmacen')->with('listSedes',$sedes);;
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);
@@ -50,8 +55,6 @@ class AlmacenController extends  Controller
         if($request->ajax()){
             $almacen = $request->all();
             $idEmpresa = Auth::user()->Sede->Empresa->id;
-            $idSede = Auth::user()->Sede->id;
-            $almacen['Sede_id'] = $idSede;
             $repuesta = $this->almacenServicio->GuardarAlmacen($almacen);
             if($repuesta == true){
                 $almacenes = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpresa);

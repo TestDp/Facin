@@ -86,7 +86,10 @@ class ProductoController extends  Controller
             if($repuesta == true){
                 $idEmpreesa = Auth::user()->Sede->Empresa->id;
                 $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
-                $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
+                $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidadesEmpresa($idEmpreesa);
+                $productosNoCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
+                $view = View::make('MInventario/Producto/listaProductos',array('listProductos'=>$productos,'listUnidades'=>$unidades,
+                    'listProductosNoCombo'=>$productosNoCombo));
                 $sections = $view->renderSections();
                 return Response::json($sections['content']);
             }
@@ -103,7 +106,9 @@ class ProductoController extends  Controller
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
-        $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
+        $productosNoCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
+        $view = View::make('MInventario/Producto/listaProductos',array('listProductos'=>$productos,
+            'listProductosNoCombo'=>$productosNoCombo));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);
@@ -113,5 +118,9 @@ class ProductoController extends  Controller
     //Metodo que me retornar una lista de productosPorProveedor filtrado por el id o pk del producto
     public function ObtenerProductoProveedor($idProducto){
         return response()->json($this->productoServicio->ObtenerProductoProveedorIdproducto($idProducto));
+    }
+
+    public function GuardarEquivalencia($idProductoP,$idProductoS,$cantidad){
+        return response()->json($this->productoServicio->GuardarEquivalencia($idProductoP,$idProductoS,$cantidad));
     }
 }
