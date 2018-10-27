@@ -1,4 +1,4 @@
-var urlBase = ""; //SE DEBE VALIDAR CUAL ES LA URL EN LA QUE SE ESTA CORRIENDO LA APP
+var urlBase = "";
 
 try {
     urlBase = obtenerUlrBase();
@@ -30,7 +30,7 @@ function ajaxRenderSectionCrearSede() {
     });
 }
 
-//Metodo para guarda la informacion de la unidad retorna la vista con todas las unidades
+//Metodo para guarda la informacion de la sede retorna la vista con todas las sedes
 function GuardarSede() {
     PopupPosition();
     var form = $("#formSede");
@@ -76,7 +76,7 @@ function GuardarSede() {
     });
 }
 
-//Funcion para mostrar la lista de categorias
+//Funcion para mostrar la lista de sedes
 function ajaxRenderSectionListaSedes() {
     PopupPosition();
     $.ajax({

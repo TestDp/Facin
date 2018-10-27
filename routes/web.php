@@ -84,3 +84,6 @@ Route::get('sedes', 'MEmpresa\SedeController@ObtenerSedes')->name('sedes');//Obt
 //CONTROLADOR DE EQUIVALENCIAS
 Route::get('equivalenciasProducto/{idProducto}','MInventario\EquivalenciaController@ObtenerEquivalenciasProducto')->name('equivalenciasProducto');//obtiene la informacion de las equivalencias
 Route::get('eliminarEquivalencia/{idProductoP}/{idProductoS}','MInventario\EquivalenciaController@EliminarEquivalencia')->name('EliminarEquivalencia');//Elimina las equivalencias asosiadas a un producto
+
+//CONTROLADOR DE CLIENTE
+Route::post('guardarCliente', 'MCliente\ClienteController@GuardarCliente')->name('guardarCliente');//Guardar la informacion del cliente

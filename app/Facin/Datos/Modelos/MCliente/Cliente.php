@@ -14,5 +14,5 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $table = 'Tbl_Clientes';
-    protected $fillable =['Identificacion','Nombre','Apellidos','Telefono','CorreoElectronico'];
+    protected $fillable =['Identificacion','Nombre','Apellidos','Telefono','CorreoElectronico','Empresa_id'];
 }

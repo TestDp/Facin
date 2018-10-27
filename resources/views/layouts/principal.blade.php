@@ -236,25 +236,7 @@
 </div>
 <!-- Classie -->
 <script src="{{ asset('js/classie.js') }}"></script>
-<script>
-    var menuLeft = document.getElementById('cbp-spmenu-s1'),
-        showLeftPush = document.getElementById('showLeftPush'),
-        body = document.body;
 
-    showLeftPush.onclick = function () {
-        classie.toggle(this, 'active');
-        classie.toggle(body, 'cbp-spmenu-push-toright');
-        classie.toggle(menuLeft, 'cbp-spmenu-open');
-        disableOther('showLeftPush');
-    };
-
-
-    function disableOther(button) {
-        if (button !== 'showLeftPush') {
-            classie.toggle(showLeftPush, 'disabled');
-        }
-    }
-</script>
 <!--scrolling js-->
 <script src="{{ asset('js/jquery.nicescroll.js') }}"></script>
 <script src="{{ asset('js/scripts.js') }}"></script>
@@ -274,6 +256,27 @@
 <script src="{{ asset('js/MInventario/Inventario.js') }}"></script>
 <script src="{{ asset('js/MEmpresa/Sede.js') }}"></script>
 <script src="{{ asset('js/MInventario/Equivalencia.js') }}"></script>
+<script src="{{ asset('js/MCliente/Cliente.js') }}"></script>
 
+<script>
+    var menuLeft = document.getElementById('cbp-spmenu-s1'),
+        showLeftPush = document.getElementById('showLeftPush'),
+        body = document.body;
+
+    showLeftPush.onclick = function () {
+        classie.toggle(this, 'active');
+        classie.toggle(body, 'cbp-spmenu-push-toright');
+        classie.toggle(menuLeft, 'cbp-spmenu-open');
+        disableOther('showLeftPush');
+    };
+
+
+    function disableOther(button) {
+        if (button !== 'showLeftPush') {
+            classie.toggle(showLeftPush, 'disabled');
+        }
+    }
+
+</script>
 </body>
 </html>
