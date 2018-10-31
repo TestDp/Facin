@@ -30,4 +30,8 @@ class ClienteRepositorio
             return $error;
         }
     }
+
+    public  function ObtenerListaClientesXEmpresa($idEmpresa){
+       return  Cliente::where('Empresa_id','=',$idEmpresa)->get();
+    }
 }

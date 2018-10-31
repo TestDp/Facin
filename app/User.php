@@ -4,6 +4,7 @@ namespace App;
 
 use App\Notifications\ResetPasswordNotification;
 use Facin\Datos\Modelos\MEmpresa\Sede;
+use Facin\Datos\Modelos\MFacturacion\Factura;
 use Facin\Datos\Modelos\MSistema\Rol;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -123,5 +124,9 @@ class User extends Authenticatable
     public function Sede()
     {
         return $this->belongsTo(Sede::class,'Sede_id');
+    }
+
+    public function Facturas(){
+        return $this->hasMany(Factura::class,'user_id','id');
     }
 }

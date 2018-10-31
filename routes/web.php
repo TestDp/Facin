@@ -87,3 +87,7 @@ Route::get('eliminarEquivalencia/{idProductoP}/{idProductoS}','MInventario\Equiv
 
 //CONTROLADOR DE CLIENTE
 Route::post('guardarCliente', 'MCliente\ClienteController@GuardarCliente')->name('guardarCliente');//Guardar la informacion del cliente
+
+//CONTROLADOR FACTURA
+Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
+Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido

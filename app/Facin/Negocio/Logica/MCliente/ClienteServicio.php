@@ -21,4 +21,9 @@ class ClienteServicio
     public  function GuardarCliente($cliente){
         return $this->clienteRepositorio->GuardarCliente($cliente);
     }
+
+    public  function ObtenerListaClientesXEmpresa($idEmpresa){
+        return $this->clienteRepositorio->ObtenerListaClientesXEmpresa($idEmpresa);
+    }
+
 }

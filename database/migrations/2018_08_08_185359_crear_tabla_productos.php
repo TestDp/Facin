@@ -18,8 +18,8 @@ class CrearTablaProductos extends Migration
             $table->string('Codigo');
             $table->string('Nombre');
             $table->double('Precio');
-            $table->integer('Cantidad');
-            $table->string('Imagen_Producto');
+          //$table->integer('Cantidad');
+            $table->string('Imagen_Producto')->nullable();
             $table->integer('Categoria_id')->unsigned();
             $table->foreign('Categoria_id')->references('id')->on('Tbl_Categorias');
             $table->timestamps();

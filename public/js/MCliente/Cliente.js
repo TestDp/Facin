@@ -10,10 +10,9 @@ try {
 
 //Metodo para guarda la informacion del cliente
 function GuardarCliente() {
-
-    PopupPosition();
     var form = $("#formCliente");
-    var token = $("#_token").val()
+    var token = $("#_token").val();
+
     $.ajax({
         type: 'POST',
         url: urlBase +'guardarCliente',
@@ -21,20 +20,16 @@ function GuardarCliente() {
         headers: {'X-CSRF-TOKEN': token},
         data:form.serialize(),
         success: function (data) {
-            OcultarPopupposition();
             if(data == true){
-                $("#modalCrearCliente").modal('hide');
-                $("#formCliente")[0].reset();
-              /**  swal({
+                swal({
                     title: "Transaccción exitosa!",
                     text: "El cliente fue grabado con exito!",
                     icon: "success",
                     button: "OK",
-                });**/
+                });
             }
         },
         error: function (data) {
-            OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
                 text: "No fue posible grabar el cliente!",

@@ -15,4 +15,8 @@ class MedioDePago extends Model
 {
     protected $table = 'Tbl_Medios_De_Pagos';
     protected $fillable =['Nombre','Descripcion'];
+
+    public function MediosDePagoXFactura(){
+        return $this->hasMany(MedioDePagoXFactura::class,'MedioDePago_id','id');
+    }
 }

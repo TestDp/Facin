@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Facin\Negocio\Logica\MFacturacion\FacturaServicio;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Array_;
 
 class HomeController extends Controller
 {
@@ -11,9 +14,11 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    protected $facturaServicio;
+    public function __construct( FacturaServicio $facturaServicio)
     {
         $this->middleware('auth');
+        $this->facturaServicio = $facturaServicio;
     }
 
     /**
@@ -23,6 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $idSede = Auth::user()->Sede->id;
+        $listaPedidosEnProceso = $this->facturaServicio->ObtenerListaPedidosEnProcesoXSede($idSede);
+
+        return view('home',Array('listPedidos'=>$listaPedidosEnProceso));
     }
 }

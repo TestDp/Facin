@@ -11,7 +11,7 @@
             <form id="formCliente">
                 <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}" />
                 <input type="hidden" id="Empresa_id" name="Empresa_id" />
-                <div id="modalCrearCliente" name="modalCrearEquivalencia"  tabindex="-1" class="modal fade" role="dialog">
+                <div id="modalCrearCliente" name="modalCrearCliente"   class="modal fade">
                     <div class="modal-dialog modal-lg" >
                         <!-- Modal content-->
                         <div class="modal-content" >
@@ -50,8 +50,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button onclick="GuardarCliente()" type="button" class="btn btn-success">Guardar Cliente</button>
+                                <button id="cerrarModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button onclick="GuardarCliente()" type="button" class="btn btn-success" data-dismiss="modal">Guardar</button>
                             </div>
 
                         </div>
@@ -67,11 +67,11 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <button onclick="ajaxRenderSectionCrearAlmacen()" type="button" class="btn btn-success">Nuevo Pedido</button>
+                                <button onclick="ObtenerFormCrearPedido()" type="button" class="btn btn-success">Nuevo Pedido</button>
                             </div>
                         </div>
                         <div class="row">
-                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaAlmacenes">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" >
                                 <thead>
                                 <tr>
                                     <th scope="col">Id</th>
@@ -81,14 +81,16 @@
                                     <th scope="col">Total</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td>a</td>
-                                    <td>b</td>
-                                    <td>a</td>
-                                    <td>b</td>
-                                    <td>a</td>
-                                </tr>
+                                <tbody id="tablaPedidos">
+                                @foreach($listPedidos as $pedido)
+                                    <tr>
+                                        <td>{{$pedido->id}}</td>
+                                        <td>{{$pedido->created_at}}</td>
+                                        <td>{{$pedido->nombreEstado}}</td>
+                                        <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
+                                        <td>$0</td>
+                                    </tr>
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -97,7 +99,7 @@
                 </div>
             </div>
             <div class="col-md-5" id="panelPedido">
-                @yield('contentPedido')
+                @yield('contentFormPedido')
             </div>
         </div>
     </div>

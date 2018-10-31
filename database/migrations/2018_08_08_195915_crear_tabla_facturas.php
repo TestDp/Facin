@@ -15,9 +15,10 @@ class CrearTablaFacturas extends Migration
     {
         Schema::create('Tbl_Facturas', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTime('Fecha');
-            $table->integer('MedioDePago_id')->unsigned();
-            $table->foreign("MedioDePago_id")->references('id')->on('Tbl_Medios_De_Pagos');
+            //$table->dateTime('Fecha');
+            $table->string('Comentario');
+        //$table->integer('MedioDePago_id')->unsigned();
+          //  $table->foreign("MedioDePago_id")->references('id')->on('Tbl_Medios_De_Pagos');
             $table->integer('user_id')->unsigned();
             $table->foreign("user_id")->references('id')->on('users');
             $table->timestamps();

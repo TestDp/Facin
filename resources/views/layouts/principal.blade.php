@@ -257,6 +257,7 @@
 <script src="{{ asset('js/MEmpresa/Sede.js') }}"></script>
 <script src="{{ asset('js/MInventario/Equivalencia.js') }}"></script>
 <script src="{{ asset('js/MCliente/Cliente.js') }}"></script>
+<script src="{{ asset('js/MFacturacion/Factura.js') }}"></script>
 
 <script>
     var menuLeft = document.getElementById('cbp-spmenu-s1'),
