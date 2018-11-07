@@ -62,8 +62,11 @@ class InventarioController extends  Controller
             $repuesta = $this->inventarioServicio->GuardarInventario($request);
             if($repuesta == true){
                 $idEmpreesa = Auth::user()->Sede->Empresa->id;
-                $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
-                $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
+               // $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
+              //  $view = View::make('MInventario/Producto/listaProductos')->with('listProductos',$productos);
+                $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+                $view = View::make('MInventario/Inventario/actualizarInventario',
+                    array('listProductos'=>$productos));
                 $sections = $view->renderSections();
                 return Response::json($sections['content']);
             }

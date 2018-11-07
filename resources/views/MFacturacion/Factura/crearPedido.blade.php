@@ -17,7 +17,7 @@
                     <select id="Cliente_id" name="Cliente_id"  class="form-control">
                         <option value="">Seleccionar</option>
                         @foreach($ListClientes as $cliente)
-                            <option value="{{ $cliente->id }}">{{ $cliente->Identificacion }}-{{ $cliente->Nombre }}{{ $cliente->Apellidos }}</option>
+                            <option value="{{ $cliente->id }}">{{ $cliente->Identificacion }}-{{ $cliente->Nombre }} {{ $cliente->Apellidos }}</option>
                         @endforeach
                     </select>
                     <span class="invalid-feedback" role="alert" id="errorCliente_id"></span>

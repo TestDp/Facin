@@ -7,7 +7,7 @@ try {
     throw new Error("El modulo transversales es requerido");
 };
 
-
+//function para mostar la vista donde se crea el pedido
 function ObtenerFormCrearPedido() {
     var token = $("#_token").val();
     PopupPosition();
@@ -26,7 +26,7 @@ function ObtenerFormCrearPedido() {
     });
 }
 
-
+//function para guardar el pedido solo con el cliente, el vendedor y el comentario
 function guardarPedido() {
     var token = $("#_tokenPedido").val();
     var form = $("#formCrearPedido");
@@ -40,17 +40,203 @@ function guardarPedido() {
         success: function (data) {
             OcultarPopupposition();
             $('#panelPedido').empty().append($(data.vista));
-            var tr = '<tr>';
-                tr = tr +'<td scope="col">'+data.Pedido.id +'</td>';
-                tr = tr +'<td scope="col">'+data.Pedido.created_at+'</th>';
-                tr = tr +'<td scope="col">'+data.Pedido.estado_factura.Nombre+'</td>';
-                tr = tr +'<td scope="col">'+data.Pedido.cliente.Nombre +' '+ data.Pedido.cliente.Apellidos+'</td>';
-                tr = tr +'<td scope="col">$0</td>';
-                tr = tr +'</tr>';
+            var tr = '<tr style="background: #dff0d8">';
+            tr = tr +'<td scope="col">'+data.Pedido.id +'</td>';
+            tr = tr +'<td scope="col">'+data.Pedido.created_at+'</th>';
+            tr = tr +'<td scope="col">'+data.Pedido.estado_factura.Nombre+'</td>';
+            tr = tr +'<td scope="col">'+data.Pedido.cliente.Nombre +' '+ data.Pedido.cliente.Apellidos+'</td>';
+            tr = tr +'<td scope="col" id="tdTotalPedido'+data.Pedido.id+'">$0</td>';
+            tr = tr +'</tr>';
             $("#tablaPedidos").append(tr);
         },
         error: function (data) {
             OcultarPopupposition();
         }
     });
+}
+
+/**funcion para validar la disponibildiad del producto
+function validarDisponibilidad(){
+    var idProducto = $('#Producto_id').val();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'infoProducto/'+idProducto,
+        dataType: 'json',
+        success: function (data) {
+            if(data.Cantidad == 0){
+                swal({
+                    title: "Producto sin existencia!",
+                    text: "El producto  seleccionado no tiene existencia en inventario!",
+                    icon: "error",
+                    button: "OK",
+                });
+            }else{
+                agregarProductoPedido();
+            }
+        },
+        error: function (data) {
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}**/
+
+//funcion para agregar un producto al pedido
+function agregarProductoPedido() {
+    var opcion= $('#Producto_id').find('option:selected');//obtenemos la opcion seleccionada
+    if(opcion.val() !=''){
+        if(!buscarProductoSecundario(opcion.val()))
+        {
+            var idProducto = $('#Producto_id').val();
+            $.ajax({
+                type: 'GET',
+                url: urlBase +'infoProducto/'+idProducto,
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Cantidad == 0){
+                        swal({
+                            title: "Producto sin existencia!",
+                            text: "El producto  seleccionado no tiene existencia en inventario!",
+                            icon: "error",
+                            button: "OK",
+                        });
+                    }else{
+                        agregarHtmlFilProducto(opcion);
+                    }
+                },
+                error: function (data) {
+                    var errors = data.responseJSON;
+                    if (errors) {
+                        $.each(errors, function (i) {
+                            console.log(errors[i]);
+                        });
+                    }
+                }
+            });
+        }else{
+            swal({
+                title: "Operación incorrecta!",
+                text: "El producto ya fue seleccionado!",
+                icon: "error",
+                button: "OK",
+            });
+        }
+    }
+}
+
+function agregarHtmlFilProducto(opcion) {
+    var row = '<div class="row" id="rowPrducto" name="rowPrducto">'
+        row = row + '<div class="col-md-12">';
+        row = row + '<div class="input-group">';
+        row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/>';
+        row = row + '<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>';
+        row = row + '<label id="lbCantidad" name="lbCantidad">1</label>';
+        row = row + '<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button>';
+        row = row + '<label >'+opcion.data('title')+'</label>';
+        row = row + '<span class="glyphicon glyphicon-usd"></span>';
+        row = row + '<label id="lbTotal">'+opcion.data('num')+'</label>';
+        row = row + '<button class="btn btn-info" type="button"><span class="glyphicon glyphicon-comment"></span></button>';
+        row = row + '<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button>';
+        row = row + '</div>';
+        row = row + '</div>';
+        row = row + '</div>';
+    $('#productosSeleccionados').append(row);
+}
+
+//fucntion para sumar 1 a la cantidad del producto del pedido
+function sumarCantidadProductoPedido(element) {
+    var row = $(element).closest("div[name=rowPrducto]");
+    var label = row.find("label[name=lbCantidad]");
+    var labelCantidad = row.find("label[name=lbCantidad]").text();
+    label.html(parseInt(labelCantidad) + 1);
+}
+
+//fucntion para restar 1 a la cantidad del producto del pedido
+function restarCantidadProductoPedido(element) {
+    var row = $(element).closest("div[name=rowPrducto]");
+    var label = row.find("label[name=lbCantidad]");
+    var labelCantidad = row.find("label[name=lbCantidad]").text();
+    label.html(parseInt(labelCantidad) - 1);
+}
+
+function removerProductoPedido(element){
+    swal({
+        title: 'Está Seguro?',
+        text: "Esta seguro que desea quitar el producto con sus cantidades!",
+        icon: 'warning',
+        buttons: {
+            cancel: {
+                text: "Cancel",
+                value: false,
+                visible: true,
+                className: "",
+                closeModal: true,
+            },
+            confirm: {
+                text: "OK",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: true
+            }},
+    }).then((result) => {
+        if (result) {
+            $(element).closest("div[name=rowPrducto]").remove();
+        }
+    })
+}
+
+function ConfirmarProductosPedido() {
+    var arregloProductosPedido =  new Array();
+    $("#productosSeleccionados").find("div[name=rowPrducto]").each(function(ind,row){
+            var producto = new Object();
+                producto.Producto_id = $(row).find("input[name=ProductoSecundario_id]").val();
+                producto.Cantidad = $(row).find("label[name=lbCantidad]").text();
+                producto.Factura_id =  $("#idPedido").val();
+                producto.Comentario = "prueba comentario";
+        arregloProductosPedido.push(producto);
+    });
+
+    var token = $("#_tokenProductosPedido").val();
+    $.ajax({
+        type: 'POST',
+        url: urlBase +'confirmarProductosPedido',
+        dataType: 'json',
+        headers: {'X-CSRF-TOKEN': token},
+        data:{'array': JSON.stringify(arregloProductosPedido)},
+        success: function (data) {
+            if(data.Respuesta){
+                swal({
+                    title: "Transaccción exitosa!",
+                    text: "El pedido fue confirmado con exito!",
+                    icon: "success",
+                    button: "OK",
+                });
+                var stringTdtotalPedido = '#tdTotalPedido'+$("#idPedido").val()
+                $(stringTdtotalPedido).html("$"+data.PrecioTotal);
+                $('#panelPedido').empty();
+
+            }else{
+                swal({
+                    title: "Operación incorrecta!",
+                    text: "No fue posible confirmar el pedido!",
+                    icon: "error",
+                    button: "OK",
+                });
+            }
+        },
+        error: function (data) {
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+
 }

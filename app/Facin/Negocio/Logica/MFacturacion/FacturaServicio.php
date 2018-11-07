@@ -32,4 +32,8 @@ class FacturaServicio
         return $this->facturaRepositorio->ListaPedidosXSedeXEstados($idSede,1);//1 es el id del estado en proceso
     }
 
+    public function ConfirmarProductosPedido($arrayDataProductos){
+        return $this->facturaRepositorio->GuardarListaProductosPedido($arrayDataProductos);
+    }
+
 }

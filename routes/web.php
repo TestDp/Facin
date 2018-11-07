@@ -91,3 +91,5 @@ Route::post('guardarCliente', 'MCliente\ClienteController@GuardarCliente')->name
 //CONTROLADOR FACTURA
 Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
 Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
+Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
+

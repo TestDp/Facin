@@ -50,8 +50,13 @@ function GuardarInventario() {
                 text: "El inventario fue actualizado con exito!",
                 icon: "success",
                 button: "OK",
-            });
-            $('#principalPanel').empty().append($(data));
+            }).then((value) => {
+                form[0].reset();
+                $("#Producto_id").val("");
+                $("#cantidadActualLabel").html("");
+                $("#cantidadFinal").html("");
+            });;
+            //$('#principalPanel').empty().append($(data));
         },
         error: function (data) {
             OcultarPopupposition();
@@ -101,6 +106,7 @@ function ConsultarInfoProducto() {
             $("#cantidadActualLabel").html(data.Cantidad);
             $("#CantidadActual").val(data.Cantidad);
             $("#PrecioVenta").val(data.producto.Precio);
+            return data.Cantidad;
         },
         error: function (data) {
             OcultarPopupposition();

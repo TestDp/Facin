@@ -60,4 +60,9 @@ class FacturaController extends Controller
         }else return  View::make('MFacturacion/Factura/productosPedido',array('listProductos'=>$productos,
             'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido));
     }
+
+    public function ConfirmarProductosPedido(Request $request){
+        $data = json_decode($_POST['array']);
+        return $this->facturaServicio->ConfirmarProductosPedido($data);
+    }
 }

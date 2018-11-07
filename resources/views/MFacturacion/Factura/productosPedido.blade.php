@@ -1,41 +1,39 @@
 @section('contentFormPedido')
-
     <div class="panel panel-info">
-        <div class="panel-heading">Pedido N° {{$pedido->id}}</div>
-        <div class="panel-body">
+        <div class="panel-heading">Pedido N° {{$pedido->id}}
+            <input type="hidden" id="idPedido" name="idPedido" value="{{$pedido->id}}" />
+            <input type="hidden" id="_tokenProductosPedido" name="_token" value="{{csrf_token()}}">
+        </div>
+        <div class="panel-body" id="productosSeleccionados">
             <div class="row">
                 <div class="col-md-12">
-                    <label>Vendedor</label>
-                    <input id="Vendedor" name="Vendedor" type="text" value="{{$nombreVendedor}}" class="form-control" readonly>
-                    <span class="invalid-feedback" role="alert" id="errorVendedor"></span>
+                    <p>Vendedor: {{$nombreVendedor}}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label>Producto</label>
-                    <select id="Producto_id" name="Producto_id"  class="form-control"  name="language" onchange="ConsultarInfoProducto()">
-                        <option value="">Seleccionar</option>
+                    <p>Comentario: {{$pedido->Comentario}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select id="Producto_id" name="Producto_id"  class="form-control"  name="language">
+                        <option value="">Seleccionar Producto</option>
                         @foreach($listProductos as $producto)
-                            <option value="{{ $producto->id }}">{{ $producto->Nombre }}</option>
+                            <option value="{{ $producto->id }}" data-num="{{ $producto->Precio}}" data-title="{{ $producto->Nombre}}">{{$producto->Codigo}} - {{ $producto->Nombre }}</option>
                         @endforeach
                     </select>
-                    <span class="invalid-feedback" role="alert" id="errorCliente_id"></span>
+                    <button onclick="agregarProductoPedido()" type="button" class="btn btn-success">agregar</button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Comentario</label>
-                    <textarea id="Comentario" name="Comentario" type="text" class="form-control"></textarea>
-                    <span class="invalid-feedback" role="alert" id="errorComentario"></span>
-                </div>
-            </div>
+
         </div>
         <div class="panel-footer">
             <div class="row">
                 <div class="col-md-4">
                 </div>
                 <div class="col-md-4">
-                    <input type="button" class="form-control btn btn-success" value="Crear">
+                    <input type="button" class="form-control btn btn-success" value="Confirmar" onclick="ConfirmarProductosPedido()">
                 </div>
                 <div class="col-md-4">
                 </div>
@@ -50,7 +48,7 @@
         $(document).ready(function() {
             $('#Producto_id').fastselect({
                 placeholder: 'Seleccione el cliente',
-                searchPlaceholder: 'Buscar opciones'
+                searchPlaceholder: 'Buscar productos'
             });
         });
 

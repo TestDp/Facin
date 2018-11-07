@@ -8,7 +8,9 @@
 
 namespace Facin\Datos\Repositorio\MFacturacion;
 
+use Facin\Datos\Modelos\MFacturacion\Detalle;
 use Facin\Datos\Modelos\MFacturacion\Factura;
+use Facin\Datos\Modelos\MInventario\Producto;
 use Illuminate\Support\Facades\DB;
 
 class FacturaRepositorio
@@ -46,6 +48,32 @@ class FacturaRepositorio
             ->orderBy('Tbl_Facturas.id')
             ->get();
         return $pedidos;
+    }
+
+    public function GuardarListaProductosPedido($arrayDataProductos){
+        DB::beginTransaction();
+        try {
+            $precioTotal = 0;
+            foreach ($arrayDataProductos as $productoDetalle){
+                $producto= Producto::find($productoDetalle->Producto_id);
+                $productoPedido = new Detalle();
+                $productoPedido->Producto_id = $productoDetalle->Producto_id;
+                $productoPedido->Factura_id = $productoDetalle->Factura_id;
+                $productoPedido->Cantidad = $productoDetalle->Cantidad;
+                $productoPedido->Comentario = $productoDetalle->Comentario;
+                $productoPedido->Descuento = 0;
+                $productoPedido ->SubTotal = $productoDetalle->Cantidad * $producto->Precio;
+                $productoPedido->save();
+                $precioTotal = $precioTotal + $productoPedido->SubTotal;
+            }
+            DB::commit();
+            return ["Respuesta"=>true,"PrecioTotal"=>$precioTotal];
+        } catch (\Exception $e) {
+
+            $error = $e->getMessage();
+            DB::rollback();
+            return $error;
+        }
     }
 
 }
