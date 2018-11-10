@@ -51,6 +51,12 @@ function guardarPedido() {
         },
         error: function (data) {
             OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
         }
     });
 }
@@ -133,14 +139,14 @@ function agregarHtmlFilProducto(opcion) {
         row = row + '<div class="col-md-12">';
         row = row + '<div class="input-group">';
         row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/>';
-        row = row + '<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>';
-        row = row + '<label id="lbCantidad" name="lbCantidad">1</label>';
-        row = row + '<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button>';
-        row = row + '<label >'+opcion.data('title')+'</label>';
+        row = row + '<button class="btn boton-menos" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>';
+        row = row + '<label class="cantidad" id="lbCantidad" name="lbCantidad">1</label>';
+        row = row + '<button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button>';
+        row = row + '<label class="nombre-producto"><p class="nombre-pedido-p">'+opcion.data('title')+'</p></label>';
         row = row + '<span class="glyphicon glyphicon-usd"></span>';
-        row = row + '<label id="lbTotal">'+opcion.data('num')+'</label>';
-        row = row + '<button class="btn btn-info" type="button"><span class="glyphicon glyphicon-comment"></span></button>';
-        row = row + '<button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button>';
+        row = row + '<label class="precio-pedido" id="lbTotal">'+opcion.data('num')+'</label>';
+        row = row + '<button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button>';
+        row = row + '<button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button>';
         row = row + '</div>';
         row = row + '</div>';
         row = row + '</div>';
