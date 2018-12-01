@@ -39,6 +39,21 @@ class RolController extends Controller
         }else return view('MSistema/Rol/crearRol');
     }
 
+    //Metodo para cargar  la vista de editar un rol
+    public function EditarRol(Request $request,$idRol)
+    {
+        $urlinfo = $request->getPathInfo();
+        $urlinfo = explode('/'.$idRol,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $rol = $this->rolServicio->ObtenerRol($idRol);
+        $recursos = $request->user()->ListaRecursos();
+        $view = View::make('MSistema/Rol/editarRol',array('listRecursos'=>$recursos,'rol'=>$rol));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MSistema/Rol/crearRol');
+    }
+
     //Metodo para guarda la informacion del rol
     public  function GuardarRol(Request $request)
     {

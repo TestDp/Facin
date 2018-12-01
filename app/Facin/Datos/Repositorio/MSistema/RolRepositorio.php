@@ -41,4 +41,10 @@ class RolRepositorio
     {
         return Rol::where('Empresa_id', '=', $idEmpreesa)->get();
     }
+
+    public  function  ObtenerRol($idRol)
+    {
+        return Rol::where('id', '=', $idRol)->get()->first();
+    }
+
 }

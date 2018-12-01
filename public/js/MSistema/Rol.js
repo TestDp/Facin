@@ -21,6 +21,30 @@ function ajaxRenderSectionCrearRol() {
     });
 }
 
+
+//Funcion para cargar la vista de editar un rol
+function ajaxRenderSectionEditarRol(idRol) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarRol/'+ idRol,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //Metodo para guarda la informacion de la categoria y retorna la vista con todos las categorias
 function GuardarRol() {
     PopupPosition();

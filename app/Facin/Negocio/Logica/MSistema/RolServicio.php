@@ -25,4 +25,9 @@ class RolServicio
     public  function  ObtenerListaRoles($idEmpreesa){
         return $this->rolRepositorio->ObtenerListaRoles($idEmpreesa);
     }
+
+    public  function  ObtenerRol($idRol)
+    {
+        return $this->rolRepositorio->ObtenerRol($idRol);
+    }
 }
