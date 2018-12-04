@@ -47,7 +47,8 @@ class RolController extends Controller
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $rol = $this->rolServicio->ObtenerRol($idRol);
         $recursos = $request->user()->ListaRecursos();
-        $view = View::make('MSistema/Rol/editarRol',array('listRecursos'=>$recursos,'rol'=>$rol));
+        $recursosDelRol = $this->rolServicio->ObtenerListaRecursosDelRol($idRol);
+        $view = View::make('MSistema/Rol/editarRol',array('listRecursos'=>$recursos,'rol'=>$rol,'recursosDelRol'=>$recursosDelRol));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);

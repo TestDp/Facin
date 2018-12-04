@@ -30,4 +30,8 @@ class RolServicio
     {
         return $this->rolRepositorio->ObtenerRol($idRol);
     }
+
+    public function ObtenerListaRecursosDelRol($idRol){
+        return $this->rolRepositorio->ObtenerListaRecursosDelRol($idRol);
+    }
 }

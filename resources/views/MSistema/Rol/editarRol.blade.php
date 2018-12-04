@@ -12,6 +12,7 @@
     <form id="formRol">
         <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
         <input type="hidden" id="Empresa_id" name="Empresa_id" >
+        <input type="hidden" id="id" name="id" value="{{$rol->id}}">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="panel panel-success">
@@ -35,14 +36,40 @@
                                     @foreach($listRecursos as $recursoPadre)
                                         @if($recursoPadre->RecursoSistemaPadre_id == null)
                                             <li name="liPadre">
-                                               <input name="idRecurso[]" type="checkbox" value="{{$recursoPadre->id}}" onclick="checkRecursosHijos(this)">
+                                                @php ($b = false)
+                                                @foreach($recursosDelRol as $recusroRol)
+                                                    @if($recursoPadre->id == $recusroRol->RecursoSistema_id)
+                                                        @php ($b = true)
+                                                        @break
+                                                    @endif
+                                                @endforeach
+                                                @if($b)
+                                               <input name="idRecurso[]" type="checkbox" value="{{$recursoPadre->id}}" onclick="checkRecursosHijos(this)" checked>
                                                 <a href="#ul{{$recursoPadre->id}}" data-toggle="collapse">{{$recursoPadre->Descripcion}} </a>
+                                                @else
+                                                    <input name="idRecurso[]" type="checkbox" value="{{$recursoPadre->id}}" onclick="checkRecursosHijos(this)">
+                                                    <a href="#ul{{$recursoPadre->id}}" data-toggle="collapse">{{$recursoPadre->Descripcion}} </a>
+                                                @endif
                                                 <ul class="nav nav-second-level collapse" id="ul{{$recursoPadre->id}}" name="ulhijo">
+
                                                     @foreach($listRecursos as $recurso)
                                                         @if($recurso->RecursoSistemaPadre_id == $recursoPadre->id)
+                                                            @php ($a = false)
+                                                            @foreach($recursosDelRol as $recusroRol)
+                                                                @if($recurso->id == $recusroRol->RecursoSistema_id)
+                                                                    @php ($a = true)
+                                                                    @break
+                                                                @endif
+                                                            @endforeach
+                                                            @if($a)
                                                             <li>
-                                                                <input name="idRecurso[]" type="checkbox" value="{{$recurso->id}}" onclick="checkRecursoPadre(this)">{{$recurso->Descripcion}}
+                                                                <input name="idRecurso[]" type="checkbox" value="{{$recurso->id}}" onclick="checkRecursoPadre(this)" checked>{{$recurso->Descripcion}}
                                                             </li>
+                                                            @else
+                                                                <li>
+                                                                    <input name="idRecurso[]" type="checkbox" value="{{$recurso->id}}" onclick="checkRecursoPadre(this)" >{{$recurso->Descripcion}}
+                                                                </li>
+                                                            @endif
                                                         @endif
                                                     @endforeach
                                                 </ul>

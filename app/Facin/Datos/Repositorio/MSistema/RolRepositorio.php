@@ -19,7 +19,16 @@ class RolRepositorio
     {
         DB::beginTransaction();
         try {
-            $rol = new Rol($Rol);
+
+            if(isset($Rol['id']))
+            {
+                $rol = Rol::find($Rol['id']);
+                $rol->Nombre = $Rol['Nombre'];
+                $rol->Descripcion = $Rol['Descripcion'];
+                RecursoSistemaPorRol::where('Rol_id','=',$Rol['id'])->delete();
+            }else{
+                $rol = new Rol($Rol);
+            }
             $rol->save();
             foreach ($Rol['idRecurso'] as $idRecurso){
                 $recursoSistemaPorRol = new RecursoSistemaPorRol();
@@ -45,6 +54,10 @@ class RolRepositorio
     public  function  ObtenerRol($idRol)
     {
         return Rol::where('id', '=', $idRol)->get()->first();
+    }
+
+    public function ObtenerListaRecursosDelRol($idRol){
+        return RecursoSistemaPorRol::where('Rol_id','=',$idRol)->get();
     }
 
 }

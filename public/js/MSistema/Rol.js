@@ -49,7 +49,7 @@ function ajaxRenderSectionEditarRol(idRol) {
 function GuardarRol() {
     PopupPosition();
     var form = $("#formRol");
-    var token = $("#_token").val()
+    var token = $("#_token").val();
     $.ajax({
         type: 'POST',
         url: urlBase +'guardarRol',
