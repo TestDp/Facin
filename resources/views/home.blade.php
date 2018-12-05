@@ -88,7 +88,7 @@
                                         <td>{{$pedido->created_at}}</td>
                                         <td>{{$pedido->nombreEstado}}</td>
                                         <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
-                                        <td>$0</td>
+                                        <td>{{$pedido->VentaTotal}}</td>
                                     </tr>
                                 @endforeach
 

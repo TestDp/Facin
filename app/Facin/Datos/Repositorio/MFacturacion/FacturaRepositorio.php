@@ -54,6 +54,8 @@ class FacturaRepositorio
         DB::beginTransaction();
         try {
             $precioTotal = 0;
+            $cantidadTotal = 0;
+            $descuentoTotal = 0;
             foreach ($arrayDataProductos as $productoDetalle){
                 $producto= Producto::find($productoDetalle->Producto_id);
                 $productoPedido = new Detalle();
@@ -65,8 +67,13 @@ class FacturaRepositorio
                 $productoPedido ->SubTotal = $productoDetalle->Cantidad * $producto->Precio;
                 $productoPedido->save();
                 $precioTotal = $precioTotal + $productoPedido->SubTotal;
+                $cantidadTotal = $cantidadTotal + $productoPedido->Cantidad;
+                $descuentoTotal = $descuentoTotal + $productoPedido->Descuento;
             }
             DB::commit();
+
+            Factura::where('id', '=', $productoDetalle->Factura_id)->update(array('VentaTotal' => $precioTotal, 'CantidadTotal' => $cantidadTotal ));
+
             return ["Respuesta"=>true,"PrecioTotal"=>$precioTotal];
         } catch (\Exception $e) {
 

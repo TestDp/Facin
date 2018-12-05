@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class Factura extends  Model
 {
     protected $table = 'Tbl_Facturas';
-    protected $fillable =['user_id','Fecha','EstadoFactura_id','Comentario','Cliente_id','TipoDeFactura_id'];
+    protected $fillable =['user_id','Fecha','EstadoFactura_id','Comentario','Cliente_id','TipoDeFactura_id','CantidadTotal','VentaTotal','DescuentoTotal'];
 
     public function MediosDePagoXFactura(){
         return $this->hasMany(MedioDePagoXFactura::class,'Factura_id','id');

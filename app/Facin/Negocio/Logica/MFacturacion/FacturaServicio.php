@@ -25,6 +25,10 @@ class FacturaServicio
         $pedido->user_id = $idVendedor;
         $pedido->EstadoFactura_id = 1;// "1" es el estado de la factura que es pedido o factura en proceso.
         $pedido->TipoDeFactura_id = 1;// el tipo de factura se debe validar con que sentido se hace
+        $pedido->CantidadTotal = 0;// al crear un pedidose crea sin productos por lo cual es cero
+        $pedido->VentaTotal = 0;// al crear un pedidose crea sin productos por lo cual es cero
+        $pedido->DescuentoTotal = 0;// al crear un pedidose crea sin productos por lo cual es cero
+
         return $this->facturaRepositorio->CrearFacutra($pedido);
     }
 
