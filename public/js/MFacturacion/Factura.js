@@ -227,12 +227,22 @@ function ConfirmarProductosPedido() {
                 $('#panelPedido').empty();
 
             }else{
-                swal({
-                    title: "Operación incorrecta!",
-                    text: "No fue posible confirmar el pedido!",
-                    icon: "error",
-                    button: "OK",
-                });
+                if(data.SinExistencia){
+                    swal({
+                        title: "Producto sin existencia!",
+                        text: "El producto "+data.producto+" solo tiene disponible "+data.cantidad,
+                        icon: "error",
+                        button: "OK",
+                    });
+                }else{
+                    swal({
+                        title: "Operación incorrecta!",
+                        text: "No fue posible confirmar el pedido!",
+                        icon: "error",
+                        button: "OK",
+                    });
+                }
+
             }
         },
         error: function (data) {

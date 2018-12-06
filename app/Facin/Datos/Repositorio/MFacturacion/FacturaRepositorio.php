@@ -11,10 +11,16 @@ namespace Facin\Datos\Repositorio\MFacturacion;
 use Facin\Datos\Modelos\MFacturacion\Detalle;
 use Facin\Datos\Modelos\MFacturacion\Factura;
 use Facin\Datos\Modelos\MInventario\Producto;
+use Facin\Datos\Repositorio\MInventario\ProductoRepositorio;
 use Illuminate\Support\Facades\DB;
 
 class FacturaRepositorio
 {
+
+    protected  $productoRepositorio;
+    public function __construct(ProductoRepositorio $productoRepositorio){
+        $this->productoRepositorio = $productoRepositorio;
+    }
 
     public  function CrearFacutra($pedido)
     {
@@ -58,6 +64,11 @@ class FacturaRepositorio
             $descuentoTotal = 0;
             foreach ($arrayDataProductos as $productoDetalle){
                 $producto= Producto::find($productoDetalle->Producto_id);
+                $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
+                if($cantidadDisponible < $productoDetalle->Cantidad)
+                {
+                    return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>$cantidadDisponible];
+                }
                 $productoPedido = new Detalle();
                 $productoPedido->Producto_id = $productoDetalle->Producto_id;
                 $productoPedido->Factura_id = $productoDetalle->Factura_id;
@@ -82,5 +93,8 @@ class FacturaRepositorio
             return $error;
         }
     }
+
+
+
 
 }
