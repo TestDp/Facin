@@ -80,36 +80,6 @@ function guardarPedido() {
     });
 }
 
-/**funcion para validar la disponibildiad del producto
-function validarDisponibilidad(){
-    var idProducto = $('#Producto_id').val();
-    $.ajax({
-        type: 'GET',
-        url: urlBase +'infoProducto/'+idProducto,
-        dataType: 'json',
-        success: function (data) {
-            if(data.Cantidad == 0){
-                swal({
-                    title: "Producto sin existencia!",
-                    text: "El producto  seleccionado no tiene existencia en inventario!",
-                    icon: "error",
-                    button: "OK",
-                });
-            }else{
-                agregarProductoPedido();
-            }
-        },
-        error: function (data) {
-            var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
-        }
-    });
-}**/
-
 //funcion para agregar un producto al pedido
 function agregarProductoPedido() {
     var opcion= $('#Producto_id').find('option:selected');//obtenemos la opcion seleccionada
@@ -156,33 +126,52 @@ function agregarProductoPedido() {
 function agregarHtmlFilProducto(opcion) {
     var row = '<tr id="rowPrducto" name="rowPrducto">';
         row = row + '<td>';
-        row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/>';
+        row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/><input id="precioProducto" name="precioProducto" type="hidden" value="'+opcion.data('num')+'"/>';
         row = row + '<button class="btn boton-menos" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>';
         row = row + '<label class="cantidad" id="lbCantidad" name="lbCantidad">1</label>';
         row = row + '<button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button></td>';
-        row = row + '<td><label class="nombre-producto"><p class="nombre-pedido-p">'+opcion.data('title')+'</p></label></td>';
+        row = row + '<td><label class="nombre-producto"><p class="nombre-pedido-p" id="pNombreProducto" name="pNombreProducto">'+opcion.data('title')+'</p></label></td>';
         row = row + '<td><span class="glyphicon glyphicon-usd"></span>';
-        row = row + '<label class="precio-pedido" id="lbTotal">'+opcion.data('num')+'</label></td>';
+        row = row + '<label class="precio-pedido" id="lbsubTotal" name="lbsubTotal">'+opcion.data('num')+'</label></td>';
         row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button></td>';
         row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button></td>';
         row = row + '</tr>';
     $('#tablaProductosSeleccionados').append(row);
+    calcularTotalPedido();
 }
 
-//fucntion para sumar 1 a la cantidad del producto del pedido
+//funcion para sumar 1 a la cantidad del producto del pedido
 function sumarCantidadProductoPedido(element) {
     var row = $(element).closest("tr[name=rowPrducto]");
     var label = row.find("label[name=lbCantidad]");
+    var precioProducto = parseInt(row.find("input[name=precioProducto]").val());
     var labelCantidad = row.find("label[name=lbCantidad]").text();
-    label.html(parseInt(labelCantidad) + 1);
+    var labelSubtotal = row.find("label[name=lbsubTotal]");
+    var cantidad = parseInt(labelCantidad) + 1;
+    label.html(cantidad);
+    labelSubtotal.html(cantidad * precioProducto);
+    calcularTotalPedido();
 }
 
-//fucntion para restar 1 a la cantidad del producto del pedido
+//funcion para restar 1 a la cantidad del producto del pedido
 function restarCantidadProductoPedido(element) {
     var row = $(element).closest("tr[name=rowPrducto]");
     var label = row.find("label[name=lbCantidad]");
+    var precioProducto = parseInt(row.find("input[name=precioProducto]").val());
     var labelCantidad = row.find("label[name=lbCantidad]").text();
-    label.html(parseInt(labelCantidad) - 1);
+    var labelSubtotal = row.find("label[name=lbsubTotal]");
+    var cantidad = parseInt(labelCantidad) - 1;
+    label.html(cantidad);
+    labelSubtotal.html(cantidad * precioProducto);
+    calcularTotalPedido();
+}
+
+function calcularTotalPedido(){
+    var totalPedido = 0;
+    $("#tablaProductosSeleccionados").find("label[name=lbsubTotal]").each(function(ind,lbSubtotal){
+        totalPedido = totalPedido + parseInt($(lbSubtotal).text());
+    });
+    $("#lbTotalPedido").html(totalPedido);
 }
 
 function removerProductoPedido(element){
@@ -212,6 +201,7 @@ function removerProductoPedido(element){
     })
 }
 
+//funcion para confirmar los productos del pedido(factura)
 function ConfirmarProductosPedido() {
     var arregloProductosPedido =  new Array();
     $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
@@ -274,6 +264,7 @@ function ConfirmarProductosPedido() {
 
 }
 
+//funcion para editar los producto del pedido(factura)
 function editarPedido(idFactura) {
     PopupPosition();
     $.ajax({
@@ -294,4 +285,21 @@ function editarPedido(idFactura) {
             }
         }
     });
+}
+
+//funcion para mostar el detalle y los medios de pagos en el modal de finalizar pedido
+function finalizarPedido(){
+    $("#TablasDetallePedido").html("");
+    $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
+        var tr='<tr>';
+        tr = tr +'<td>'+$(row).find("p[name=pNombreProducto]").text();+'</td>';
+        tr = tr +'<td>'+$(row).find("label[name=lbCantidad]").text();+'</td>';
+        tr = tr +'<td>$'+$(row).find("label[name=lbsubTotal]").text()+'</td>';
+        tr = tr +'</tr>';
+        $("#TablasDetallePedido").append(tr);
+
+    });
+    $("#tdTotalPedido").html('$'+$("#lbTotalPedido").text());
+
+
 }

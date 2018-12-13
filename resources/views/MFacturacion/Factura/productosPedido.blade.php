@@ -30,6 +30,14 @@
             <br/>
             <table style="width:100%" id="tablaProductosSeleccionados">
             </table>
+            <br/>
+            <table style="width:100%" >
+                <tr>
+                    <td colspan="4">Total</td>
+                    <td colspan="2"><span class="glyphicon glyphicon-usd"></span>
+                        <label class="precio-pedido" id="lbTotalPedido">0</label></td>
+                </tr>
+            </table>
         </div>
         <div class="panel-footer">
             <div class="row">
