@@ -53,12 +53,12 @@
                             <ul class="nav nav-second-level collapse" id="ulFacturacion">
                                 @if(Auth::user()->buscarRecurso('Pedidos'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()">Pedidos</a>
+                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(1)">Pedidos</a>
                                     </li>
                                 @endif
                                 @if(Auth::user()->buscarRecurso('Facturas'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Facturas</a>
+                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(2)">Facturas</a>
                                     </li>
                                 @endif
                             </ul>

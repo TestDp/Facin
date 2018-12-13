@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function index()
     {
         $idSede = Auth::user()->Sede->id;
-        $listaPedidosEnProceso = $this->facturaServicio->ObtenerListaPedidosEnProcesoXSede($idSede);
+        $listaPedidosEnProceso = $this->facturaServicio->ObtenerListaPedidosXSedeXEstados($idSede,1);//1 es el id del estado en proceso
 
         return view('home',Array('listPedidos'=>$listaPedidosEnProceso));
     }

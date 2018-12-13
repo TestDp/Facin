@@ -1,7 +1,11 @@
 @extends('layouts.principal')
 
 @section('content')
-
+    <style>
+        tr:hover {
+            background-color: #dff0d8;
+        }
+    </style>
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -83,12 +87,12 @@
                                 </thead>
                                 <tbody id="tablaPedidos">
                                 @foreach($listPedidos as $pedido)
-                                    <tr>
+                                    <tr onclick="editarPedido({{$pedido->id}})">
                                         <td>{{$pedido->id}}</td>
                                         <td>{{$pedido->created_at}}</td>
                                         <td>{{$pedido->nombreEstado}}</td>
                                         <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
-                                        <td>{{$pedido->VentaTotal}}</td>
+                                        <td>${{$pedido->VentaTotal}}</td>
                                     </tr>
                                 @endforeach
 

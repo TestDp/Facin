@@ -26,7 +26,6 @@ class FacturaRepositorio
     {
         DB::beginTransaction();
         try {
-            //$factura = new Factura($pedido);
             $pedido->save();
             DB::commit();
             $pedido->EstadoFactura;
@@ -40,7 +39,10 @@ class FacturaRepositorio
         }
     }
 
-    //retorna una lista de pedidos filtrados por sede y estado
+    public function ObtenerFactura($idFactura){
+        return Factura::find($idFactura);
+    }
+    //retorna una lista de pedidos(Facturas) filtrados por sede y estado
     public function ListaPedidosXSedeXEstados($idSede,$idEstado)
     {
         $pedidos = DB::table('Tbl_Facturas')
@@ -56,12 +58,17 @@ class FacturaRepositorio
         return $pedidos;
     }
 
+    //Function para guardar la lista de productos del pedido(factura)
     public function GuardarListaProductosPedido($arrayDataProductos){
         DB::beginTransaction();
         try {
             $precioTotal = 0;
             $cantidadTotal = 0;
             $descuentoTotal = 0;
+           if($arrayDataProductos[0]->EsEditar == 'true')
+           {
+               Detalle::where('Factura_id','=',$arrayDataProductos[0]->Factura_id)->delete();
+           }
             foreach ($arrayDataProductos as $productoDetalle){
                 $producto= Producto::find($productoDetalle->Producto_id);
                 $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
@@ -82,9 +89,7 @@ class FacturaRepositorio
                 $descuentoTotal = $descuentoTotal + $productoPedido->Descuento;
             }
             DB::commit();
-
-            Factura::where('id', '=', $productoDetalle->Factura_id)->update(array('VentaTotal' => $precioTotal, 'CantidadTotal' => $cantidadTotal ));
-
+            Factura::where('id','=',$productoDetalle->Factura_id)->update(array('VentaTotal' => $precioTotal, 'CantidadTotal' => $cantidadTotal ));
             return ["Respuesta"=>true,"PrecioTotal"=>$precioTotal];
         } catch (\Exception $e) {
 
@@ -94,7 +99,13 @@ class FacturaRepositorio
         }
     }
 
-
-
+    //Retorna los producto del pedido(Factura)
+    public function ObtenerListaProductosXPedido($idFactura){
+       $productosPedido = Detalle::where('Factura_id','=',$idFactura)->get();
+        foreach ($productosPedido as $productoPedido){
+            $productoPedido->Producto;
+        }
+        return $productosPedido;
+    }
 
 }

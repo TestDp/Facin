@@ -32,12 +32,19 @@ class FacturaServicio
         return $this->facturaRepositorio->CrearFacutra($pedido);
     }
 
-    public function ObtenerListaPedidosEnProcesoXSede($idSede){
-        return $this->facturaRepositorio->ListaPedidosXSedeXEstados($idSede,1);//1 es el id del estado en proceso
+    public function ObtenerFactura($idFactura){
+        return  $this->facturaRepositorio->ObtenerFactura($idFactura);
+    }
+    public function ObtenerListaPedidosXSedeXEstados($idSede,$idEstado){
+        return $this->facturaRepositorio->ListaPedidosXSedeXEstados($idSede,$idEstado);
     }
 
     public function ConfirmarProductosPedido($arrayDataProductos){
         return $this->facturaRepositorio->GuardarListaProductosPedido($arrayDataProductos);
+    }
+
+    public function ObtenerListaProductosXPedido($idFactura){
+        return $this->facturaRepositorio->ObtenerListaProductosXPedido($idFactura);
     }
 
 }

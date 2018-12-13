@@ -26,6 +26,25 @@ function ObtenerFormCrearPedido() {
     });
 }
 
+//function para mostar la vista donde se listan los pedidos
+function ajaxRenderSectionVistaListaPedidos(idEstado) {
+    var token = $("#_token").val();
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'listaPedidos/'+ idEstado,
+        dataType: 'json',
+        headers: {'X-CSRF-TOKEN': token},
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+        }
+    });
+}
+
 //function para guardar el pedido solo con el cliente, el vendedor y el comentario
 function guardarPedido() {
     var token = $("#_tokenPedido").val();
@@ -135,27 +154,24 @@ function agregarProductoPedido() {
 }
 
 function agregarHtmlFilProducto(opcion) {
-    var row = '<div class="row" id="rowPrducto" name="rowPrducto">'
-        row = row + '<div class="col-md-12">';
-        row = row + '<div class="input-group">';
+    var row = '<tr id="rowPrducto" name="rowPrducto">';
+        row = row + '<td>';
         row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/>';
         row = row + '<button class="btn boton-menos" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>';
         row = row + '<label class="cantidad" id="lbCantidad" name="lbCantidad">1</label>';
-        row = row + '<button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button>';
-        row = row + '<label class="nombre-producto"><p class="nombre-pedido-p">'+opcion.data('title')+'</p></label>';
-        row = row + '<span class="glyphicon glyphicon-usd"></span>';
-        row = row + '<label class="precio-pedido" id="lbTotal">'+opcion.data('num')+'</label>';
-        row = row + '<button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button>';
-        row = row + '<button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button>';
-        row = row + '</div>';
-        row = row + '</div>';
-        row = row + '</div>';
-    $('#productosSeleccionados').append(row);
+        row = row + '<button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button></td>';
+        row = row + '<td><label class="nombre-producto"><p class="nombre-pedido-p">'+opcion.data('title')+'</p></label></td>';
+        row = row + '<td><span class="glyphicon glyphicon-usd"></span>';
+        row = row + '<label class="precio-pedido" id="lbTotal">'+opcion.data('num')+'</label></td>';
+        row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button></td>';
+        row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button></td>';
+        row = row + '</tr>';
+    $('#tablaProductosSeleccionados').append(row);
 }
 
 //fucntion para sumar 1 a la cantidad del producto del pedido
 function sumarCantidadProductoPedido(element) {
-    var row = $(element).closest("div[name=rowPrducto]");
+    var row = $(element).closest("tr[name=rowPrducto]");
     var label = row.find("label[name=lbCantidad]");
     var labelCantidad = row.find("label[name=lbCantidad]").text();
     label.html(parseInt(labelCantidad) + 1);
@@ -163,7 +179,7 @@ function sumarCantidadProductoPedido(element) {
 
 //fucntion para restar 1 a la cantidad del producto del pedido
 function restarCantidadProductoPedido(element) {
-    var row = $(element).closest("div[name=rowPrducto]");
+    var row = $(element).closest("tr[name=rowPrducto]");
     var label = row.find("label[name=lbCantidad]");
     var labelCantidad = row.find("label[name=lbCantidad]").text();
     label.html(parseInt(labelCantidad) - 1);
@@ -191,19 +207,20 @@ function removerProductoPedido(element){
             }},
     }).then((result) => {
         if (result) {
-            $(element).closest("div[name=rowPrducto]").remove();
+            $(element).closest("tr[name=rowPrducto]").remove();
         }
     })
 }
 
 function ConfirmarProductosPedido() {
     var arregloProductosPedido =  new Array();
-    $("#productosSeleccionados").find("div[name=rowPrducto]").each(function(ind,row){
+    $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
             var producto = new Object();
                 producto.Producto_id = $(row).find("input[name=ProductoSecundario_id]").val();
                 producto.Cantidad = $(row).find("label[name=lbCantidad]").text();
                 producto.Factura_id =  $("#idPedido").val();
                 producto.Comentario = "prueba comentario";
+                producto.EsEditar = $("#esEditar").val();
         arregloProductosPedido.push(producto);
     });
 
@@ -230,7 +247,7 @@ function ConfirmarProductosPedido() {
                 if(data.SinExistencia){
                     swal({
                         title: "Producto sin existencia!",
-                        text: "El producto "+data.producto+" solo tiene disponible "+data.cantidad,
+                        text: "El producto "+data.producto+" solo tiene "+data.cantidad+" cantidades disponibles",
                         icon: "error",
                         button: "OK",
                     });
@@ -255,4 +272,26 @@ function ConfirmarProductosPedido() {
         }
     });
 
+}
+
+function editarPedido(idFactura) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarPedido/'+idFactura,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#panelPedido').empty().append($(data.vista));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
 }

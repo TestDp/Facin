@@ -61,8 +61,39 @@ class FacturaController extends Controller
             'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido));
     }
 
+    public function EditarFactura(Request $request,$idFactura){
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
+        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
+        $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
+        $view = View::make('MFacturacion/Factura/editarProductosPedido',array('listProductos'=>$productos,
+            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'productosXPedido'=>$productosXPedido));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json(['vista'=>$sections['contentFormPedido'],'Pedido'=>$Pedido]);
+        }else return  View::make('MFacturacion/Factura/editarProductosPedido',array('listProductos'=>$productos,
+            'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido,'productosXPedido'=>$productosXPedido));
+    }
+
     public function ConfirmarProductosPedido(Request $request){
         $data = json_decode($_POST['array']);
         return $this->facturaServicio->ConfirmarProductosPedido($data);
+    }
+
+    public function getVistaListaPedidos(Request $request,$idEstado){
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idEstado,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idSede = Auth::user()->Sede->id;
+        $listaPedidosEnProceso = $this->facturaServicio->ObtenerListaPedidosXSedeXEstados($idSede,$idEstado);
+        $view = View::make('MFacturacion/Factura/listaPedidos',array('listPedidos'=>$listaPedidosEnProceso));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return  view('MFacturacion/Factura/listaPedidos',['ListClientes'=>$listaPedidosEnProceso]);
     }
 }

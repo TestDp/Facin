@@ -2,31 +2,34 @@
     <div class="panel panel-info">
         <div class="panel-heading">Pedido N° {{$pedido->id}}
             <input type="hidden" id="idPedido" name="idPedido" value="{{$pedido->id}}" />
+            <input type="hidden" id="esEditar" name="esEditar" value="false" />
             <input type="hidden" id="_tokenProductosPedido" name="_token" value="{{csrf_token()}}">
         </div>
         <div class="panel-body" id="productosSeleccionados">
-            <div class="row">
-                <div class="col-md-12">
-                    <p>Vendedor: {{$nombreVendedor}}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p>Comentario: {{$pedido->Comentario}}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <select id="Producto_id" name="Producto_id"  class="form-control"  name="language">
-                        <option value="">Seleccionar Producto</option>
-                        @foreach($listProductos as $producto)
-                            <option value="{{ $producto->id }}" data-num="{{ $producto->Precio}}" data-title="{{ $producto->Nombre}}">{{$producto->Codigo}} - {{ $producto->Nombre }}</option>
-                        @endforeach
-                    </select>
-                    <button onclick="agregarProductoPedido()" type="button" class="btn btn-success">agregar</button>
-                </div>
-            </div>
-
+            <table style="width:100%">
+                <tr>
+                    <th>Vendedor</th>
+                    <th>Comentario</th>
+                </tr>
+                <tr>
+                    <td>{{$nombreVendedor}}</td>
+                    <td>{{$pedido->Comentario}}</td>
+                </tr>
+            </table>  <br/>
+            <table style="width:100%">
+                <tr>
+                    <td><select id="Producto_id" name="Producto_id"  class="form-control"  name="language">
+                            <option value="">Seleccionar Producto</option>
+                            @foreach($listProductos as $producto)
+                                <option value="{{ $producto->id }}" data-num="{{ $producto->Precio}}" data-title="{{ $producto->Nombre}}">{{$producto->Codigo}} - {{ $producto->Nombre }}</option>
+                            @endforeach
+                        </select></td>
+                    <td><button onclick="agregarProductoPedido()" type="button" class="btn btn-success">agregar</button></td>
+                </tr>
+            </table>
+            <br/>
+            <table style="width:100%" id="tablaProductosSeleccionados">
+            </table>
         </div>
         <div class="panel-footer">
             <div class="row">
