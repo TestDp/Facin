@@ -172,6 +172,7 @@ function calcularTotalPedido(){
         totalPedido = totalPedido + parseInt($(lbSubtotal).text());
     });
     $("#lbTotalPedido").html(totalPedido);
+    return totalPedido;
 }
 
 function removerProductoPedido(element){
@@ -198,7 +199,7 @@ function removerProductoPedido(element){
         if (result) {
             $(element).closest("tr[name=rowPrducto]").remove();
         }
-    })
+    });
 }
 
 //funcion para confirmar los productos del pedido(factura)
@@ -287,7 +288,7 @@ function editarPedido(idFactura) {
     });
 }
 
-//funcion para mostar el detalle y los medios de pagos en el modal de finalizar pedido
+//funcion para mostar el detalle y los medios de pagos en el modal de finalizar pedido(factura)
 function finalizarPedido(){
     $("#TablasDetallePedido").html("");
     $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
@@ -300,6 +301,76 @@ function finalizarPedido(){
 
     });
     $("#tdTotalPedido").html('$'+$("#lbTotalPedido").text());
+}
 
+//funcion para listar los medios de pago en el momento de finalizar el pedido(factura)
+function agregarMedioDePago() {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'mediosDePago',
+        dataType: 'json',
+        success: function (data) {
+        var tr='<tr>';
+            tr = tr +'<td>';
+            tr= tr+'<select class="form-control">'
+            $.each(data, function (i,medioPago){
+                tr = tr +'<option value="'+medioPago.id+'">'+medioPago.Nombre+'</option>';
+            });
+            tr= tr+'</select></td>';
+            tr= tr+'<td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onkeyup="calcularVuelto()"/></td>';
+            tr= tr+'<td><button class="btn btn-default btn-sm"" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>';
+            tr= tr+'</tr>';
+            $("#TablaMediosPagos").append(tr);
+        },
+        error: function (data) {
 
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+
+}
+
+//funcion para eliminar el medio de pago en el momento de finalizar el pedido(factura)
+function eliminarMedioDePago(element){
+    swal({
+        title: 'Está Seguro?',
+        text: "Esta seguro que desea quitar el medio de pago!",
+        icon: 'warning',
+        buttons: {
+            cancel: {
+                text: "Cancel",
+                value: false,
+                visible: true,
+                className: "",
+                closeModal: true,
+            },
+            confirm: {
+                text: "OK",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: true
+            }},
+    }).then((result) => {
+        if (result) {
+            $(element).closest("tr").remove();
+        }
+    });
+}
+
+//funcion para calcular la devuelta del pago del pedido(factura)
+function calcularVuelto() {
+    var totalPedido = calcularTotalPedido();
+    var totalPagado = 0;
+    $("#TablaMediosPagos").find("input[name=inputSubTotalMd]").each(function(ind,lbSubtotal){
+        totalPagado = totalPagado + parseInt($(lbSubtotal).val());
+    });
+    var vuelto = totalPagado-totalPedido;
+    $("#tdVueltoPedido").html("$"+vuelto);
 }

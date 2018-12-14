@@ -78,23 +78,25 @@
                                         <div class="row">
                                         <div class="col-md-6">
                                             <div class="panel panel-success">
-                                                <div class="panel-heading"><h3>Detalle Pedido</h3></div>
+                                                <div class="panel-heading clearfix" >
+                                                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Detalle Pedido</h4>
+                                                </div>
                                                 <div class="panel-body">
                                                     <table style="width:100%" class="table table-bordered">
                                                         <thead>
-                                                        <tr >
-                                                            <th>Producto</th>
-                                                            <th>Cantidad</th>
-                                                            <th>Subtotal</th>
-                                                        </tr>
+                                                            <tr >
+                                                                <th>Producto</th>
+                                                                <th>Cantidad</th>
+                                                                <th>Subtotal</th>
+                                                            </tr>
                                                         </thead>
                                                         <tbody id="TablasDetallePedido">
                                                         </tbody>
                                                         <tfoot>
-                                                        <tr>
-                                                            <td colspan="2">Total</td>
-                                                            <td id="tdTotalPedido"></td>
-                                                        </tr>
+                                                            <tr>
+                                                                <th colspan="2">Total</th>
+                                                                <td id="tdTotalPedido"></td>
+                                                            </tr>
                                                         </tfoot>
                                                     </table>
                                                 </div>
@@ -102,8 +104,24 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="panel panel-info">
-                                                <div class="panel-heading"><h3>Medio de Pago</h3></div>
+                                                <div class="panel-heading clearfix">
+                                                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Medios de Pago</h4>
+                                                    <div class="btn-group pull-right">
+                                                        <button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-plus" onclick="agregarMedioDePago()"></span></button>
+                                                    </div>
+                                                </div>
                                                 <div class="panel-body">
+                                                    <table style="width:100%" class="table table-bordered">
+                                                        <tbody id="TablaMediosPagos">
+
+                                                        </tbody>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th >Vuelto</th>
+                                                            <td id="tdVueltoPedido"></td>
+                                                        </tr>
+                                                        </tfoot>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>

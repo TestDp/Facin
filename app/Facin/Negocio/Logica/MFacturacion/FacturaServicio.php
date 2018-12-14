@@ -47,4 +47,9 @@ class FacturaServicio
         return $this->facturaRepositorio->ObtenerListaProductosXPedido($idFactura);
     }
 
+    public function ObtenerListaMediosDePagos(){
+
+        return $this->facturaRepositorio->ObtenerListaMediosDePagos();
+    }
+
 }

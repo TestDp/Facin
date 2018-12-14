@@ -68,9 +68,9 @@ function ObtenerEquivalenciasProducto(element,idProducto){
             $.each(data, function (i,equivalencia) {
                 var tr ='<tr>';
                 tr = tr + '<td scope="col">'+ equivalencia.producto_principal.Nombre +'</td>';
-                tr = tr + '<td scope="col">('+ equivalencia.producto_principal.unidad_de_medida.Unidad+')'+equivalencia.producto_principal.unidad_de_medida.Unidad+'</td>';
+                tr = tr + '<td scope="col">('+ equivalencia.producto_principal.unidad_de_medida.Abreviatura+')'+equivalencia.producto_principal.unidad_de_medida.Unidad+'</td>';
                 tr = tr + '<td scope="col">'+ equivalencia.producto_secundario.Nombre +'</td>';
-                tr = tr + '<td scope="col">('+ equivalencia.producto_secundario.unidad_de_medida.Unidad+')'+equivalencia.producto_secundario.unidad_de_medida.Unidad+'</td>';
+                tr = tr + '<td scope="col">('+ equivalencia.producto_secundario.unidad_de_medida.Abreviatura+')'+equivalencia.producto_secundario.unidad_de_medida.Unidad+'</td>';
                 tr = tr + '<td scope="col">'+ equivalencia.Cantidad +'</td>';
                 tr = tr +'<td scope="col"><button type="button" class="btn btn-default" aria-label="Left Align" title="Eliminar equivalencias"\n' +
                     '                                                    data-toggle="modal" data-target="#modalCrearEquivalencia{{$producto->Producto->id}}"\n' +

@@ -96,4 +96,9 @@ class FacturaController extends Controller
             return Response::json($sections['content']);
         }else return  view('MFacturacion/Factura/listaPedidos',['ListClientes'=>$listaPedidosEnProceso]);
     }
+
+    public function ObtenerListaMediosDePagos(Request $request){
+
+        return $this->facturaServicio->ObtenerListaMediosDePagos();
+    }
 }

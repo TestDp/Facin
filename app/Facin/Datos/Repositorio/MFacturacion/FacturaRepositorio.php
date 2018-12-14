@@ -10,6 +10,7 @@ namespace Facin\Datos\Repositorio\MFacturacion;
 
 use Facin\Datos\Modelos\MFacturacion\Detalle;
 use Facin\Datos\Modelos\MFacturacion\Factura;
+use Facin\Datos\Modelos\MFacturacion\MedioDePago;
 use Facin\Datos\Modelos\MInventario\Producto;
 use Facin\Datos\Repositorio\MInventario\ProductoRepositorio;
 use Illuminate\Support\Facades\DB;
@@ -125,6 +126,10 @@ class FacturaRepositorio
             $productoPedido->Producto;
         }
         return $productosPedido;
+    }
+
+    public function ObtenerListaMediosDePagos(){
+        return MedioDePago::all();
     }
 
 }
