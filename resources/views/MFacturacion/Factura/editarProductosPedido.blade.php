@@ -129,7 +129,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button id="cerrarModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <button onclick="GuardarCliente()" type="button" class="btn btn-success" data-dismiss="modal">Finalizar pedido</button>
+                                        <button onclick="PagarPedido()" type="button" class="btn btn-success" data-dismiss="modal">Finalizar pedido</button>
                                     </div>
 
                                 </div>

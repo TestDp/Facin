@@ -98,7 +98,11 @@ class FacturaController extends Controller
     }
 
     public function ObtenerListaMediosDePagos(Request $request){
-
         return $this->facturaServicio->ObtenerListaMediosDePagos();
+    }
+
+    public function PagarPedido(Request $request){
+        $data = json_decode($_POST['array']);
+        return $this->facturaServicio->PagarPedido($data);
     }
 }

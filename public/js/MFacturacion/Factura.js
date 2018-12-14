@@ -59,10 +59,10 @@ function guardarPedido() {
         success: function (data) {
             OcultarPopupposition();
             $('#panelPedido').empty().append($(data.vista));
-            var tr = '<tr style="background: #dff0d8">';
+            var tr = '<tr style="background: #dff0d8" id="trPedido'+data.Pedido.id+'">';
             tr = tr +'<td scope="col">'+data.Pedido.id +'</td>';
             tr = tr +'<td scope="col">'+data.Pedido.created_at+'</th>';
-            tr = tr +'<td scope="col">'+data.Pedido.estado_factura.Nombre+'</td>';
+            tr = tr +'<td scope="col" id="tdEstadoPedido'+data.Pedido.id+'">'+data.Pedido.estado_factura.Nombre+'</td>';
             tr = tr +'<td scope="col">'+data.Pedido.cliente.Nombre +' '+ data.Pedido.cliente.Apellidos+'</td>';
             tr = tr +'<td scope="col" id="tdTotalPedido'+data.Pedido.id+'">$0</td>';
             tr = tr +'</tr>';
@@ -223,16 +223,21 @@ function ConfirmarProductosPedido() {
         headers: {'X-CSRF-TOKEN': token},
         data:{'array': JSON.stringify(arregloProductosPedido)},
         success: function (data) {
+            var mensajeRespuesta="El pedido fue confirmado con exito!"
             if(data.Respuesta){
+                if($("#esEditar").val() =='true'){
+                    mensajeRespuesta ="El pedido fue modficado con exito!"
+                }
                 swal({
                     title: "Transaccción exitosa!",
-                    text: "El pedido fue confirmado con exito!",
+                    text: mensajeRespuesta,
                     icon: "success",
                     button: "OK",
                 });
-                var stringTdtotalPedido = '#tdTotalPedido'+$("#idPedido").val()
+                var stringTdtotalPedido = '#tdTotalPedido'+$("#idPedido").val();
                 $(stringTdtotalPedido).html("$"+data.PrecioTotal);
-                $('#panelPedido').empty();
+                $(stringTdtotalPedido).closest("tr").attr("onclick","editarPedido(this,"+$("#idPedido").val()+")");
+              //$('#panelPedido').empty();
 
             }else{
                 if(data.SinExistencia){
@@ -266,7 +271,8 @@ function ConfirmarProductosPedido() {
 }
 
 //funcion para editar los producto del pedido(factura)
-function editarPedido(idFactura) {
+function editarPedido(element,idFactura) {
+    pintarFilaSelecciona(element);
     PopupPosition();
     $.ajax({
         type: 'GET',
@@ -305,7 +311,6 @@ function finalizarPedido(){
 
 //funcion para listar los medios de pago en el momento de finalizar el pedido(factura)
 function agregarMedioDePago() {
-    PopupPosition();
     $.ajax({
         type: 'GET',
         url: urlBase +'mediosDePago',
@@ -313,7 +318,7 @@ function agregarMedioDePago() {
         success: function (data) {
         var tr='<tr>';
             tr = tr +'<td>';
-            tr= tr+'<select class="form-control">'
+            tr= tr+'<select class="form-control" id="selMedioPago" name="selMedioPago">'
             $.each(data, function (i,medioPago){
                 tr = tr +'<option value="'+medioPago.id+'">'+medioPago.Nombre+'</option>';
             });
@@ -373,4 +378,55 @@ function calcularVuelto() {
     });
     var vuelto = totalPagado-totalPedido;
     $("#tdVueltoPedido").html("$"+vuelto);
+}
+
+//funcion para realizar el paggo del pedido(factura)
+function PagarPedido() {
+    var arregloMediosDepago =  new Array();
+    $("#TablaMediosPagos").find("tr").each(function(ind,row){
+        var medioDePagoXPedido = new Object();
+        medioDePagoXPedido.Valor = $(row).find("input[name=inputSubTotalMd]").val();
+        medioDePagoXPedido.MedioDePago_id = $(row).find("select[name=selMedioPago]").val();
+        medioDePagoXPedido.Factura_id =  $("#idPedido").val();
+        arregloMediosDepago.push(medioDePagoXPedido);
+    });
+
+    var token = $("#_tokenProductosPedido").val();
+    $.ajax({
+        type: 'POST',
+        url: urlBase +'pagarPedido',
+        dataType: 'json',
+        headers: {'X-CSRF-TOKEN': token},
+        data:{'array': JSON.stringify(arregloMediosDepago)},
+        success: function (data) {
+            if(data.Respuesta){
+                swal({
+                    title: "Transaccción exitosa!",
+                    text: "El pedido fue pagado con exito!",
+                    icon: "success",
+                    button: "OK",
+                });
+                var stringTrtotalPedido = '#trPedido'+$("#idPedido").val();
+                var stringTdEstadoPedido = '#tdEstadoPedido'+$("#idPedido").val();
+                $(stringTrtotalPedido).removeAttr("onclick");
+                $(stringTdEstadoPedido).html("Finalizada");
+                $('#panelPedido').empty();
+            }
+        },
+        error: function (data) {
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
+
+function pintarFilaSelecciona(element)
+{
+    $(element).closest('tbody').find('tr').removeAttr('style');
+    $(element).closest('tr').attr("style","background: #dff0d8");
 }

@@ -11,6 +11,7 @@ namespace Facin\Datos\Repositorio\MFacturacion;
 use Facin\Datos\Modelos\MFacturacion\Detalle;
 use Facin\Datos\Modelos\MFacturacion\Factura;
 use Facin\Datos\Modelos\MFacturacion\MedioDePago;
+use Facin\Datos\Modelos\MFacturacion\MedioDePagoXFactura;
 use Facin\Datos\Modelos\MInventario\Producto;
 use Facin\Datos\Repositorio\MInventario\ProductoRepositorio;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +67,7 @@ class FacturaRepositorio
             $precioTotal = 0;
             $cantidadTotal = 0;
             $descuentoTotal = 0;
-           if($arrayDataProductos[0]->EsEditar == 'true')
+           if($arrayDataProductos[0]->EsEditar == 'true')// se pregunta si lo que se va a guardar es desde la vista de la edición
            {
                Detalle::where('Factura_id','=',$arrayDataProductos[0]->Factura_id)->delete();
            }
@@ -85,15 +86,12 @@ class FacturaRepositorio
                 {
                     $productoPrincipalId = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->ProductoPrincipal_id;
                     $cantidadEquivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->Cantidad;
-
                     $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoPrincipalId)->Cantidad;
                     $cantidadDisponibleEquivalente = ($productoDetalle->Cantidad * $cantidadEquivalencia);
                     if($cantidadDisponible < $cantidadDisponibleEquivalente)
                     {
                         return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>($cantidadDisponible/$cantidadEquivalencia)];
                     }
-
-
                 }
 
                 $productoPedido = new Detalle();
@@ -112,7 +110,6 @@ class FacturaRepositorio
             Factura::where('id','=',$productoDetalle->Factura_id)->update(array('VentaTotal' => $precioTotal, 'CantidadTotal' => $cantidadTotal ));
             return ["Respuesta"=>true,"PrecioTotal"=>$precioTotal];
         } catch (\Exception $e) {
-
             $error = $e->getMessage();
             DB::rollback();
             return $error;
@@ -128,8 +125,32 @@ class FacturaRepositorio
         return $productosPedido;
     }
 
+    //Retonar la lista de medios de pagos
     public function ObtenerListaMediosDePagos(){
         return MedioDePago::all();
+    }
+
+    public function PagarPedido($arrayDataMediosDepago){
+        DB::beginTransaction();
+        try {
+            foreach ($arrayDataMediosDepago as $arrayMedioDePagoXPedido){
+                $medioDePagoXPedido = new MedioDePagoXFactura();
+                $medioDePagoXPedido->Valor = $arrayMedioDePagoXPedido->Valor;
+                $medioDePagoXPedido->Factura_id = $arrayMedioDePagoXPedido->Factura_id;
+                $medioDePagoXPedido->MedioDePago_id = $arrayMedioDePagoXPedido->MedioDePago_id;
+                $medioDePagoXPedido->save();
+            }
+            $factura =$this->ObtenerFactura($arrayDataMediosDepago[0]->Factura_id);
+            $factura->EstadoFactura_id=2;//se pasa el pedido(factura) al estado de finalizada
+            $factura->save();
+            DB::commit();
+            return ["Respuesta"=>true];
+        } catch (\Exception $e) {
+
+            $error = $e->getMessage();
+            DB::rollback();
+            return $error;
+        }
     }
 
 }

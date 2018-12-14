@@ -100,3 +100,4 @@ Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@Confirma
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
 Route::get('editarPedido/{idFactura}', 'MFacturacion\FacturaController@EditarFactura')->name('editarPedido');//Obtiene la vista donde se edita el producto
 Route::get('mediosDePago', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePago');//obtiene la lista de medios de pagos
+Route::post('pagarPedido', 'MFacturacion\FacturaController@PagarPedido')->name('pagarPedido');//pagar  el pedido

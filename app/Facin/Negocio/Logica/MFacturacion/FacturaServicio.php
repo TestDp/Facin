@@ -52,4 +52,8 @@ class FacturaServicio
         return $this->facturaRepositorio->ObtenerListaMediosDePagos();
     }
 
+    public function PagarPedido($arrayDataMediosDepago){
+        return $this->facturaRepositorio->PagarPedido($arrayDataMediosDepago);
+    }
+
 }
