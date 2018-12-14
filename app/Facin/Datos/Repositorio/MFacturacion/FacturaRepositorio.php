@@ -71,11 +71,30 @@ class FacturaRepositorio
            }
             foreach ($arrayDataProductos as $productoDetalle){
                 $producto= Producto::find($productoDetalle->Producto_id);
-                $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
-                if($cantidadDisponible < $productoDetalle->Cantidad)
+                $esPrincipal = $this->productoRepositorio->EsProductoPrincipal($productoDetalle->Producto_id);
+                if($esPrincipal)
                 {
-                    return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>$cantidadDisponible];
+                    $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
+                    if($cantidadDisponible < $productoDetalle->Cantidad)
+                    {
+                        return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>$cantidadDisponible];
+                    }
                 }
+                else
+                {
+                    $productoPrincipalId = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->ProductoPrincipal_id;
+                    $cantidadEquivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->Cantidad;
+
+                    $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoPrincipalId)->Cantidad;
+                    $cantidadDisponibleEquivalente = ($productoDetalle->Cantidad * $cantidadEquivalencia);
+                    if($cantidadDisponible < $cantidadDisponibleEquivalente)
+                    {
+                        return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>($cantidadDisponible/$cantidadEquivalencia)];
+                    }
+
+
+                }
+
                 $productoPedido = new Detalle();
                 $productoPedido->Producto_id = $productoDetalle->Producto_id;
                 $productoPedido->Factura_id = $productoDetalle->Factura_id;

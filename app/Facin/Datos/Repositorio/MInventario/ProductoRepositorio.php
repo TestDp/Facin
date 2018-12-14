@@ -139,4 +139,25 @@ class ProductoRepositorio
         }
     }
 
+    //Parametros:Pk tabla de producto($idProducto)
+    //retorna:un producto filtrado por el id o pk del producto de la tabla equivalencias
+    public function ObtenerProductoEquivalencia($idProducto){
+        $Producto = Equivalencia::where('ProductoSecundario_id','=',$idProducto)->get()->first();
+        $Producto->ProductoPrincipal;
+        return $Producto;
+    }
+
+    //Parametros:Pk tabla de producto($idProducto)
+    //retorna:un producto filtrado por el id o pk del producto de la tabla equivalencias
+    public function EsProductoPrincipal($idProducto){
+        //$Producto = Equivalencia::find($idProducto)->count();
+        $Producto = Equivalencia::where('ProductoSecundario_id','=',$idProducto)->get()->count();
+        if($Producto == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
 }
