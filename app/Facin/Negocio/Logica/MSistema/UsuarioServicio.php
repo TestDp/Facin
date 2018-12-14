@@ -22,4 +22,8 @@ class UsuarioServicio
     public  function  ObtenerListaUsuarios($idEmpresa,$idUsuario){
         return $this->usuarioRepositorio->ObtenerListaUsuarios($idEmpresa,$idUsuario);
     }
+
+    public  function  ObtenerUsuario($idUsuario){
+        return $this->usuarioRepositorio->ObtenerUsuario($idUsuario);
+    }
 }

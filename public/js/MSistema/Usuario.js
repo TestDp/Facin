@@ -30,6 +30,29 @@ function ajaxRenderSectionCrearUsuario() {
     });
 }
 
+//Funcion para cargar la vista de editar un usuario
+function ajaxRenderSectionEditarUsuario(idUsuario) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarUsuario/'+ idUsuario,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //Metodo para guarda la informacion del producto retorna la vista con todos los provedores
 function GuardarUsuario() {
     var form = $("#formUsuario");

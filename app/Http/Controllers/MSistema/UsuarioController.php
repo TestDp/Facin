@@ -55,6 +55,24 @@ class UsuarioController extends  Controller
         }else return view('MSistema/Usuario/crearUsuario');
     }
 
+    //Metodo para cargar  la vista de editar un rol
+    public function EditarUsuarioEmpresa(Request $request, $idUsuario)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idUsuario,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $usuario = $this->usuarioServicio->ObtenerUsuario($idUsuario);
+        $sedes = $this->sedeServicio->ObtenerListaSedes($idEmpreesa);
+        $roles = $this->rolServicio->ObtenerListaRoles($idEmpreesa);
+        $view = View::make('MSistema/Usuario/editarUsuario',
+            array('usuario'=>$usuario,'listSedes'=>$sedes,'listRoles'=>$roles));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MSistema/Usuario/editarUsuario');
+    }
+
     //Metodo para crear un usuario desde el perfil de una empresa
     public function GuardarUsuarioEmpresa(Request $request)
     {

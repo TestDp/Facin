@@ -26,4 +26,11 @@ class UsuarioRepositorio
             ->get();
         return $users;
     }
+
+    public  function  ObtenerUsuario($idUsuario)
+    {
+
+        return User::where('id', '=', $idUsuario)->get()->first();
+
+    }
 }

@@ -21,6 +21,7 @@
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Usuario</th>
                                     <th scope="col">Correo</th>
+                                    <th scope="col">Editar Usuario</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -30,6 +31,10 @@
                                         <td>{{$usuario->name}} {{$usuario->last_name}}</td>
                                         <td>{{$usuario->username}}</td>
                                         <td>{{$usuario->email}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarUsuario({{$usuario->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Usuario">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
