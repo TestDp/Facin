@@ -22,6 +22,7 @@
                                     <th scope="col">Nit</th>
                                     <th scope="col">Celular</th>
                                     <th scope="col">Telefono</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -32,6 +33,10 @@
                                         <td>{{$proveedor->Nit}}</td>
                                         <td>{{$proveedor->Celular}}</td>
                                         <td>{{$proveedor->Telefono}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarProveedor({{$proveedor->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Proveedor">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -19,7 +19,24 @@ class ProveedorRepositorio
     {
         DB::beginTransaction();
         try {
-            $proveedor = new Proveedor($request);
+            if(isset($request['id']))
+            {
+                $proveedor = Proveedor::find($request['id']);
+                $proveedor->RazonSocial = $request['RazonSocial'];
+                $proveedor->Nit = $request['Nit'];
+                $proveedor->Nombre = $request['Nombre'];
+                $proveedor->Apellidos = $request['Apellidos'];
+                $proveedor->TipoDocumento_id = $request['TipoDocumento_id'];
+                $proveedor->Identificacion = $request['Identificacion'];
+                $proveedor->CorreoElectronico = $request['CorreoElectronico'];
+                $proveedor->Telefono = $request['Telefono'];
+                $proveedor->Celular = $request['Celular'];
+                $proveedor->Terminos_De_Pago = $request['Terminos_De_Pago'];
+                $proveedor->Descripcion = $request['Descripcion'];
+
+            }else {
+                $proveedor = new Proveedor($request);
+            }
             $proveedor->save();
             DB::commit();
             return true;
@@ -29,6 +46,11 @@ class ProveedorRepositorio
             DB::rollback();
             return $error;
         }
+    }
+
+    public  function  ObtenerProveedor($idProveedor)
+    {
+        return Proveedor::where('id', '=', $idProveedor)->get()->first();
     }
 
     public  function  ObtenerListaProveedores($idEmpreesa)

@@ -36,6 +36,22 @@ class ProveedorController extends Controller
         }else return view('MInventario/Proveedor/crearProveedor');
     }
 
+    //Metodo para cargar retornar la vista de editar proveedor
+    public function EditarProveedor(Request $request, $idProveedor)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idProveedor,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $tiposDoc = $this->TipoDocumentoServicio->ObtenerListaTipoDocumentos();
+        $proveedor = $this->proveedorServicio->ObtenerProveedor($idProveedor);
+        $view = View::make('MInventario/Proveedor/editarProveedor', array('proveedor'=>$proveedor, 'listDoc'=>$tiposDoc));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MInventario/Proveedor/editarProveedor');
+    }
+
+
     //Metodo para guarda el proveedor
     public  function GuardarProveedor(Request $request)
     {

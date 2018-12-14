@@ -55,6 +55,7 @@ Route::get('tiposProductos', 'MSistema\TipoDeProductoController@ObtenerTiposProd
 
 //CONTROLADOR PROVEEDOR
 Route::get('crearProveedor', 'MInventario\ProveedorController@CrearProveedor')->name('crearProveedor');//cargar la vista para crear un proveedor
+Route::get('editarProveedor/{idProveedor}', 'MInventario\ProveedorController@EditarProveedor')->name('editarProveedor');//cargar la vista para editar un proveedor
 Route::post('guardarProveedor', 'MInventario\ProveedorController@GuardarProveedor')->name('guardarProveedor');//Guardar la informacion del proveedor
 Route::get('proveedores', 'MInventario\ProveedorController@ObtenerProveedores')->name('proveedores');//Obtiene la lista de proveedores
 
