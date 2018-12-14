@@ -86,6 +86,7 @@ function agregarProductoPedido() {
     if(opcion.val() !=''){
         if(!buscarProductoSecundario(opcion.val()))
         {
+            DeshabilitarBtnDeCerrarPedido();//se hace el llamado a desabilitar el boton de cerrar pedido cuando se esta editando el pedido.
             var idProducto = $('#Producto_id').val();
             $.ajax({
                 type: 'GET',
@@ -101,6 +102,7 @@ function agregarProductoPedido() {
                         });
                     }else{
                         agregarHtmlFilProducto(opcion);
+                        DeshabilitarBtnDeCerrarPedido();
                     }
                 },
                 error: function (data) {
@@ -151,6 +153,7 @@ function sumarCantidadProductoPedido(element) {
     label.html(cantidad);
     labelSubtotal.html(cantidad * precioProducto);
     calcularTotalPedido();
+    DeshabilitarBtnDeCerrarPedido();
 }
 
 //funcion para restar 1 a la cantidad del producto del pedido
@@ -164,6 +167,7 @@ function restarCantidadProductoPedido(element) {
     label.html(cantidad);
     labelSubtotal.html(cantidad * precioProducto);
     calcularTotalPedido();
+    DeshabilitarBtnDeCerrarPedido();
 }
 
 function calcularTotalPedido(){
@@ -198,6 +202,7 @@ function removerProductoPedido(element){
     }).then((result) => {
         if (result) {
             $(element).closest("tr[name=rowPrducto]").remove();
+            DeshabilitarBtnDeCerrarPedido();
         }
     });
 }
@@ -236,8 +241,12 @@ function ConfirmarProductosPedido() {
                 });
                 var stringTdtotalPedido = '#tdTotalPedido'+$("#idPedido").val();
                 $(stringTdtotalPedido).html("$"+data.PrecioTotal);
-                $(stringTdtotalPedido).closest("tr").attr("onclick","editarPedido(this,"+$("#idPedido").val()+")");
-              //$('#panelPedido').empty();
+                $(stringTdtotalPedido).closest("tr").attr("onclick","validarEdicionDePedido(this,"+$("#idPedido").val()+")");
+                habilitarBtnDeCerrarPedido();
+                if($("#esEditar").val() =='false'){
+                    $('#panelPedido').empty();
+                }
+
 
             }else{
                 if(data.SinExistencia){
@@ -429,4 +438,43 @@ function pintarFilaSelecciona(element)
 {
     $(element).closest('tbody').find('tr').removeAttr('style');
     $(element).closest('tr').attr("style","background: #dff0d8");
+}
+
+function DeshabilitarBtnDeCerrarPedido(){
+    $("#BtnCerrarPedido").attr("disabled","disabled");
+}
+
+function habilitarBtnDeCerrarPedido(){
+    $("#BtnCerrarPedido").removeAttr("disabled");
+}
+
+function validarEdicionDePedido(element,idFactura){
+    if($("#BtnCerrarPedido").is(':disabled')){
+        swal({
+            title: '¡El pedido se está editando!',
+            text: "¿Está seguro que desea descartar los cambios realizados?",
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: "Cancel",
+                    value: false,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                },
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true
+                }},
+        }).then((result) => {
+            if (result) {
+                editarPedido(element,idFactura);
+            }
+        });
+    }else{
+        editarPedido(element,idFactura);
+    }
 }

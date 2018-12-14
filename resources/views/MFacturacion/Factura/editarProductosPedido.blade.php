@@ -65,7 +65,7 @@
                     <input type="button" class="form-control btn btn-success" value="Guardar" onclick="ConfirmarProductosPedido()">
                 </div>
                 <div class="col-md-6">
-                    <input type="button" class="form-control btn btn-info" value="Cerrar Pedido" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()">
+                    <input type="button" id="BtnCerrarPedido"  class="form-control btn btn-info" value="Cerrar Pedido" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()">
                     <!-- inicio modal finalizar  Pedido-->
                         <div id="modalFinalizarPedido" name="modalFinalizarPedido"   class="modal fade">
                             <div class="modal-dialog modal-lg" >
