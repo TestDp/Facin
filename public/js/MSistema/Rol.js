@@ -60,7 +60,7 @@ function GuardarRol() {
             OcultarPopupposition();
             swal({
                 title: "Transaccción exitosa!",
-                text: "La categoria fue grabada con exito!",
+                text: "El rol fue grabado con exito!",
                 icon: "success",
                 button: "OK",
             });
@@ -70,7 +70,7 @@ function GuardarRol() {
             OcultarPopupposition();
             swal({
                 title: "Transacción con error!",
-                text: "No fue posible grabar la categoria!",
+                text: "No fue posible grabar el rol!",
                 icon: "error",
                 button: "OK",
             });

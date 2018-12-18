@@ -20,6 +20,7 @@ class ClienteController extends Controller
     protected  $clienteServicio;
     protected  $clienteValidaciones;
     public function __construct(ClienteServicio $clienteServicio,ClienteValidaciones $clienteValidaciones){
+        $this->middleware('auth');
         $this->clienteServicio = $clienteServicio;
         $this->clienteValidaciones = $clienteValidaciones;
 

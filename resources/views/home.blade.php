@@ -71,7 +71,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <button onclick="ObtenerFormCrearPedido()" type="button" class="btn btn-success">Nuevo Pedido</button>
+                                <button onclick="validarEdicionDePedidoBtnCrear()" type="button" class="btn btn-success">Nuevo Pedido</button>
                             </div>
                         </div>
                         <div class="row">
@@ -92,7 +92,7 @@
                                         <td>{{$pedido->created_at}}</td>
                                         <td name="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>
                                         <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
-                                        <td>${{$pedido->VentaTotal}}</td>
+                                        <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal}}</td>
                                     </tr>
                                 @endforeach
 

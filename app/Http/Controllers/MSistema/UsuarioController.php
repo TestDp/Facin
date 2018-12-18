@@ -33,6 +33,7 @@ class UsuarioController extends  Controller
 
     public function __construct(UsuarioServicio $usuarioServicio, SedeServicio $sedeServicio, RolServicio $rolServicio,
                                 UsuarioValidaciones $usuarioValidaciones){
+        $this->middleware('auth');
         $this->usuarioServicio = $usuarioServicio;
         $this->sedeServicio = $sedeServicio;
         $this->rolServicio = $rolServicio;

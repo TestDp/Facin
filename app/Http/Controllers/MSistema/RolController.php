@@ -22,6 +22,7 @@ class RolController extends Controller
     protected  $rolServicio;
     protected  $rolValidaciones;
     public function __construct(RolServicio $rolServicio, RolValidaciones $rolValidaciones){
+        $this->middleware('auth');
         $this->rolServicio = $rolServicio;
         $this->rolValidaciones = $rolValidaciones;
     }
@@ -80,10 +81,15 @@ class RolController extends Controller
 
     //Metodo para obtener todos  los roles
     public  function ObtenerRoles(Request $request){
+        $roles = null;
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $roles = $this->rolServicio->ObtenerListaRoles($idEmpreesa);
+        if($request->user()->hasRole("SuperAdmin")){
+            $roles = $this->rolServicio->ObtenerRolesSupeAdmin($idEmpreesa);
+        }else{
+            $roles = $this->rolServicio->ObtenerListaRoles($idEmpreesa);
+        }
         $view = View::make('MSistema/Rol/listaRoles')->with('listRoles',$roles);
         if($request->ajax()){
             $sections = $view->renderSections();

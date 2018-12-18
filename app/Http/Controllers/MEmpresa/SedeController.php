@@ -23,6 +23,7 @@ class SedeController extends Controller
     protected  $sedeValidaciones;
 
     public function __construct(SedeServicio $sedeServicio,SedeValidaciones $sedeValidaciones){
+        $this->middleware('auth');
         $this->sedeServicio = $sedeServicio;
         $this->sedeValidaciones = $sedeValidaciones;
     }

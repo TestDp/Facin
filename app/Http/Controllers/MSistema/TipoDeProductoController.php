@@ -23,6 +23,7 @@ class TipoDeProductoController extends Controller
     protected  $tipoDeProductoValidaciones;
 
     public function __construct(TipoDeProductoServicio $tipoProductoServicio,TipoDeProductoValidaciones $tipoDeProductoValidaciones){
+        $this->middleware('auth');
         $this->tipoProductoServicio = $tipoProductoServicio;
         $this->tipoDeProductoValidaciones = $tipoDeProductoValidaciones;
     }

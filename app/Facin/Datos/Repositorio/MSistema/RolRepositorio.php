@@ -60,4 +60,10 @@ class RolRepositorio
         return RecursoSistemaPorRol::where('Rol_id','=',$idRol)->get();
     }
 
+    //Funcion para devolver los roles del superAdmin con los creados por el usuario
+    public function ObtenerRolesSupeAdmin($idEmpreesa){
+        return Rol::where('Empresa_id', '=', $idEmpreesa)
+                    ->OrWhere('Empresa_id','=',null) ->get();
+    }
+
 }

@@ -34,4 +34,8 @@ class RolServicio
     public function ObtenerListaRecursosDelRol($idRol){
         return $this->rolRepositorio->ObtenerListaRecursosDelRol($idRol);
     }
+
+    public function ObtenerRolesSupeAdmin($idEmpreesa){
+        return $this->rolRepositorio->ObtenerRolesSupeAdmin($idEmpreesa);
+    }
 }

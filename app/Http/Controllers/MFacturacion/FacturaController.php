@@ -26,6 +26,7 @@ class FacturaController extends Controller
     protected $productoServicio;
 
     public function __construct(ClienteServicio $clienteServicio,FacturaServicio $facturaServicio,ProductoServicio $productoServicio){
+        $this->middleware('auth');
         $this->clienteServicio = $clienteServicio;
         $this->facturaServicio = $facturaServicio;
         $this->productoServicio = $productoServicio;

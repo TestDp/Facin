@@ -17,6 +17,7 @@ function ObtenerFormCrearPedido() {
         dataType: 'json',
         headers: {'X-CSRF-TOKEN': token},
         success: function (data) {
+            $("#tablaPedidos").find('tr').removeAttr('style');
             OcultarPopupposition();
             $('#panelPedido').empty().append($(data));
         },
@@ -59,7 +60,7 @@ function guardarPedido() {
         success: function (data) {
             OcultarPopupposition();
             $('#panelPedido').empty().append($(data.vista));
-            var tr = '<tr style="background: #dff0d8" id="trPedido'+data.Pedido.id+'">';
+            var tr = '<tr style="background: #dff0d8" id="trPedido'+data.Pedido.id+'" onclick="validarEdicionDePedido(this,'+data.Pedido.id+')">';
             tr = tr +'<td scope="col">'+data.Pedido.id +'</td>';
             tr = tr +'<td scope="col">'+data.Pedido.created_at+'</th>';
             tr = tr +'<td scope="col" id="tdEstadoPedido'+data.Pedido.id+'">'+data.Pedido.estado_factura.Nombre+'</td>';
@@ -170,6 +171,7 @@ function restarCantidadProductoPedido(element) {
     DeshabilitarBtnDeCerrarPedido();
 }
 
+//funcion para calcular el total del pedido
 function calcularTotalPedido(){
     var totalPedido = 0;
     $("#tablaProductosSeleccionados").find("label[name=lbsubTotal]").each(function(ind,lbSubtotal){
@@ -179,6 +181,7 @@ function calcularTotalPedido(){
     return totalPedido;
 }
 
+//funcion para remover un producto del pedido
 function removerProductoPedido(element){
     swal({
         title: 'Está Seguro?',
@@ -202,6 +205,7 @@ function removerProductoPedido(element){
     }).then((result) => {
         if (result) {
             $(element).closest("tr[name=rowPrducto]").remove();
+            calcularTotalPedido();
             DeshabilitarBtnDeCerrarPedido();
         }
     });
@@ -246,8 +250,6 @@ function ConfirmarProductosPedido() {
                 if($("#esEditar").val() =='false'){
                     $('#panelPedido').empty();
                 }
-
-
             }else{
                 if(data.SinExistencia){
                     swal({
@@ -433,21 +435,24 @@ function PagarPedido() {
     });
 }
 
-
-function pintarFilaSelecciona(element)
-{
+//funcion para pintar la fila del pedido en la que se esta trabajando
+function pintarFilaSelecciona(element){
     $(element).closest('tbody').find('tr').removeAttr('style');
     $(element).closest('tr').attr("style","background: #dff0d8");
 }
 
+//funcion para deshabilitar el boton cuando se esta editando un pedido para obligar al usuario a relizar nuevamente
+//la confirmacion o guardado del pedido
 function DeshabilitarBtnDeCerrarPedido(){
     $("#BtnCerrarPedido").attr("disabled","disabled");
 }
 
+//funcion para habilitar el funcion cuando se se confirmo o se guardo el pedido
 function habilitarBtnDeCerrarPedido(){
     $("#BtnCerrarPedido").removeAttr("disabled");
 }
 
+//Funcion para validar si el pedido se esta editando
 function validarEdicionDePedido(element,idFactura){
     if($("#BtnCerrarPedido").is(':disabled')){
         swal({
@@ -476,5 +481,37 @@ function validarEdicionDePedido(element,idFactura){
         });
     }else{
         editarPedido(element,idFactura);
+    }
+}
+
+//Funcion para validar si el pedido se esta editando desde el boton de crear pedido
+function validarEdicionDePedidoBtnCrear(element,idFactura){
+    if($("#BtnCerrarPedido").is(':disabled')){
+        swal({
+            title: '¡Un Pedido se esta editando!',
+            text: "¿Está seguro que desea descartar los cambios realizados?",
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: "Cancel",
+                    value: false,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                },
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true
+                }},
+        }).then((result) => {
+            if (result) {
+                ObtenerFormCrearPedido(element,idFactura);
+            }
+        });
+    }else{
+        ObtenerFormCrearPedido(element,idFactura);
     }
 }
