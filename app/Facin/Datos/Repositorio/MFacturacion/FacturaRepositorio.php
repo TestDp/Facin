@@ -10,6 +10,7 @@ namespace Facin\Datos\Repositorio\MFacturacion;
 
 use Facin\Datos\Modelos\MFacturacion\Detalle;
 use Facin\Datos\Modelos\MFacturacion\Factura;
+use Facin\Datos\Modelos\MInventario\ProductoPorProveedor;
 use Facin\Datos\Modelos\MFacturacion\MedioDePago;
 use Facin\Datos\Modelos\MFacturacion\MedioDePagoXFactura;
 use Facin\Datos\Modelos\MInventario\Producto;
@@ -81,6 +82,9 @@ class FacturaRepositorio
                     {
                         return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>$cantidadDisponible];
                     }
+
+                    $cantidadInventario = ($cantidadDisponible-$productoDetalle->Cantidad);
+                    ProductoPorProveedor::where('Producto_id','=',$productoDetalle->Producto_id)->update(array('Cantidad' => $cantidadInventario));
                 }
                 else
                 {
@@ -92,6 +96,9 @@ class FacturaRepositorio
                     {
                         return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>($cantidadDisponible/$cantidadEquivalencia)];
                     }
+
+                    $cantidadInventario = ($cantidadDisponible - $cantidadDisponibleEquivalente);
+                    ProductoPorProveedor::where('Producto_id','=',$productoPrincipalId)->update(array('Cantidad' => $cantidadInventario));
                 }
 
                 $productoPedido = new Detalle();
@@ -105,6 +112,8 @@ class FacturaRepositorio
                 $precioTotal = $precioTotal + $productoPedido->SubTotal;
                 $cantidadTotal = $cantidadTotal + $productoPedido->Cantidad;
                 $descuentoTotal = $descuentoTotal + $productoPedido->Descuento;
+
+
             }
             DB::commit();
             Factura::where('id','=',$productoDetalle->Factura_id)->update(array('VentaTotal' => $precioTotal, 'CantidadTotal' => $cantidadTotal ));
