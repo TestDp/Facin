@@ -1,5 +1,4 @@
 <?php $__env->startSection('content'); ?>
-
 			<div class="main-page login-page ">
 				<div class="widget-shadow">
 					<div class="login-top">
@@ -8,10 +7,8 @@
 					<div class="login-body">
 						<form method="POST" action="<?php echo e(route('login')); ?>" aria-label="<?php echo e(__('Login')); ?>">
                         <?php echo csrf_field(); ?>
-
                         <div class="form-group row">
                             <label for="login”" class="col-sm-4 col-form-label text-md-right"><?php echo e(__('Usuario | Email')); ?></label>
-
                             <div class="col-md-6">
                                 <input id="login”" type="login" class="form-control<?php echo e($errors->has('login') ? ' is-invalid' : ''); ?>" name="login" value="<?php echo e(old('login')); ?>" required autofocus>
 
@@ -22,7 +19,6 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right"><?php echo e(__('Contraseña')); ?></label>
 
@@ -36,7 +32,6 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
@@ -56,7 +51,6 @@
                                     <?php echo e(__('Ingresar')); ?>
 
                                 </button>
-
                                 <a class="btn btn-link" href="<?php echo e(route('password.request')); ?>">
                                     <?php echo e(__('Olvidaste tu contraseña?')); ?>
 
