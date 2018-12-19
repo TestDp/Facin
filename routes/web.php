@@ -11,7 +11,11 @@
 |
 */
 
+use Illuminate\Support\Facades\DB;
 
+DB::listen(function ($query){
+   // echo "<pre>{$query->sql}</pre>";
+});
 
 Route::get('/', function () {
     return view('auth.login');

@@ -57,7 +57,7 @@ class FacturaRepositorio
             ->where('Tbl_Sedes.id', '=', $idSede)
             ->where('Tbl_Facturas.EstadoFactura_id', '=', $idEstado)
             ->orderBy('Tbl_Facturas.id')
-            ->get();
+            ->paginate(10);
         return $pedidos;
     }
 

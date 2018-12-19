@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Facin\Negocio\Logica\MFacturacion\FacturaServicio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Array_;
+
 
 class HomeController extends Controller
 {
@@ -26,11 +26,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $idSede = Auth::user()->Sede->id;
         $listaPedidosEnProceso = $this->facturaServicio->ObtenerListaPedidosXSedeXEstados($idSede,1);//1 es el id del estado en proceso
-
+        if($request->ajax()){
+                return view('MFacturacion/Factura/datosPagFacturas', ['listPedidos' => $listaPedidosEnProceso])->render();
+        }
         return view('home',Array('listPedidos'=>$listaPedidosEnProceso));
     }
 }

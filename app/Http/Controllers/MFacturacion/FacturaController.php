@@ -14,6 +14,7 @@ use Facin\Negocio\Logica\MCliente\ClienteServicio;
 use Facin\Negocio\Logica\MFacturacion\FacturaServicio;
 use Facin\Negocio\Logica\MInventario\ProductoServicio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -91,15 +92,28 @@ class FacturaController extends Controller
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idSede = Auth::user()->Sede->id;
         $listaPedidosEnProceso = $this->facturaServicio->ObtenerListaPedidosXSedeXEstados($idSede,$idEstado);
-        $view = View::make('MFacturacion/Factura/listaPedidos',array('listPedidos'=>$listaPedidosEnProceso));
         if($request->ajax()){
+            if(isset($request['page']))
+            {
+                return view('MFacturacion/Factura/datosPagFacturas', ['listPedidos' => $listaPedidosEnProceso])->render();
+                // $view = View::make('MFacturacion/Factura/datosPagFacturas',array('listPedidos'=>$listaPedidosEnProceso));
+            }else{
+                $view = View::make('MFacturacion/Factura/listaPedidos',array('listPedidos'=>$listaPedidosEnProceso));
+            }
             $sections = $view->renderSections();
             return Response::json($sections['content']);
-        }else return  view('MFacturacion/Factura/listaPedidos',['ListClientes'=>$listaPedidosEnProceso]);
+        }else return  view('MFacturacion/Factura/listaPedidos',['listPedidos'=>$listaPedidosEnProceso]);
     }
 
     public function ObtenerListaMediosDePagos(Request $request){
-        return $this->facturaServicio->ObtenerListaMediosDePagos();
+
+        $keyCache = "mediosPagos";
+        $mediosDePago = Cache::rememberForever($keyCache,function (){
+           return $this->facturaServicio->ObtenerListaMediosDePagos();
+        });
+        return $mediosDePago;
+
+       // return $this->facturaServicio->ObtenerListaMediosDePagos();
     }
 
     public function PagarPedido(Request $request){
