@@ -109,7 +109,7 @@ class FacturaController extends Controller
 
         $keyCache = "mediosPagos";
         $mediosDePago = Cache::rememberForever($keyCache,function (){
-           return $this->facturaServicio->ObtenerListaMediosDePagos();
+            return $this->facturaServicio->ObtenerListaMediosDePagos();
         });
         return $mediosDePago;
 

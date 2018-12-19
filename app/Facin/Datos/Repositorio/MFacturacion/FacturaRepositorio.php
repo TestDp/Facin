@@ -99,6 +99,9 @@ class FacturaRepositorio
 
                     $cantidadInventario = ($cantidadDisponible - $cantidadDisponibleEquivalente);
                     ProductoPorProveedor::where('Producto_id','=',$productoPrincipalId)->update(array('Cantidad' => $cantidadInventario));
+                    $cantidadDisponibleSecundario =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
+                    $cantidadInventarioSecundario = ($cantidadDisponibleSecundario-$productoDetalle->Cantidad);
+                    ProductoPorProveedor::where('Producto_id','=',$productoDetalle->Producto_id)->update(array('Cantidad' => $cantidadInventarioSecundario));
                 }
 
                 $productoPedido = new Detalle();

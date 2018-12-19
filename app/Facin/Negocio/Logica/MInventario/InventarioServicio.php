@@ -30,6 +30,26 @@ class InventarioServicio
         $productoXProveedor->Cantidad = $productoXProveedor->Cantidad + $request->Cantidad;
         $precioDeCompra->ProductoPorProveedor_id = $productoXProveedor->id;
         $producto->Precio = $request->PrecioVenta;
+
+        //Nuevo metodo para actualizar inventario cuando hay equivalencias
+        $esPrincipal = $this->productoRepositorio->EsProductoPrincipal($request->Producto_id);
+        if($esPrincipal)
+        {
+
+        }
+        else
+        {
+            $productoPrincipalId = $this->productoRepositorio->ObtenerProductoEquivalencia($request->Producto_id)->ProductoPrincipal_id;
+            $cantidadEquivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($request->Producto_id)->Cantidad;
+            $cantidadPrincipal =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoPrincipalId)->Cantidad;
+            $cantidadActualizarEquivalente = ($request->Cantidad * $cantidadEquivalencia);
+            $cantidadActualizarPrincipal = ($cantidadPrincipal + $cantidadActualizarEquivalente);
+            $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadActualizarPrincipal);
+
+
+        }
+
+
         return $this->inventarioRepositorio->GuardarInventario($precioDeCompra,$productoXProveedor,$producto);
     }
 }
