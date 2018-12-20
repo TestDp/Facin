@@ -14,12 +14,19 @@ use Illuminate\Support\Facades\DB;
 
 class CategoriaRepositorio
 {
-    public  function GuardarCategoria($Categoria)
+    public  function GuardarCategoria($request)
     {
         DB::beginTransaction();
         try {
-            $categoria = new Categoria($Categoria);
-            $categoria->save();
+            if(isset($request['id']))
+            {
+                $categoria = Categoria::find($request['id']);
+                $categoria->Nombre = $request['Nombre'];
+                $categoria->Descripcion = $request['Descripcion'];
+            }else {
+                $categoria = new Categoria($request);
+            }
+             $categoria->save();
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -28,6 +35,11 @@ class CategoriaRepositorio
             DB::rollback();
             return $error;
         }
+    }
+
+    public  function  ObtenerCategoria($idCategoria)
+    {
+        return Categoria::where('id', '=', $idCategoria)->get()->first();
     }
 
     public  function  ObtenerListaCategorias($idEmpreesa)

@@ -65,6 +65,7 @@ Route::get('proveedores', 'MInventario\ProveedorController@ObtenerProveedores')-
 
 //CONTROLADOR CATEGORIAS
 Route::get('crearCategoria', 'MInventario\CategoriaController@CrearCategoria')->name('crearCategoria');//cargar la vista para crear una categoria
+Route::get('editarCategoria/{idCategoria}', 'MInventario\CategoriaController@EditarCategoria')->name('editarCategoria');//cargar la vista para editar una categoria
 Route::post('guardarCategoria', 'MInventario\CategoriaController@GuardarCategoria')->name('guardarCategoria');//Guardar la informacion de la categoria
 Route::get('categorias', 'MInventario\CategoriaController@ObtenerCategorias')->name('categorias');//Obtiene la lista de categorias
 

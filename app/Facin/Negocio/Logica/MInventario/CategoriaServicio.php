@@ -22,6 +22,11 @@ class CategoriaServicio
         return $this->categoriaRepositorio->GuardarCategoria($Categoria);
     }
 
+    public  function  ObtenerCategoria($idCategoria)
+    {
+        return $this->categoriaRepositorio->ObtenerCategoria($idCategoria);
+    }
+
     public  function  ObtenerListaCategorias($idEmpreesa)
     {
          return $this->categoriaRepositorio->ObtenerListaCategorias($idEmpreesa);

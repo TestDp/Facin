@@ -36,7 +36,7 @@
                                         @if($recursoPadre->RecursoSistemaPadre_id == null)
                                             <li name="liPadre">
                                                <input name="idRecurso[]" type="checkbox" value="{{$recursoPadre->id}}" onclick="checkRecursosHijos(this)">
-                                                <a href="#ul{{$recursoPadre->id}}" data-toggle="collapse">{{$recursoPadre->Descripcion}} </a>
+                                                <a href="#ul{{$recursoPadre->id}}" data-toggle="collapse">{{$recursoPadre->Descripcion}} <i>(Ver más)</i> </a>
                                                 <ul class="nav nav-second-level collapse" id="ul{{$recursoPadre->id}}" name="ulhijo">
                                                     @foreach($listRecursos as $recurso)
                                                         @if($recurso->RecursoSistemaPadre_id == $recursoPadre->id)

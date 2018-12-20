@@ -19,6 +19,7 @@
                                 <tr>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Descripcion</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -26,6 +27,10 @@
                                     <tr>
                                         <td>{{$categoria->Nombre}}</td>
                                         <td>{{$categoria->Descripcion}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarCategoria({{$categoria->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Categoría">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

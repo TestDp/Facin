@@ -40,6 +40,18 @@ class CategoriaController extends  Controller
         }else return view('MInventario/Categoria/crearCategoria');
     }
 
+    //Metodo para cargar  la vista de editar categoria
+    public function EditarCategoria(Request $request)
+    {
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $view = View::make('MInventario/Categoria/editarCategoria');
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MInventario/Categoria/editarCategoria');
+    }
+
     //Metodo para guarda la categoria
     public  function GuardarCategoria(Request $request)
     {
