@@ -158,6 +158,14 @@ class ProductoRepositorio
         }
         return false;
     }
+    //me retorna un lista de producto que no es combo filtrado por el id de la empresa
+    public function ObtenerProductosSecundarios($idProducto)
+    {
+        $ListaproductosSecundarios = Equivalencia::where('ProductoPrincipal_id','=',$idProducto)->get();
+
+        return $ListaproductosSecundarios;
+    }
+
 
 
 }

@@ -35,6 +35,7 @@ class InventarioServicio
         $esPrincipal = $this->productoRepositorio->EsProductoPrincipal($request->Producto_id);
         if($esPrincipal)
         {
+            $this->ActualizarProductosSecundarios($request->Producto_id, $request->Cantidad, $request->Producto_id);
 
         }
         else
@@ -45,11 +46,27 @@ class InventarioServicio
             $cantidadActualizarEquivalente = ($request->Cantidad * $cantidadEquivalencia);
             $cantidadActualizarPrincipal = ($cantidadPrincipal + $cantidadActualizarEquivalente);
             $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadActualizarPrincipal);
-
+            $this->ActualizarProductosSecundarios($productoPrincipalId, $cantidadActualizarEquivalente, $request->Producto_id);
 
         }
 
 
         return $this->inventarioRepositorio->GuardarInventario($precioDeCompra,$productoXProveedor,$producto);
+    }
+
+    public function ActualizarProductosSecundarios($productoPrincipal, $cantidadPrincipal, $productoSecundario){
+
+        $arrayProductosSecundarios = $this->productoRepositorio->ObtenerProductosSecundarios($productoPrincipal);
+
+        foreach ($arrayProductosSecundarios as $productoSecunDetalle) {
+
+            if ($productoSecundario <> $productoSecunDetalle->ProductoSecundario_id) {
+            $cantidadProductoSecun = $this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoSecunDetalle->ProductoSecundario_id)->Cantidad;
+            $cantidadequivalenciaSecun = $this->productoRepositorio->ObtenerProductoEquivalencia($productoSecunDetalle->ProductoSecundario_id)->Cantidad;
+
+            $cantidadActualizarSecu = $cantidadProductoSecun + ($cantidadPrincipal / $cantidadequivalenciaSecun);
+            $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoSecunDetalle->ProductoSecundario_id, $cantidadActualizarSecu);
+             }
+        }
     }
 }
