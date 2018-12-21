@@ -41,11 +41,13 @@ class CategoriaController extends  Controller
     }
 
     //Metodo para cargar  la vista de editar categoria
-    public function EditarCategoria(Request $request)
+    public function EditarCategoria(Request $request, $idCategoria)
     {
         $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idCategoria,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
         $request->user()->AutorizarUrlRecurso($urlinfo);
-        $view = View::make('MInventario/Categoria/editarCategoria');
+        $categoria = $this->categoriaServicio->ObtenerCategoria($idCategoria);
+        $view = View::make('MInventario/Categoria/editarCategoria', array('categoria'=>$categoria));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);

@@ -31,11 +31,11 @@ function ajaxRenderSectionCrearCategoria() {
 }
 
 //Funcion para cargar la vista de editar categoria
-function ajaxRenderSectionEditarCategoria() {
+function ajaxRenderSectionEditarCategoria(idCategoria) {
     PopupPosition();
     $.ajax({
         type: 'GET',
-        url: urlBase +'editarCategoria',
+        url: urlBase +'editarCategoria/' + idCategoria,
         dataType: 'json',
         success: function (data) {
             OcultarPopupposition();
