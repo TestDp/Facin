@@ -104,5 +104,16 @@ Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->nam
 Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
 Route::get('editarPedido/{idFactura}', 'MFacturacion\FacturaController@EditarFactura')->name('editarPedido');//Obtiene la vista donde se edita el producto
-Route::get('mediosDePago', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePago');//obtiene la lista de medios de pagos
+Route::get('mediosDePagolist', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePagolist');//obtiene la lista de medios de pagos
 Route::post('pagarPedido', 'MFacturacion\FacturaController@PagarPedido')->name('pagarPedido');//pagar  el pedido
+
+
+//CONTROLADOR DE ESTADO FACTURA
+Route::get('vistaCrearEstadoFactura', 'MFacturacion\EstadoFacturaController@ObtenerVistaCrearEstadoFactura')->name('vistaCrearEstadoFactura');//cargar la vista para crear un estado factura
+Route::post('guardarEstadoFactura', 'MFacturacion\EstadoFacturaController@GuardarEstadoFactura')->name('guardarEstadoFactura');//Guardar la informacion del estado
+Route::get('estadosFactura', 'MFacturacion\EstadoFacturaController@ObtenerEstadosFactura')->name('estadosFactura');//Obtiene la lista de los estados de las facturas
+
+//CONTROLADOR DE MEDIO DE PAGO
+Route::get('vistaCrearMedioDePago', 'MFacturacion\MedioDePagoController@ObtenerVistaCrearMedioDePago')->name('vistaCrearMedioDePago');//cargar la vista para crear un estado factura
+Route::post('guardarMedioDePago', 'MFacturacion\MedioDePagoController@GuardarMedioDePago')->name('guardarMedioDePago');//Guardar la informacion del estado
+Route::get('mediosDePago', 'MFacturacion\MedioDePagoController@ObtenerMediosDePago')->name('mediosDePago');//Obtiene la lista de los estados de las facturas

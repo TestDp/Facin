@@ -324,7 +324,7 @@ function finalizarPedido(){
 function agregarMedioDePago() {
     $.ajax({
         type: 'GET',
-        url: urlBase +'mediosDePago',
+        url: urlBase +'mediosDePagolist',
         dataType: 'json',
         success: function (data) {
         var tr='<tr>';

@@ -135,7 +135,6 @@
                                         <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de Documentos</a>
                                     </li>
                                 @endif
-
                                 @if(Auth::user()->buscarRecurso('TiposProductos'))
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de productos</a>
@@ -143,12 +142,17 @@
                                 @endif
                                 @if(Auth::user()->buscarRecurso('EstadosFacturas'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Estados de Factura</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaEstadoFactura()">Estados de Factura</a>
                                     </li>
                                 @endif
-                                @if(Auth::user()->buscarRecurso('TiposdeFacturas'))
+                               <!-- @if(Auth::user()->buscarRecurso('TiposdeFacturas'))
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaTiposProductos()">Tipos de Facturas</a>
+                                    </li>-->
+                                @endif
+                                @if(Auth::user()->buscarRecurso('MediosDePago'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionListaMediosDePago()">Medios de Pago</a>
                                     </li>
                                 @endif
                             </ul>
@@ -258,6 +262,8 @@
 <script src="{{ asset('js/MInventario/Equivalencia.js') }}"></script>
 <script src="{{ asset('js/MCliente/Cliente.js') }}"></script>
 <script src="{{ asset('js/MFacturacion/Factura.js') }}"></script>
+<script src="{{ asset('js/MFacturacion/EstadoFactura.js') }}"></script>
+<script src="{{ asset('js/MFacturacion/MedioDePago.js') }}"></script>
 
 <script>
     var menuLeft = document.getElementById('cbp-spmenu-s1'),
