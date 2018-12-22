@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="panel panel-success">
-                    <div class="panel-heading"><h3>Crear nueva sede</h3></div>
+                    <div class="panel-heading"><h3>Editar sede</h3></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
