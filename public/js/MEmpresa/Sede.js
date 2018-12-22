@@ -30,6 +30,29 @@ function ajaxRenderSectionCrearSede() {
     });
 }
 
+//Funcion para cargar la vista de editar sede
+function ajaxRenderSectionEditarSede(idSede) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarSede/' + idSede,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //Metodo para guarda la informacion de la sede retorna la vista con todas las sedes
 function GuardarSede() {
     PopupPosition();

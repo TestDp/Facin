@@ -37,6 +37,7 @@ Route::get('tiposDocumentos', 'MSistema\TipoDocumentoController@ObtenerTiposDocu
 //CONTROLADOR UNIDADDEMEDIDA
 Route::get('crearUnidad', 'MEmpresa\UnidadDeMedidaController@CrearUnidad')->name('crearUnidad');//cargar la vista para crear una unidad
 Route::post('guardarUnidad', 'MEmpresa\UnidadDeMedidaController@GuardarUnidad')->name('guardarUnidad');//Guardar la informacion de la unidad
+Route::get('editarUnidad/{idUnidad}', 'MEmpresa\UnidadDeMedidaController@EditarUnidad')->name('editarUnidad');//cargar la vista para editar una unidad
 Route::get('unidades', 'MEmpresa\UnidadDeMedidaController@ObtenerUnidadesEmpresa')->name('unidades');//Obtiene la lista de tipos de la unidad
 
 //CONTROLADOR ROL
@@ -89,6 +90,7 @@ Route::post('guardarInventario', 'MInventario\InventarioController@GuardarInvent
 
 //CONTROLADOR SEDES
 Route::get('crearSede', 'MEmpresa\SedeController@CrearSede')->name('crearSede');//cargar la vista para crear una sede
+Route::get('editarSede/{idSede}', 'MEmpresa\SedeController@EditarSede')->name('editarSede');//cargar la vista para editar una sede
 Route::post('guardarSede', 'MEmpresa\SedeController@GuardarSede')->name('guardarSede');//Guardar la informacion de la sede
 Route::get('sedes', 'MEmpresa\SedeController@ObtenerSedes')->name('sedes');//Obtiene la lista de sedes
 

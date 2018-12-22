@@ -15,13 +15,18 @@ class SedeServicio
 {
     protected  $sedeRepositorio;
     public function __construct(SedeRepositorio $sedeRepositorio){
-        $this->sedeServicio = $sedeRepositorio;
+        $this->sedeRepositorio = $sedeRepositorio;
     }
 
     public  function GuardarSede($Sede){
-        return $this->sedeServicio->GuardarSede($Sede);
+        return $this->sedeRepositorio->GuardarSede($Sede);
     }
     public  function  ObtenerListaSedes($idEmpreesa){
-        return $this->sedeServicio->ObtenerListaSedes($idEmpreesa);
+        return $this->sedeRepositorio->ObtenerListaSedes($idEmpreesa);
     }
+
+    public  function  ObtenerSede($idSede){
+        return $this->sedeRepositorio->  ObtenerSede($idSede);
+    }
+
 }

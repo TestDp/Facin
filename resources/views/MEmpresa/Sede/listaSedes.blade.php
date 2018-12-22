@@ -21,6 +21,7 @@
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Direccion</th>
                                     <th scope="col">Telefono</th>
+                                    <th scope="col">Editar Sede</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -30,6 +31,10 @@
                                         <td >{{$sede->Nombre}}</td>
                                         <td>{{$sede->Direccion}}</td>
                                         <td>{{$sede->Telefono}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarSede({{$sede->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Sede">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

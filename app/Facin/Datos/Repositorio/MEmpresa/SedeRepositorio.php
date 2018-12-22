@@ -15,11 +15,20 @@ use Illuminate\Support\Facades\DB;
 class SedeRepositorio
 {
 
-    public  function GuardarSede($Sede)
+    public  function GuardarSede($request)
     {
         DB::beginTransaction();
         try {
-            $sede = new Sede($Sede);
+            if(isset($request['id']))
+            {
+                $sede = Sede::find($request['id']);
+                $sede->Nombre = $request['Nombre'];
+                $sede->Direccion = $request['Direccion'];
+                $sede->Telefono = $request['Telefono'];
+
+            }else{
+                $sede = new Sede($request);
+            }
             $sede->save();
             DB::commit();
             return true;
@@ -34,5 +43,10 @@ class SedeRepositorio
     public  function  ObtenerListaSedes($idEmpreesa)
     {
         return Sede::where('Empresa_id', '=', $idEmpreesa)->get();
+    }
+
+    public  function  ObtenerSede($idSede)
+    {
+        return Sede::where('id', '=', $idSede)->get()->first();
     }
 }

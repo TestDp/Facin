@@ -40,6 +40,22 @@ class SedeController extends Controller
         }else return view('MEmpresa/Sede/crearSede');
     }
 
+    //Metodo para cargar  la vista de editar sede
+    public function EditarSede(Request $request, $idSede)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idSede,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $sede = $this->sedeServicio->ObtenerSede($idSede);
+        $view = View::make('MEmpresa/Sede/editarSede',array('sede'=>$sede));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MEmpresa/Sede/editarSede');
+    }
+
+
+
     //Metodo para guarda la sede
     public  function GuardarSede(Request $request)
     {
