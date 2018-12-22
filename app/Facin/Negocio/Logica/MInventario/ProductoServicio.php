@@ -23,6 +23,11 @@ class ProductoServicio
         return $this->productoRepositorio->GuardarProducto($request);
     }
 
+    public  function  ObtenerProducto($idProducto)
+    {
+        return $this->productoRepositorio->ObtenerProducto($idProducto);
+    }
+
     public function ObtenerListaProductoPorEmpresa($idEmpreesa){
         return $this->productoRepositorio->ObtenerListaProductoPorEmpresa($idEmpreesa);
     }

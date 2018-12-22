@@ -70,6 +70,27 @@ class ProductoController extends  Controller
         }else return view('MInventario/Producto/crearProducto');
     }
 
+    //Metodo para cargar retornar la vista de editar producto
+    public function EditarProducto(Request $request, $idProducto)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idProducto,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $tiposProd = $this->tipoProductoServicio->ObtenerListaTipoProductos();
+        $tiposCat = $this->categoriaServicio->ObtenerListaCategorias($idEmpreesa);
+        $tiposUni = $this->unidadDeMedidaServicio->ObtenerListaUnidadesEmpresa($idEmpreesa);
+        $tiposAlma = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpreesa);
+        $tiposProv = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
+        $tiposProd = $this->tipoProductoServicio->ObtenerListaTipoProductos();
+        $producto = $this->productoServicio->ObtenerProducto($idProducto);
+        $view = View::make('MInventario/Producto/editarProducto', array('producto'=>$producto, 'listProd'=>$tiposProd, 'listCat'=>$tiposCat, 'listUni'=>$tiposUni, 'listAlma'=>$tiposAlma, 'listProv'=>$tiposProv, 'listProd'=>$tiposProd));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MInventario/Producto/editarProducto');
+    }
+
 
     //Metodo para guarda el producto
     public  function GuardarProducto(Request $request)

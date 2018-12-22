@@ -30,6 +30,29 @@ function ajaxRenderSectionCrearProducto() {
     });
 }
 
+//Funcion para cargar la vista de editar producto
+function ajaxRenderSectionEditarProducto(idProducto) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarProducto/' + idProducto,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //funcion para validar los campos espcialmente los dinamicos
 function validarCamposFormCrearProducto()
 {

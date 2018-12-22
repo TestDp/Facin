@@ -22,7 +22,23 @@ class ProductoRepositorio
     {
         DB::beginTransaction();
         try {
+            if(isset($request['id']))
+            {
+                $producto = Producto::find($request['id']);
+                $producto->Codigo = $request['Codigo'];
+                $producto->Nombre = $request['Nombre'];
+                $producto->Precio = $request['Precio'];
+                $producto->TipoDeProducto_id = $request['TipoDeProducto_id'];
+                $producto->Categoria_id = $request['Categoria_id'];
+                $producto->UnidadDeMedida_id = $request['UnidadDeMedida_id'];
+                $producto->Almacen_id = $request['Almacen_id'];
+                $producto->PrecioSinIva = $request['PrecioSinIva'];
+                $producto->PrecioConIva = $request['PrecioConIva'];
+                $producto->Proveedor_id = $request['Proveedor_id'];
+
+            }else{
             $producto = new Producto($request->all());
+            }
             if(!$request->EsCombo)
                 $producto->EsCombo = 0;
             $producto->save();

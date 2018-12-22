@@ -76,6 +76,7 @@ Route::get('almacenes', 'MInventario\AlmacenController@ObtenerAlmacenes')->name(
 
 //CONTROLADOR PRODUCTO
 Route::get('crearProducto', 'MInventario\ProductoController@CrearProducto')->name('crearProducto');//cargar la vista para crear un producto
+Route::get('editarProducto/{idProducto}', 'MInventario\ProductoController@EditarProducto')->name('editarProducto');//cargar la vista para editar una producto
 Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del producto
 Route::get('productos', 'MInventario\ProductoController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los producto
 Route::get('infoProducto/{idProducto}','MInventario\ProductoController@ObtenerProductoProveedor')->name('infoProducto');//obtiene la informacion del producto

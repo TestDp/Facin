@@ -104,7 +104,7 @@
                                                 </div>
                                             </div>
                                             <!-- fin modal crear equivalencia-->
-                                            <button type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
+                                            <button onclick="ajaxRenderSectionEditarProducto({{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
                                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
                                             </button>
                                         </td>
