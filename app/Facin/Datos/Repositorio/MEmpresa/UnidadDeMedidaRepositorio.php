@@ -19,7 +19,17 @@ class UnidadDeMedidaRepositorio
     {
         DB::beginTransaction();
         try {
-            $unidad = new UnidadDeMedida($unidadMedida);
+
+            if(isset($unidadMedida['id']))
+            {
+                $unidad = UnidadDeMedida::find($unidadMedida['id']);
+                $unidad->Unidad =$unidadMedida['Unidad'];
+                $unidad->Abreviatura =$unidadMedida['Abreviatura'];
+                $unidad->Descripcion = $unidadMedida['Descripcion'];
+                $unidad->Empresa_id = $unidadMedida['Empresa_id'];
+            }else{
+                $unidad = new UnidadDeMedida($unidadMedida);
+            }
             $unidad->save();
             DB::commit();
             return true;
@@ -39,6 +49,11 @@ class UnidadDeMedidaRepositorio
     public  function  ObtenerListaUnidadesEmpresa($idEmpreesa)
     {
         return UnidadDeMedida::where('Empresa_id', '=', $idEmpreesa)->get();
+    }
+
+    public  function  ObtenerUnidadMedidaXId($idUnidad)
+    {
+        return UnidadDeMedida::where('id','=',$idUnidad)->get()->first();
     }
 
 }

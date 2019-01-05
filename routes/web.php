@@ -37,7 +37,7 @@ Route::get('tiposDocumentos', 'MSistema\TipoDocumentoController@ObtenerTiposDocu
 //CONTROLADOR UNIDADDEMEDIDA
 Route::get('crearUnidad', 'MEmpresa\UnidadDeMedidaController@CrearUnidad')->name('crearUnidad');//cargar la vista para crear una unidad
 Route::post('guardarUnidad', 'MEmpresa\UnidadDeMedidaController@GuardarUnidad')->name('guardarUnidad');//Guardar la informacion de la unidad
-Route::get('editarUnidad/{idUnidad}', 'MEmpresa\UnidadDeMedidaController@EditarUnidad')->name('editarUnidad');//cargar la vista para editar una unidad
+Route::get('editarUnidad/{idUnidad}', 'MEmpresa\UnidadDeMedidaController@obtenerVistaEditarUnidad')->name('editarUnidad');//cargar la vista para editar una unidad
 Route::get('unidades', 'MEmpresa\UnidadDeMedidaController@ObtenerUnidadesEmpresa')->name('unidades');//Obtiene la lista de tipos de la unidad
 
 //CONTROLADOR ROL
@@ -72,6 +72,7 @@ Route::get('categorias', 'MInventario\CategoriaController@ObtenerCategorias')->n
 
 //CONTROLADOR ALMACEN
 Route::get('crearAlmacen', 'MInventario\AlmacenController@CrearAlmacen')->name('crearAlmacen');//cargar la vista para crear un almacen
+Route::get('editarAlmacen/{idAlmacen}', 'MInventario\AlmacenController@ObetnerVistaEditarAlmacen')->name('editarAlmacen');//cargar la vista para editar un almacen
 Route::post('guardarAlmacen', 'MInventario\AlmacenController@GuardarAlmacen')->name('guardarAlmacen');//Guardar la informacion del almacen
 Route::get('almacenes', 'MInventario\AlmacenController@ObtenerAlmacenes')->name('almacenes');//Obtiene la lista de los almacenes
 

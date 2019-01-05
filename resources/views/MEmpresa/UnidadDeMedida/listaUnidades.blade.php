@@ -21,6 +21,7 @@
                                     <th scope="col">Unidad</th>
                                     <th scope="col">Abreviatura</th>
                                     <th scope="col">Descripción</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -30,6 +31,10 @@
                                         <td >{{$unidad->Unidad}}</td>
                                         <td>{{$unidad->Abreviatura}}</td>
                                         <td>{{$unidad->Descripcion}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarUnidad({{$unidad->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Unidad">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

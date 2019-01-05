@@ -32,4 +32,9 @@ class AlmacenServicio
     {
         return $this->almacenRepositorio->ObtenerListaAlmacenXEmpresa($idEmpresa);
     }
+
+    public  function  ObtenerAlmacenXId($idAlmancen)
+    {
+        return $this->almacenRepositorio->ObtenerAlmacenXID($idAlmancen);
+    }
 }

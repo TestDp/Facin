@@ -35,7 +35,6 @@ class FacturaRepositorio
             $pedido->Cliente;
             return $pedido;
         } catch (\Exception $e) {
-
             $error = $e->getMessage();
             DB::rollback();
             return $error;

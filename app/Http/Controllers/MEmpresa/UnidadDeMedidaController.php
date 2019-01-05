@@ -42,6 +42,20 @@ class UnidadDeMedidaController extends  Controller
         }else return view('MEmpresa/UnidadDeMedida/crearUnidad');
     }
 
+    //Metodo para cargar  la vista de editar una unidad de medida
+    public function obtenerVistaEditarUnidad(Request $request,$idUnidad)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idUnidad,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $unidad = $this->unidadDeMedidaServicio->ObtenerUnidadMedidaXId($idUnidad);
+        $view = View::make('MEmpresa/UnidadDeMedida/editarUnidad')->with('unidad',$unidad);
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MEmpresa/UnidadDeMedida/editarUnidad');
+    }
+
     //Metodo para guardar la unidad
     public  function GuardarUnidad(Request $request)
     {

@@ -32,4 +32,9 @@ class UnidadDeMedidaServicio
         return $this->unidadDeMedidaRepositorio->ObtenerListaUnidadesEmpresa($idEmpreesa);
     }
 
+    public  function  ObtenerUnidadMedidaXId($idUnidad)
+    {
+        return $this->unidadDeMedidaRepositorio->ObtenerUnidadMedidaXId($idUnidad);
+    }
+
 }

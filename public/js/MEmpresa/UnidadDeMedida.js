@@ -7,7 +7,7 @@ try {
     throw new Error("El modulo transversales es requerido");
 };
 
-//Funcion para cargar la vista de crear tipo documento
+//Funcion para cargar la vista de crear una unidad de medida
 function ajaxRenderSectionCrearUnidad() {
     PopupPosition();
     $.ajax({
@@ -30,6 +30,28 @@ function ajaxRenderSectionCrearUnidad() {
     });
 }
 
+//Funcion para cargar la vista de editar unidad
+function ajaxRenderSectionEditarUnidad(idUnidad) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarUnidad/'+idUnidad,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
 
 //Metodo para guarda la informacion de la unidad retorna la vista con todas las unidades
 function GuardarUnidad() {

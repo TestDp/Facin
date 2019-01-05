@@ -30,6 +30,29 @@ function ajaxRenderSectionCrearAlmacen() {
     });
 }
 
+//Funcion para cargar la vista de crear categoria
+function ajaxRenderSectionVistaEditarAlmacen(idAlmacen) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarAlmacen/'+idAlmacen,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //Metodo para guarda la informacion del almacen  y retorna la vista con todos los almacenes
 function GuardarAlmacen() {
     var form = $("#formAlmacen");

@@ -19,7 +19,15 @@ class AlmacenRepositorio
     {
         DB::beginTransaction();
         try {
-            $almacen = new Almacen($Almacen);
+            if(isset($Almacen['id']))
+            {
+                $almacen = Almacen::find($Almacen['id']);
+                $almacen->Nombre =$Almacen['Nombre'];
+                $almacen->Ubicacion =$Almacen['Ubicacion'];
+                $almacen->Sede_id = $Almacen['Sede_id'];
+            }else{
+                $almacen = new Almacen($Almacen);
+            }
             $almacen->save();
             DB::commit();
             return true;
@@ -45,5 +53,10 @@ class AlmacenRepositorio
             ->where('Tbl_Empresas.id', '=', $idEmpresa)
             ->get();
         return $almacenes;
+    }
+
+    public  function  ObtenerAlmacenXId($idAlmancen)
+    {
+        return Almacen::where('id','=',$idAlmancen)->get()->first();
     }
 }

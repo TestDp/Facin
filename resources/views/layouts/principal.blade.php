@@ -249,7 +249,7 @@
 <!-- js de la apliacion-->
 <script src="{{ asset('js/Transversal/generales.js') }}"></script>
 <script src="{{ asset('js/MSistema/TipoDocumento.js') }}"></script>
-<script src="{{ asset('js/MSistema/UnidadDeMedida.js') }}"></script>
+<script src="{{ asset('js/MEmpresa/UnidadDeMedida.js') }}"></script>
 <script src="{{ asset('js/MSistema/Rol.js') }}"></script>
 <script src="{{ asset('js/MSistema/Usuario.js') }}"></script>
 <script src="{{ asset('js/MSistema/TipoProducto.js') }}"></script>

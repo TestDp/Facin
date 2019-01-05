@@ -35,9 +35,8 @@ class ProductoRepositorio
                 $producto->PrecioSinIva = $request['PrecioSinIva'];
                 $producto->PrecioConIva = $request['PrecioConIva'];
                 $producto->Proveedor_id = $request['Proveedor_id'];
-
             }else{
-            $producto = new Producto($request->all());
+                $producto = new Producto($request->all());
             }
             if(!$request->EsCombo)
                 $producto->EsCombo = 0;

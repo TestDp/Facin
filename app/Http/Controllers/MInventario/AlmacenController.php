@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\MInventario;
 
-
 use Facin\Negocio\Logica\MEmpresa\SedeServicio;
 use Facin\Negocio\Logica\MInventario\AlmacenServicio;
 use Facin\Validaciones\MInventario\AlmacenValidaciones;
@@ -46,6 +45,21 @@ class AlmacenController extends  Controller
         }else return view('MInventario/Almacen/crearAlmacen');
     }
 
+    //Metodo para obtener la vista de editar Almacen
+    public function ObetnerVistaEditarAlmacen(Request $request,$idAlmacen)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idAlmacen,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $sedes = $this->sedeServicio->ObtenerListaSedes($idEmpreesa);
+        $almacen = $this->almacenServicio->ObtenerAlmacenXId($idAlmacen);
+        $view = View::make('MInventario/Almacen/editarAlmacen',array('listSedes'=>$sedes,'almacen'=>$almacen));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MInventario/Almacen/editarAlmacen');
+    }
     //Metodo para guarda la categoria
     public  function GuardarAlmacen(Request $request)
     {

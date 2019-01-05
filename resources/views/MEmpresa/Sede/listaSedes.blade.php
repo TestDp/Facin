@@ -21,7 +21,7 @@
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Direccion</th>
                                     <th scope="col">Telefono</th>
-                                    <th scope="col">Editar Sede</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
