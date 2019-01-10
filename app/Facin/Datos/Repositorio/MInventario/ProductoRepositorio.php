@@ -22,22 +22,8 @@ class ProductoRepositorio
     {
         DB::beginTransaction();
         try {
-            if(isset($request['id']))
-            {
-                $producto = Producto::find($request['id']);
-                $producto->Codigo = $request['Codigo'];
-                $producto->Nombre = $request['Nombre'];
-                $producto->Precio = $request['Precio'];
-                $producto->TipoDeProducto_id = $request['TipoDeProducto_id'];
-                $producto->Categoria_id = $request['Categoria_id'];
-                $producto->UnidadDeMedida_id = $request['UnidadDeMedida_id'];
-                $producto->Almacen_id = $request['Almacen_id'];
-                $producto->PrecioSinIva = $request['PrecioSinIva'];
-                $producto->PrecioConIva = $request['PrecioConIva'];
-                $producto->Proveedor_id = $request['Proveedor_id'];
-            }else{
                 $producto = new Producto($request->all());
-            }
+
             if(!$request->EsCombo)
                 $producto->EsCombo = 0;
             $producto->save();
@@ -69,6 +55,53 @@ class ProductoRepositorio
             return $error;
         }
     }
+
+    public  function EditarProducto($request)
+    {
+        DB::beginTransaction();
+        try {
+
+            $producto = Producto::find($request['id']);
+            $producto->Codigo = $request['Codigo'];
+            $producto->Nombre = $request['Nombre'];
+            $producto->Precio = $request['Precio'];
+            $producto->TipoDeProducto_id = $request['TipoDeProducto_id'];
+            $producto->Categoria_id = $request['Categoria_id'];
+            $producto->UnidadDeMedida_id = $request['UnidadDeMedida_id'];
+            $producto->Almacen_id = $request['Almacen_id'];
+            $producto->PrecioSinIva = $request['PrecioSinIva'];
+            $producto->PrecioConIva = $request['PrecioConIva'];
+
+            if(!$request->EsCombo)
+                $producto->EsCombo = 0;
+            $producto->save();
+            if($request->Proveedor_id)//preguntamos si viene la lista Proveedor_id
+            {
+                $productoXProveedor = ProductoPorProveedor::find($request['id']);
+                $productoXProveedor->Proveedor_id = $request['Proveedor_id'];
+                $productoXProveedor->Producto_id =  $producto->id;
+                $productoXProveedor->save();
+            }
+            /*$indCantidad=0;
+            if($request->ProductoSecundario_id)//preguntamos si viene la lista ProductoSecundario_id
+                foreach ($request->ProductoSecundario_id as $idProductoSecundario){
+                    $grupoProducto = new GrupoDeProductos();
+                    $grupoProducto->ProductoPrincipal_id =  $producto->id;
+                    $grupoProducto->ProductoSecundario_id = $idProductoSecundario;
+                    $grupoProducto->Cantidad = $request->Cantidad[$indCantidad];
+                    $grupoProducto->save();
+                    $indCantidad++;
+                }*/
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+
+            $error = $e->getMessage();
+            DB::rollback();
+            return $error;
+        }
+    }
+
 
     //me retorna un lista de producto filtrado por el id de la empresa
     public function ObtenerListaProductoPorEmpresa($idEmpreesa)

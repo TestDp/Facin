@@ -20,7 +20,15 @@ class ProductoServicio
     }
 
     public  function GuardarProducto($request){
-        return $this->productoRepositorio->GuardarProducto($request);
+
+        if(isset($request['id']))
+        {
+            return $this->productoRepositorio->EditarProducto($request);
+
+        }else{
+            return $this->productoRepositorio->GuardarProducto($request);
+        }
+
     }
 
     public  function  ObtenerProducto($idProducto)

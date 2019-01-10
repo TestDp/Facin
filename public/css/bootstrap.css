@@ -6337,6 +6337,7 @@ button.close {
 .modal-footer:after {
   clear: both;
 }
+#tablaPedidos{cursor:pointer;}
 .center-block {
   display: block;
   margin-right: auto;

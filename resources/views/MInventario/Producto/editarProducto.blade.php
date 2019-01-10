@@ -3,6 +3,7 @@
 @section('content')
     <form id="formProducto">
         <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" id="id" name="id" value="{{$producto->id}}">
 
         <div class="container">
             <div class="row justify-content-center">
