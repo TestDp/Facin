@@ -37,6 +37,20 @@ class TipoDocumentoController extends Controller
         }else return view('MSistema/TipoDocumento/crearTipoDocumento');
     }
 
+    //Metodo para cargar  la vista de editar el tipo de documento
+    public function EditarTipoDocumento(Request $request, $idTipo)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idTipo,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $tipoDocumento = $this->TipoDocumentoServicio->ObtenerTipoDocumento($idTipo);
+        $view = View::make('MSistema/TipoDocumento/editarTipoDocumento', array('tipoDocumento'=>$tipoDocumento));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MSistema/TipoDocumento/crearTipoDocumento');
+    }
+
     //Metodo para guardar el tipo de documento
     public  function GuardarTipoDocumento(Request $request)
     {

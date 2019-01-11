@@ -23,6 +23,11 @@ class TipoDeProductoServicio
         return $this->tipoProductoRepositorio->GuardarTipoProducto($request);
     }
 
+    public  function ObtenerTipoProducto($idTipo)
+    {
+        return $this->tipoProductoRepositorio->ObtenerTipoProducto($idTipo);
+    }
+
     public  function  ObtenerListaTipoProductos()
     {
         return $this->tipoProductoRepositorio->ObtenerListaTipoProductos();

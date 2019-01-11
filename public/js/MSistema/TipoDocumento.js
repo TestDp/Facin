@@ -29,6 +29,28 @@ function ajaxRenderSectionCrearTipoDocumento() {
     });
 }
 
+//Funcion para cargar la vista de editar tipo documento
+function ajaxRenderSectionEditarTipoDocumento(idTipo) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarTipoDocumento/' + idTipo,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //Metodo para guarda la informacion del tipo de documento y retorna la vista con todos los tipos de documentos
 function GuardarTipoDocumento() {
     var form = $("#formTipoDocumento");

@@ -24,6 +24,12 @@ class TipoDocumentoServicio
          return $this->TipoDocumentoRepositorio->GuardarTipoDocumento($request);
     }
 
+    public  function ObtenerTipoDocumento($idTipo)
+    {
+        return $this->TipoDocumentoRepositorio->ObtenerTipoDocumento($idTipo);
+    }
+
+
     public  function  ObtenerListaTipoDocumentos()
     {
         return $this->TipoDocumentoRepositorio->ObtenerListaTipoDocumentos();

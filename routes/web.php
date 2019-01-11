@@ -31,6 +31,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //CONTROLADOR TIPODOCUMENTO
 Route::get('crearTipoDocumento', 'MSistema\TipoDocumentoController@CrearTipoDocumento')->name('crearTipoDocumento');//cargar la vista para crear un tipo de documento
+Route::get('editarTipoDocumento/{idTipo}', 'MSistema\TipoDocumentoController@EditarTipoDocumento')->name('editarTipoDocumento');//cargar la vista para editar un tipo de documento
 Route::post('guardarTipoDocumento', 'MSistema\TipoDocumentoController@GuardarTipoDocumento')->name('guardarTipoDocumento');//Guardar la informacion del tipo documento
 Route::get('tiposDocumentos', 'MSistema\TipoDocumentoController@ObtenerTiposDocumentos')->name('tiposDocumentos');//Obtiene la lista de tipos de documentos
 
@@ -55,6 +56,7 @@ Route::get('/register/verify/{code}', 'MSistema\UsuarioController@verifarCorreo'
 
 //CONTROLADOR TIPODEPRODUCTOS
 Route::get('crearTipoProducto', 'MSistema\TipoDeProductoController@CrearTipoDeProducto')->name('crearTipoProducto');//cargar la vista para crear un tipo de producto
+Route::get('editarTipoProducto/{idTipo}', 'MSistema\TipoDeProductoController@EditarTipoDeProducto')->name('editarTipoProducto');//cargar la vista para editar un tipo de producto
 Route::post('guardarTipoProducto', 'MSistema\TipoDeProductoController@GuardarTipoProducto')->name('guardarTipoProducto');//Guardar la informacion del usuario
 Route::get('tiposProductos', 'MSistema\TipoDeProductoController@ObtenerTiposProductos')->name('tiposProductos');//Obtiene la lista de tipos de productos
 

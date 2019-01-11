@@ -29,6 +29,28 @@ function ajaxRenderSectionCrearTipoProducto() {
     });
 }
 
+//Funcion para cargar la vista de editar tipo documento
+function ajaxRenderSectionEditarTipoProducto(idTipo) {
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'editarTipoProducto/' + idTipo,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //Metodo para guarda la informacion de la categoria y retorna la vista con todos las categorias
 function GuardarTipoProducto() {
     PopupPosition();

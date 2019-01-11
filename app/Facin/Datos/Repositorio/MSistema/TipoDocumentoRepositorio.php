@@ -19,7 +19,15 @@ class TipoDocumentoRepositorio
     {
         DB::beginTransaction();
         try {
-            $tipoDocumento = new TipoDocumento($request->all());
+            if(isset($request['id']))
+            {
+                $tipoDocumento = TipoDocumento::find($request['id']);
+                $tipoDocumento->Nombre = $request['Nombre'];
+                $tipoDocumento->Descripcion = $request['Descripcion'];
+
+            }else {
+                $tipoDocumento = new TipoDocumento($request);
+            }
             $tipoDocumento->save();
             DB::commit();
             return true;
@@ -29,6 +37,11 @@ class TipoDocumentoRepositorio
             DB::rollback();
             return $error;
         }
+    }
+
+    public  function  ObtenerTipoDocumento($idTipo)
+    {
+        return TipoDocumento::where('id', '=', $idTipo)->get()->first();
     }
 
     public  function  ObtenerListaTipoDocumentos()

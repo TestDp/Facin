@@ -17,7 +17,15 @@ class TipoDeProductoRepositorio
     {
         DB::beginTransaction();
         try {
-            $tipoProducto = new TipoDeProducto($request->all());
+            if(isset($request['id']))
+            {
+                $tipoProducto = TipoDeProducto::find($request['id']);
+                $tipoProducto->Nombre = $request['Nombre'];
+                $tipoProducto->Descripcion = $request['Descripcion'];
+
+            }else {
+                $tipoProducto = new TipoDeProducto($request);
+            }
             $tipoProducto->save();
             DB::commit();
             return true;
@@ -27,6 +35,11 @@ class TipoDeProductoRepositorio
             DB::rollback();
             return $error;
         }
+    }
+
+    public  function  ObtenerTipoProducto($idTipo)
+    {
+        return TipoDeProducto::where('id', '=', $idTipo)->get()->first();
     }
 
     public  function  ObtenerListaTipoProductos()

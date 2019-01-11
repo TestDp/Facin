@@ -40,6 +40,20 @@ class TipoDeProductoController extends Controller
         }else return view('MSistema/TipoDeProducto/crearTipoProducto');
     }
 
+    //Metodo para cargar  la vista de editar un tipo de producto
+    public function EditarTipoDeProducto(Request $request, $idTipo)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idTipo,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $tipoProducto = $this->tipoProductoServicio->ObtenerTipoProducto($idTipo);
+        $view = View::make('MSistema/TipoDeProducto/editarTipoProducto', array('tipoProducto'=>$tipoProducto));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MSistema/TipoDeProducto/crearTipoProducto');
+    }
+
     //Metodo para guardar el tipo de producto
     public  function GuardarTipoProducto(Request $request)
     {

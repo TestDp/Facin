@@ -20,6 +20,7 @@
                                     <th scope="col">Id</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Descripcion</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -28,6 +29,10 @@
                                         <th scope="row">{{$tipo->id}}</th>
                                         <td>{{$tipo->Nombre}}</td>
                                         <td>{{$tipo->Descripcion}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarTipoDocumento({{$tipo->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Tipo Documento">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
