@@ -92,7 +92,7 @@
                             </div>
                             <div class="col-md-4">
                                 Precio Con IVA
-                                <input id="PrecioConIva" name="PrecioConIva" type="text" class="form-control" disabled value="{{$producto->PrecioConIva}}">
+                                <input id="PrecioConIva" name="PrecioConIva" type="text" class="form-control"  value="{{$producto->PrecioSinIva + $producto->PrecioSinIva *0.19}}" disabled>
                             </div>
                             <div class="col-md-4">
                                 Precio venta
@@ -105,11 +105,11 @@
                                 Proveedores
                                 <select id="Proveedor_id" name="Proveedor_id"  class="form-control">
                                     <option value="">Seleccionar</option>
-                                    @foreach($listProv as $tipo)
-                                        @if ($tipo->id == $producto->Proveedor_id)
-                                            <option value="{{ $tipo->id }}" selected>{{ $tipo->Nombre }}</option>
+                                    @foreach($listProv as $proveedor)
+                                        @if ($proveedor->id == $productoXprovedor->Proveedor_id)
+                                            <option value="{{ $proveedor->id }}" selected>{{ $proveedor->Nombre }}</option>
                                         @else
-                                            <option value="{{ $tipo->id }}">{{ $tipo->Nombre }}</option>
+                                            <option value="{{ $proveedor->id }}">{{ $proveedor->Nombre }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -179,15 +179,15 @@
     <script src="{{ asset('js/Plugins/fastselect-master/dist/fastselect.js') }}"></script>
     <script type="text/javascript">
         // Material Select Initialization
-        $(document).ready(function() {
+      $(document).ready(function() {
             $('#Proveedor_id').fastselect({
                 placeholder: 'Seleccione los proveedores',
                 searchPlaceholder: 'Buscar opciones'
             });
-            $('#ListaProductos').fastselect({
+            /**$('#ListaProductos').fastselect({
                 placeholder: 'Seleccione los productos',
                 searchPlaceholder: 'Buscar opciones'
-            });
+            });**/
         });
 
     </script>

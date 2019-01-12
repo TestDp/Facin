@@ -9,6 +9,7 @@
 namespace Facin\Datos\Repositorio\MInventario;
 
 
+use Facin\Datos\Modelos\MInventario\ProductoPorProveedor;
 use Facin\Datos\Modelos\MInventario\Proveedor;
 use Illuminate\Support\Facades\DB;
 
@@ -56,5 +57,9 @@ class ProveedorRepositorio
     public  function  ObtenerListaProveedores($idEmpreesa)
     {
         return Proveedor::where('Empresa_id', '=', $idEmpreesa)->get();
+    }
+
+    public function ObtenerProveedorXIdProducto($idproducto){
+        return ProductoPorProveedor::where('Producto_id','=',$idproducto)->get()->first();
     }
 }

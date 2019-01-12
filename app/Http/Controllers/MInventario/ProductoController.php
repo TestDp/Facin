@@ -77,14 +77,16 @@ class ProductoController extends  Controller
         $urlinfo = explode('/'.$idProducto,$urlinfo)[0];//se parte la url para quitarle el parametro y porder consultarla NOTA:provicional mientras se encuentra otra forma
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $tiposProd = $this->tipoProductoServicio->ObtenerListaTipoProductos();
         $tiposCat = $this->categoriaServicio->ObtenerListaCategorias($idEmpreesa);
         $tiposUni = $this->unidadDeMedidaServicio->ObtenerListaUnidadesEmpresa($idEmpreesa);
         $tiposAlma = $this->almacenServicio->ObtenerListaAlmacenXEmpresa($idEmpreesa);
         $tiposProv = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
         $tiposProd = $this->tipoProductoServicio->ObtenerListaTipoProductos();
         $producto = $this->productoServicio->ObtenerProducto($idProducto);
-        $view = View::make('MInventario/Producto/editarProducto', array('producto'=>$producto, 'listProd'=>$tiposProd, 'listCat'=>$tiposCat, 'listUni'=>$tiposUni, 'listAlma'=>$tiposAlma, 'listProv'=>$tiposProv, 'listProd'=>$tiposProd));
+        $productoXprovedor = $this->proveedorServicio->ObtenerProveedorXIdProducto($idProducto);
+        $view = View::make('MInventario/Producto/editarProducto', array('producto'=>$producto, 'listProd'=>$tiposProd,
+            'listCat'=>$tiposCat, 'listUni'=>$tiposUni, 'listAlma'=>$tiposAlma, 'listProv'=>$tiposProv,
+            'listProd'=>$tiposProd,'productoXprovedor'=>$productoXprovedor));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);
