@@ -26,6 +26,11 @@ class EstadoFacturaServicio
     }
 
     //Metodo para obtener toda  la lista de los estados de la factura
+    public  function ObtenerEstadoFactura($idEstado){
+        return $this->estadoFacturaRepositorio->ObtenerEstadoFactura($idEstado);
+    }
+
+    //Metodo para obtener toda  la lista de los estados de la factura
     public  function ObtenerEstadosFactura(){
         return $this->estadoFacturaRepositorio->ObtenerEstadosFactura();
     }

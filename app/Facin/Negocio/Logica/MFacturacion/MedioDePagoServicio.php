@@ -26,6 +26,11 @@ class MedioDePagoServicio
         return $this->medioDePagoRepositorio->GuardarMedioDePago($request);
     }
 
+    //Metodo para obtener toda  la lista de los estados de la factura
+    public  function ObtenerMedioDePago($idMedio){
+        return $this->medioDePagoRepositorio->ObtenerMedioDePago($idMedio);
+    }
+
     //Metodo para obtener toda  la lista de los medios de pagos
     public  function ObtenerMediosDePago(){
         return $this->medioDePagoRepositorio->ObtenerMediosDePago();

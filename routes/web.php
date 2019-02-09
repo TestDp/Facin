@@ -116,10 +116,12 @@ Route::post('pagarPedido', 'MFacturacion\FacturaController@PagarPedido')->name('
 
 //CONTROLADOR DE ESTADO FACTURA
 Route::get('vistaCrearEstadoFactura', 'MFacturacion\EstadoFacturaController@ObtenerVistaCrearEstadoFactura')->name('vistaCrearEstadoFactura');//cargar la vista para crear un estado factura
+Route::get('editarEstadosFactura/{idEstado}', 'MFacturacion\EstadoFacturaController@ObtenerVistaEditarEstadoFactura')->name('editarEstadosFactura');//Editar la informacion del estado
 Route::post('guardarEstadoFactura', 'MFacturacion\EstadoFacturaController@GuardarEstadoFactura')->name('guardarEstadoFactura');//Guardar la informacion del estado
 Route::get('estadosFactura', 'MFacturacion\EstadoFacturaController@ObtenerEstadosFactura')->name('estadosFactura');//Obtiene la lista de los estados de las facturas
 
 //CONTROLADOR DE MEDIO DE PAGO
 Route::get('vistaCrearMedioDePago', 'MFacturacion\MedioDePagoController@ObtenerVistaCrearMedioDePago')->name('vistaCrearMedioDePago');//cargar la vista para crear un estado factura
+Route::get('editarMedioDePago/{idMedio}', 'MFacturacion\MedioDePagoController@ObtenerVistaEditarMedioDePago')->name('vistaEditarMedioDePago');//cargar la vista para editar un estado factura
 Route::post('guardarMedioDePago', 'MFacturacion\MedioDePagoController@GuardarMedioDePago')->name('guardarMedioDePago');//Guardar la informacion del estado
 Route::get('mediosDePago', 'MFacturacion\MedioDePagoController@ObtenerMediosDePago')->name('mediosDePago');//Obtiene la lista de los estados de las facturas

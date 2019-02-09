@@ -40,6 +40,20 @@ class EstadoFacturaController extends Controller
         }else return view('MFacturacion/EstadoFactura/crearEstadosFactura');
     }
 
+    //Metodo para cargar  la vista de editar el tipo de documento
+    public function ObtenerVistaEditarEstadoFactura(Request $request, $idEstado)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idEstado,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $estadoFactura = $this->estadoFacturaServicio->ObtenerEstadoFactura($idEstado);
+        $view = View::make('MFacturacion/EstadoFactura/editarEstadosFactura', array('estadoFactura'=>$estadoFactura));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MFacturacion/EstadoFactura/crearEstadosFactura');
+    }
+
     //Metodo para guardar el estado de factura
     public  function GuardarEstadoFactura(Request $request)
     {

@@ -422,7 +422,10 @@ function PagarPedido() {
                 $(stringTrtotalPedido).removeAttr("onclick");
                 $(stringTdEstadoPedido).html("Finalizada");
                 $('#panelPedido').empty();
-                window.print($("#TablasDetallePedido").html());
+                window.onload = function(){
+                    window.print($("#TablasDetallePedido").html());
+                }
+                //window.print($("#TablasDetallePedido").html());
             }
         },
         error: function (data) {

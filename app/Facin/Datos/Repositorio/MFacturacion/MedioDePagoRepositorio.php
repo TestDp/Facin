@@ -20,8 +20,16 @@ class MedioDePagoRepositorio
     {
         DB::beginTransaction();
         try {
-            $estadoFactura = new MedioDePago($request->all());
-            $estadoFactura->save();
+            if(isset($request['id']))
+            {
+                $medioDePago = MedioDePago::find($request['id']);
+                $medioDePago->Nombre = $request['Nombre'];
+                $medioDePago->Descripcion = $request['Descripcion'];
+
+            }else {
+                $medioDePago = new MedioDePago($request);
+            }
+            $medioDePago->save();
             DB::commit();
             Cache::flush();
             return true;
@@ -31,6 +39,11 @@ class MedioDePagoRepositorio
             DB::rollback();
             return $error;
         }
+    }
+
+    public  function  ObtenerMedioDePago($idMedio)
+    {
+        return MedioDePago::where('id', '=', $idMedio)->get()->first();
     }
 
     //Metodo para obtener toda  la lista de los medios de pagos

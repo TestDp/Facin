@@ -40,6 +40,20 @@ class MedioDePagoController extends Controller
         }else return view('MFacturacion/MedioDePago/crearMedioDePago');
     }
 
+    //Metodo para cargar  la vista de editar el medio de pago
+    public function ObtenerVistaEditarMedioDePago(Request $request, $idMedio)
+    {
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idMedio,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $medioDePago = $this->medioDePagoServicio->ObtenerMedioDePago($idMedio);
+        $view = View::make('MFacturacion/MedioDePago/editarMedioDePago', array('medioDePago'=>$medioDePago));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MFacturacion/MedioDePago/crearMedioDePago');
+    }
+
     //Metodo para guardar el medio de pago
     public  function GuardarMedioDePago(Request $request)
     {

@@ -20,6 +20,7 @@
                                     <th scope="col">Id</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Descripcion</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -28,6 +29,10 @@
                                         <th scope="row">{{$medio->id}}</th>
                                         <td>{{$medio->Nombre}}</td>
                                         <td>{{$medio->Descripcion}}</td>
+                                        <td> <button onclick="ajaxRenderSectionEditarMedioDePago({{$medio->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Medio de Pago">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

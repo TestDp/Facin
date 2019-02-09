@@ -36,7 +36,7 @@ function ajaxRenderSectionEditarEstadoFactura(idEstadoFactura) {
     PopupPosition();
     $.ajax({
         type: 'GET',
-        url: urlBase +'editarEstadoFactura/'+ idEstadoFactura,
+        url: urlBase +'editarEstadosFactura/'+ idEstadoFactura,
         dataType: 'json',
         success: function (data) {
             OcultarPopupposition();

@@ -19,7 +19,15 @@ class EstadoFacturaRepositorio
     {
         DB::beginTransaction();
         try {
-            $estadoFactura = new EstadoFactura($request->all());
+            if(isset($request['id']))
+            {
+                $estadoFactura = EstadoFactura::find($request['id']);
+                $estadoFactura->Nombre = $request['Nombre'];
+                $estadoFactura->Descripcion = $request['Descripcion'];
+
+            }else {
+                $estadoFactura = new EstadoFactura($request);
+            }
             $estadoFactura->save();
             DB::commit();
             return true;
@@ -29,6 +37,10 @@ class EstadoFacturaRepositorio
             DB::rollback();
             return $error;
         }
+    }
+    public  function  ObtenerEstadoFactura($idEstado)
+    {
+        return EstadoFactura::where('id', '=', $idEstado)->get()->first();
     }
 
     //Metodo para obtener toda  la lista de los estados de la factura
