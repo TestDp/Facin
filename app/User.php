@@ -79,7 +79,7 @@ class User extends Authenticatable
         $roles = $this->roles()->get();
         foreach ($roles as $rol)
         {
-            if ($rol->recursos()->where('Nombre', $recurso)->first()) {
+            if ($rol->recursos()->where(    'Nombre', $recurso)->first()) {
                 return true;
             }
         }

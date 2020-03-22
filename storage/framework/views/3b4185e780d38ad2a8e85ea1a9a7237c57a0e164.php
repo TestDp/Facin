@@ -1,5 +1,9 @@
 <?php $__env->startSection('content'); ?>
-
+    <style>
+        tr:hover {
+            background-color: #dff0d8;
+        }
+    </style>
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -65,10 +69,10 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <button onclick="ObtenerFormCrearPedido()" type="button" class="btn btn-success">Nuevo Pedido</button>
+                                <button onclick="validarEdicionDePedidoBtnCrear()" type="button" class="btn btn-success">Nuevo Pedido</button>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" id="tablaPedidosCompleta">
                             <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" >
                                 <thead>
                                 <tr>
@@ -81,17 +85,18 @@
                                 </thead>
                                 <tbody id="tablaPedidos">
                                 <?php $__currentLoopData = $listPedidos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pedido): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr>
+                                    <tr onclick="validarEdicionDePedido(this,<?php echo e($pedido->id); ?>)" id="trPedido<?php echo e($pedido->id); ?>">
                                         <td><?php echo e($pedido->id); ?></td>
                                         <td><?php echo e($pedido->created_at); ?></td>
-                                        <td><?php echo e($pedido->nombreEstado); ?></td>
+                                        <td id="tdEstadoPedido<?php echo e($pedido->id); ?>" name="tdEstadoPedido<?php echo e($pedido->id); ?>"><?php echo e($pedido->nombreEstado); ?></td>
                                         <td><?php echo e($pedido->Nombre); ?> <?php echo e($pedido->Apellidos); ?></td>
-                                        <td><?php echo e($pedido->VentaTotal); ?></td>
+                                        <td id="tdTotalPedido<?php echo e($pedido->id); ?>">$<?php echo e($pedido->VentaTotal); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
                                 </tbody>
                             </table>
+                            <?php echo $listPedidos->links(); ?>
+
                         </div>
                     </div>
                 </div>
@@ -101,7 +106,31 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
 
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+
+                $('#tablaPedidosCompleta a').css('color', '#dfecf6');
+                //  $('#tablaPedidosCompleta').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="../images/loader.gif" />');
+
+                var url = $(this).attr('href');
+                getArticles(url);
+                window.history.pushState("", "", url);
+            });
+
+            function getArticles(url) {
+                $.ajax({
+                    url : url
+                }).done(function (data) {
+                    $('#tablaPedidosCompleta').html(data);
+                }).fail(function () {
+                    alert('Articles could not be loaded.');
+                });
+            }
+        });
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.principal', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

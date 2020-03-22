@@ -8,7 +8,6 @@
 
 namespace Facin\Datos\Repositorio\MEmpresa;
 
-
 use Facin\Datos\Modelos\MEmpresa\Sede;
 use Illuminate\Support\Facades\DB;
 
