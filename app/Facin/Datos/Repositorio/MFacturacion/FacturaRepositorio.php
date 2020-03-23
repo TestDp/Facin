@@ -42,7 +42,8 @@ class FacturaRepositorio
     }
 
     public function ObtenerFactura($idFactura){
-        return Factura::find($idFactura);
+        $factura =  Factura::find($idFactura);
+        return $factura;
     }
     //retorna una lista de pedidos(Facturas) filtrados por sede y estado
     public function ListaPedidosXSedeXEstados($idSede,$idEstado)

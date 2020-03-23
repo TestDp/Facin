@@ -107,6 +107,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>
     <script type="text/javascript">
 
         $(document).ready(function() {

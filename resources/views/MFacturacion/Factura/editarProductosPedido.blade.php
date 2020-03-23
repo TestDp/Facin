@@ -85,16 +85,17 @@
                                                     <table style="width:100%" class="table table-bordered">
                                                         <thead>
                                                             <tr >
-                                                                <th>Producto</th>
                                                                 <th>Cantidad</th>
-                                                                <th>Subtotal</th>
+                                                                <th>Producto</th>
+                                                                <th>Vlr Unitario</th>
+                                                                <th>Vlr total</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="TablasDetallePedido">
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <th colspan="2">Total</th>
+                                                                <th colspan="3">Total</th>
                                                                 <td id="tdTotalPedido"></td>
                                                             </tr>
                                                         </tfoot>
@@ -143,7 +144,7 @@
     </div>
     <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css') }}" rel="stylesheet">
     <script src="{{ asset('js/Plugins/fastselect-master/dist/fastsearch.js') }}"></script>
-    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastselect.js') }}"></script>
+    <script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>
     <script type="text/javascript">
         // Material Select Initialization
         $(document).ready(function() {

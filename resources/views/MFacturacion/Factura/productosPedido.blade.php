@@ -51,9 +51,9 @@
             </div>
         </div>
     </div>
-    <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastsearch.js') }}"></script>
-    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastselect.js') }}"></script>
+    <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css')}}" rel="stylesheet">
+    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastsearch.js')}}"></script>
+    <script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>
     <script type="text/javascript">
         // Material Select Initialization
         $(document).ready(function() {

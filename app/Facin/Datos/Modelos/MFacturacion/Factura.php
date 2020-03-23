@@ -22,6 +22,10 @@ class Factura extends  Model
         return $this->hasMany(MedioDePagoXFactura::class,'Factura_id','id');
     }
 
+    public function Detalles(){
+        return $this->hasMany(Detalle::class,'Factura_id','id');
+    }
+
     public function Cliente()
     {
         return $this->belongsTo(Cliente::class,'Cliente_id');

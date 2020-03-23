@@ -309,10 +309,15 @@ function editarPedido(element,idFactura) {
 function finalizarPedido(){
     $("#TablasDetallePedido").html("");
     $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
+
+        var valorSuTotal = parseFloat($(row).find("label[name=lbsubTotal]").text());
+        var cantidad = parseFloat($(row).find("label[name=lbCantidad]").text());
+        var valorUnidad = valorSuTotal/cantidad;
         var tr='<tr>';
-        tr = tr +'<td>'+$(row).find("p[name=pNombreProducto]").text();+'</td>';
-        tr = tr +'<td>'+$(row).find("label[name=lbCantidad]").text();+'</td>';
-        tr = tr +'<td>$'+$(row).find("label[name=lbsubTotal]").text()+'</td>';
+        tr = tr +'<td>'+cantidad+'</td>';
+        tr = tr +'<td>'+$(row).find("p[name=pNombreProducto]").text()+'</td>';
+        tr = tr +'<td>$'+valorUnidad+'</td>';
+        tr = tr +'<td>$'+valorSuTotal+'</td>';
         tr = tr +'</tr>';
         $("#TablasDetallePedido").append(tr);
 
@@ -422,10 +427,14 @@ function PagarPedido() {
                 $(stringTrtotalPedido).removeAttr("onclick");
                 $(stringTdEstadoPedido).html("Finalizada");
                 $('#panelPedido').empty();
-                window.onload = function(){
+               /* window.onload = function(){
                     window.print($("#TablasDetallePedido").html());
-                }
-                //window.print($("#TablasDetallePedido").html());
+                }*/
+                var doc = new jsPDF();
+                doc.text(20, 20, 'Hola mundo');
+                doc.text(20, 30, 'Vamos a generar un pdf desde el lado del cliente');
+                // Save the PDF
+                doc.save('documento.pdf');
             }
         },
         error: function (data) {
