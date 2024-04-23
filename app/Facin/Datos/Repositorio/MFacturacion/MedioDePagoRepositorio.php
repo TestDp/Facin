@@ -27,7 +27,7 @@ class MedioDePagoRepositorio
                 $medioDePago->Descripcion = $request['Descripcion'];
 
             }else {
-                $medioDePago = new MedioDePago($request);
+                $medioDePago = new MedioDePago($request->all());
             }
             $medioDePago->save();
             DB::commit();

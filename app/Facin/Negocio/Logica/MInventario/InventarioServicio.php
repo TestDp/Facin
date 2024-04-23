@@ -59,13 +59,13 @@ class InventarioServicio
         $arrayProductosSecundarios = $this->productoRepositorio->ObtenerProductosSecundarios($productoPrincipal);
 
         foreach ($arrayProductosSecundarios as $productoSecunDetalle) {
-
             if ($productoSecundario <> $productoSecunDetalle->ProductoSecundario_id) {
-            $cantidadProductoSecun = $this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoSecunDetalle->ProductoSecundario_id)->Cantidad;
-            $cantidadequivalenciaSecun = $this->productoRepositorio->ObtenerProductoEquivalencia($productoSecunDetalle->ProductoSecundario_id)->Cantidad;
+                $cantidadProductoSecun = $this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoSecunDetalle->ProductoSecundario_id)->Cantidad;
+                $cantidadequivalenciaSecun = $this->productoRepositorio->ObtenerProductoEquivalencia($productoSecunDetalle->ProductoSecundario_id)->Cantidad;
 
-            $cantidadActualizarSecu = $cantidadProductoSecun + ($cantidadPrincipal / $cantidadequivalenciaSecun);
-            $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoSecunDetalle->ProductoSecundario_id, $cantidadActualizarSecu);
+               // $cantidadActualizarSecu = $cantidadProductoSecun + ($cantidadPrincipal / $cantidadequivalenciaSecun);
+                $cantidadActualizarSecu = $cantidadProductoSecun + ($cantidadPrincipal * $cantidadequivalenciaSecun);
+                $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoSecunDetalle->ProductoSecundario_id, $cantidadActualizarSecu);
              }
         }
     }

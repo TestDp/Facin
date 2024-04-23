@@ -15,14 +15,17 @@ use Facin\Datos\Modelos\MFacturacion\MedioDePago;
 use Facin\Datos\Modelos\MFacturacion\MedioDePagoXFactura;
 use Facin\Datos\Modelos\MInventario\Producto;
 use Facin\Datos\Repositorio\MInventario\ProductoRepositorio;
+use Facin\Negocio\Logica\MInventario\InventarioServicio;
 use Illuminate\Support\Facades\DB;
 
 class FacturaRepositorio
 {
 
     protected  $productoRepositorio;
-    public function __construct(ProductoRepositorio $productoRepositorio){
+    protected $inventarioServcio;
+    public function __construct(ProductoRepositorio $productoRepositorio, InventarioServicio $inventarioServcio){
         $this->productoRepositorio = $productoRepositorio;
+        $this->inventarioServcio = $inventarioServcio;
     }
 
     public  function CrearFacutra($pedido)
@@ -86,13 +89,14 @@ class FacturaRepositorio
 
                     $cantidadInventario = ($cantidadDisponible-$productoDetalle->Cantidad);
                     ProductoPorProveedor::where('Producto_id','=',$productoDetalle->Producto_id)->update(array('Cantidad' => $cantidadInventario));
+                    $this->inventarioServcio->ActualizarProductosSecundarios($productoDetalle->Producto_id,-$productoDetalle->Cantidad,$productoDetalle->Producto_id);
                 }
                 else
                 {
                     $productoPrincipalId = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->ProductoPrincipal_id;
                     $cantidadEquivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->Cantidad;
                     $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoPrincipalId)->Cantidad;
-                    $cantidadDisponibleEquivalente = ($productoDetalle->Cantidad * $cantidadEquivalencia);
+                    $cantidadDisponibleEquivalente = ($productoDetalle->Cantidad / $cantidadEquivalencia);
                     if($cantidadDisponible < $cantidadDisponibleEquivalente)
                     {
                         return ["SinExistencia"=>true,"producto"=>$producto->Nombre,"cantidad"=>($cantidadDisponible/$cantidadEquivalencia)];

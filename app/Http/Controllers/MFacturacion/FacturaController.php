@@ -117,8 +117,11 @@ class FacturaController extends Controller
 
        // return $this->facturaServicio->ObtenerListaMediosDePagos();
     }
-
     public function PagarPedido(Request $request){
+        $data = json_decode($_POST['array']);
+        return $this->facturaServicio->PagarPedido($data);
+    }
+    public function ImprimirFactura(Request $request){
         $data = json_decode($_POST['array']);
         $nombre_impresora = "facintest";
         $connector = new WindowsPrintConnector($nombre_impresora);

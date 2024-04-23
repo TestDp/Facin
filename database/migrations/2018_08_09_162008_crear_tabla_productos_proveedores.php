@@ -15,7 +15,7 @@ class CrearTablaProductosProveedores extends Migration
     {
         Schema::create('Tbl_Productos_Por_Proveedores', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('Cantidad');
+            $table->double('Cantidad');
             $table->integer('Proveedor_id')->unsigned();
             $table->foreign('Proveedor_id')->references('id')->on('Tbl_Proveedores');
             $table->integer('Producto_id')->unsigned();
