@@ -34,9 +34,9 @@ class InventarioRepositorio
 
     public function ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadActualizarPrincipal)
     {
-
         ProductoPorProveedor::where('Producto_id','=',$productoPrincipalId)->update(array('Cantidad' => $cantidadActualizarPrincipal));
     }
+
 
 
 }

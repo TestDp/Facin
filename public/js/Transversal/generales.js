@@ -7,7 +7,8 @@ function obtenerUlrBase() {
         case 'localhost':
             //rootFolder = '/Facin/trunk/public/'; break;
             rootFolder = '/'; break;
-        default:  // set whatever you want
+        default:
+            rootFolder = '/';
     }
     var urlBase = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + rootFolder;
     return urlBase;

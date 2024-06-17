@@ -1,17 +1,17 @@
 @extends('layouts.principal')
 
 @section('content')
-
+    <div class="row">
+        <div class="col-md-4">
+            <button onclick="ajaxRenderSectionCrearProducto()" type="button" class="btn btn-success">Nuevo Producto</button>
+        </div>
+    </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="panel panel-success">
                 <div class="panel-heading"><h3>Productos</h3></div>
                 <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <button onclick="ajaxRenderSectionCrearProducto()" type="button" class="btn btn-success">Nuevo Producto</button>
-                        </div>
-                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProductos">
@@ -104,6 +104,40 @@
                                                 </div>
                                             </div>
                                             <!-- fin modal crear equivalencia-->
+                                            <button onclick="ajaxRenderSectionEditarProducto({{$producto->Producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
+                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading"><h3>Productos en Combo</h3></div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProductos">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Precio Unidad</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($listProductosCombo as $producto)
+                                    <tr>
+                                        <td>{{$producto->Codigo}}</td>
+                                        <td>{{$producto->Nombre}}</td>
+                                        <td>{{$producto->Precio}}</td>
+                                        <td>
                                             <button onclick="ajaxRenderSectionEditarProducto({{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
                                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
                                             </button>
@@ -116,8 +150,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
 
     <link href="{{asset('js/Plugins/data-table/datatables.css')}}" rel="stylesheet">

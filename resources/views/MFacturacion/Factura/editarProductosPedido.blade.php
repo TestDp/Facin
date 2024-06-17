@@ -15,19 +15,19 @@
                 </tr>
                 <tr>
                     <td>{{$nombreVendedor}}</td>
-                    <td>{{$pedido->Comentario}}</td>
+                    <td><input id="comentarioPedido" name="comentarioPedido" type="text" class="form-control"></td>
                 </tr>
             </table>
             <br/>
             <table style="width:100%">
                 <tr>
-                    <td><select id="Producto_id" name="Producto_id"  class="form-control"  name="language">
+                    <td><select id="Producto_id" name="Producto_id"  class="form-control"  name="language" onchange="agregarProductoPedido()">
                             <option value="">Seleccionar Producto</option>
                             @foreach($listProductos as $producto)
                                 <option value="{{ $producto->id }}" data-num="{{ $producto->Precio}}" data-title="{{ $producto->Nombre}}">{{$producto->Codigo}} - {{ $producto->Nombre }}</option>
                             @endforeach
                         </select></td>
-                    <td><button onclick="agregarProductoPedido()" type="button" class="btn btn-success">agregar</button></td>
+{{--                    <td><button onclick="agregarProductoPedido(this)" type="button" class="btn btn-success">agregar</button></td>--}}
                 </tr>
             </table>
             <br/>
@@ -37,6 +37,7 @@
                     <tr id="rowPrducto" name="rowPrducto">
                         <td><input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="{{$productoPedido->Producto->id}}"/>
                             <input id="precioProducto" name="precioProducto" type="hidden" value="{{$productoPedido->Producto->Precio}}"/>
+                            <input id="esEditarProducto" name="esEditarProducto" type="hidden" value="{{true}}"/>
                             <button class="btn boton-menos" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>
                             <label class="cantidad" id="lbCantidad" name="lbCantidad">{{$productoPedido->Cantidad}}</label>
                             <button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button></td>
@@ -61,11 +62,11 @@
         </div>
         <div class="panel-footer">
             <div class="row">
-                <div class="col-md-6">
-                    <input type="button" class="form-control btn btn-success" value="Guardar" onclick="ConfirmarProductosPedido()">
+                <div class="col-md-4">
+                    <input type="button" class="form-control btn btn-success" value="Guardar" onclick="ConfirmarProductosPedido(this)">
                 </div>
-                <div class="col-md-6">
-                    <input type="button" id="BtnCerrarPedido"  class="form-control btn btn-info" value="Cerrar Pedido" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()">
+                <div class="col-md-4">
+                    <input type="button" id="BtnCerrarPedido"  class="form-control btn btn-info" value="facturar" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()">
                     <!-- inicio modal finalizar  Pedido-->
                         <div id="modalFinalizarPedido" name="modalFinalizarPedido"   class="modal fade">
                             <div class="modal-dialog modal-lg" >
@@ -76,12 +77,22 @@
                                     </div>
                                     <div class="modal-body" >
                                         <div class="row">
+                                            <div class="col-md-12">
+                                            <label>Cliente</label>
+                                            <select id="Cliente_id" name="Cliente_id"  class="form-control">
+                                                @foreach($ListClientes as $cliente)
+                                                    <option value="{{ $cliente->id }}">{{ $cliente->Identificacion }}-{{ $cliente->Nombre }} {{ $cliente->Apellidos }}</option>
+                                                @endforeach
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                         <div class="col-md-6">
                                             <div class="panel panel-success">
                                                 <div class="panel-heading clearfix" >
                                                     <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Detalle Pedido</h4>
                                                 </div>
-                                                <div class="panel-body">
+                                                <div class="panel-body" id="tblExporFactura">
                                                     <table style="width:100%" class="table table-bordered">
                                                         <thead>
                                                             <tr >
@@ -114,7 +125,18 @@
                                                 <div class="panel-body">
                                                     <table style="width:100%" class="table table-bordered">
                                                         <tbody id="TablaMediosPagos">
-
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control" id="selMedioPago" name="selMedioPago" onchange="validarMedioDePago(this),ValidarFormularioFinalizarPedido()">
+                                                                    <option value="">seleccionar</option>
+                                                                        @foreach($mediosPago as $medioPago)
+                                                                            <option value="{{$medioPago->id}}">{{$medioPago->Nombre}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                            </td>
+                                                            <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
+                                                            <td><button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>
+                                                            </tr>
                                                         </tbody>
                                                         <tfoot>
                                                         <tr>
@@ -130,7 +152,9 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button id="cerrarModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <button onclick="PagarPedido()" type="button" class="btn btn-success" data-dismiss="modal">Finalizar pedido</button>
+                                        <button id="cerrarModalFinalizar" onclick="PagarPedido(this)" type="button" class="btn btn-success" data-dismiss="modal" disabled>Pagar</button>
+
+
                                     </div>
 
                                 </div>
@@ -139,17 +163,22 @@
 
                     <!-- fin modal finalizar  Pedido-->
                 </div>
+                <div class="col-md-4">
+                    <input type="button" class="form-control btn btn-danger" value="Eliminar" onclick="eliminarPedido()">
+                </div>
             </div>
         </div>
     </div>
     <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css') }}" rel="stylesheet">
     <script src="{{ asset('js/Plugins/fastselect-master/dist/fastsearch.js') }}"></script>
-    <script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>
+    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastselect.js') }}"></script>
+<!--    <script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>-->
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <script type="text/javascript">
         // Material Select Initialization
         $(document).ready(function() {
             $('#Producto_id').fastselect({
-                placeholder: 'Seleccione el cliente',
+                placeholder: 'Seleccione el producto',
                 searchPlaceholder: 'Buscar productos'
             });
         });

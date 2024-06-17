@@ -9,6 +9,7 @@
 namespace Facin\Datos\Repositorio\MInventario;
 
 
+use Facin\Datos\Modelos\MEmpresa\Empresa;
 use Facin\Datos\Modelos\MInventario\Equivalencia;
 use Facin\Datos\Modelos\MInventario\GrupoDeProductos;
 use Facin\Datos\Modelos\MInventario\Producto;
@@ -70,28 +71,32 @@ class ProductoRepositorio
             $producto->UnidadDeMedida_id = $request['UnidadDeMedida_id'];
             $producto->Almacen_id = $request['Almacen_id'];
             $producto->PrecioSinIva = $request['PrecioSinIva'];
-            $producto->PrecioConIva = $request['PrecioConIva'];
+           // $producto->PrecioConIva = $request['PrecioConIva'];
 
-            if(!$request->EsCombo)
+            if(!$request['EsCombo'])
                 $producto->EsCombo = 0;
             $producto->save();
-            if($request->Proveedor_id)//preguntamos si viene la lista Proveedor_id
+            if($producto->EsCombo == 0)//preguntamos si viene la lista Proveedor_id
             {
-                $productoXProveedor = ProductoPorProveedor::find($request['id']);
+                //$productoXProveedor = ProductoPorProveedor::find($request['id']);
+                $productoXProveedor = ProductoPorProveedor::where('Producto_id','=',$request['id'])->get()->first();
                 $productoXProveedor->Proveedor_id = $request['Proveedor_id'];
                 $productoXProveedor->Producto_id =  $producto->id;
                 $productoXProveedor->save();
             }
-            /*$indCantidad=0;
-            if($request->ProductoSecundario_id)//preguntamos si viene la lista ProductoSecundario_id
-                foreach ($request->ProductoSecundario_id as $idProductoSecundario){
+            $indCantidad=0;
+            if($request['ProductoSecundario_id'])//preguntamos si viene la lista ProductoSecundario_id
+            {
+                GrupoDeProductos::where('ProductoPrincipal_id', '=', $producto->id)->delete();
+                foreach ($request->ProductoSecundario_id as $idProductoSecundario) {
                     $grupoProducto = new GrupoDeProductos();
-                    $grupoProducto->ProductoPrincipal_id =  $producto->id;
+                    $grupoProducto->ProductoPrincipal_id = $producto->id;
                     $grupoProducto->ProductoSecundario_id = $idProductoSecundario;
                     $grupoProducto->Cantidad = $request->Cantidad[$indCantidad];
                     $grupoProducto->save();
                     $indCantidad++;
-                }*/
+                }
+            }
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -104,13 +109,28 @@ class ProductoRepositorio
 
 
     //me retorna un lista de producto filtrado por el id de la empresa
+    public function ObtenerListaProductoPrincipalesPorEmpresa($idEmpreesa)
+    {
+        $productos = Producto::where('EsCombo','<>',1)->get();
+        $ListaProductosEmpresa = array();
+        foreach ($productos as $producto) {
+
+            if($producto->Almacen->Sede->Empresa->id ==$idEmpreesa && $this->EsProductoPrincipal($producto->id))
+                $ListaProductosEmpresa[]=$producto;
+        }
+        return $ListaProductosEmpresa;
+    }
+
+    //me retorna un lista de producto filtrado por el id de la empresa
     public function ObtenerListaProductoPorEmpresa($idEmpreesa)
     {
         $productos = Producto::all();
         $ListaProductosEmpresa = array();
         foreach ($productos as $producto) {
             if($producto->Almacen->Sede->Empresa->id ==$idEmpreesa)
+            {   $producto->UnidadDeMedida;
                 $ListaProductosEmpresa[]=$producto;
+            }
         }
         return $ListaProductosEmpresa;
     }
@@ -121,10 +141,16 @@ class ProductoRepositorio
         $productos = ProductoPorProveedor::all();
         $ListaProductosEmpresa = array();
         foreach ($productos as $productoProveedor) {
-            if($productoProveedor->Producto->Almacen->Sede->Empresa->id ==$idEmpreesa){
-                $productoProveedor->Producto->UnidadDeMedida;
-                //$productoProveedor->Producto->EquivalenciasPrincipales->ProductoPrincipal;
-                $ListaProductosEmpresa[]=$productoProveedor;
+            if($productoProveedor->Producto->Almacen->Sede->Empresa->id ==$idEmpreesa) {
+                if ($this->EsProductoPrincipal($productoProveedor->Producto_id)) {
+                    $ListaProductosEmpresa[] = $productoProveedor;
+                } else {
+                    $equivalencia = $this->ObtenerProductoEquivalencia($productoProveedor->Producto_id);
+                    $cantidadEquivalencia = $equivalencia->Cantidad;
+                    $cantidadProdPrincipal = $this->ObtenerProductoProveedorIdproducto($equivalencia->ProductoPrincipal_id)->Cantidad;
+                    $productoProveedor->Cantidad = $cantidadEquivalencia * $cantidadProdPrincipal;
+                    $ListaProductosEmpresa[] = $productoProveedor;
+                }
             }
         }
         return $ListaProductosEmpresa;
@@ -136,11 +162,46 @@ class ProductoRepositorio
         $productos = Producto::where('EsCombo','<>',1)->get();
         $ListaProductosEmpresa = array();
         foreach ($productos as $producto) {
-            if($producto->Almacen->Sede->Empresa->id ==$idEmpreesa)
+            if($producto->Almacen->Sede->Empresa->id ==$idEmpreesa) {
                 $producto->UnidadDeMedida;
-                $ListaProductosEmpresa[]=$producto;
+                $ListaProductosEmpresa[] = $producto;
+            }
         }
         return $ListaProductosEmpresa;
+    }
+
+    //me retorna un lista de producto que son combo filtrado por el id de la empresa
+    public function ObtenerListaProductoPorEmpresaCombo($idEmpreesa)
+    {
+        $productos = GrupoDeProductos::all();
+        $ListaProductosEmpresa = array();
+        foreach ($productos as $productoGrupo) {
+            if($productoGrupo->ProductoPrincipal->Almacen->Sede->Empresa->id ==$idEmpreesa ){
+                $ListaProductosEmpresa[]=$productoGrupo->ProductoPrincipal;
+            }
+        }
+        $ListaProductosEmpresa = array_unique($ListaProductosEmpresa);
+        return $ListaProductosEmpresa;
+    }
+
+    //me retorna un lista de producto que hacen parte del combo filtrado por el id de la empresa
+    public function ObtenerListaProductoPorEmpresaDelCombo($idEmpreesa)
+    {
+        $productos = GrupoDeProductos::all();
+        $ListaProductosEmpresa = array();
+        foreach ($productos as $productoProveedor) {
+            if($productoProveedor->ProductoPrincipal->Almacen->Sede->Empresa->id ==$idEmpreesa ){
+                $ListaProductosEmpresa[]=$productoProveedor;
+                $productoProveedor->ProductoSecundario;
+            }
+        }
+        return $ListaProductosEmpresa;
+    }
+
+    //me retorna un lista de producto que hacen parte del combo filtrado por el id del producto principal
+    public function ObtenerListaProductoDelComboPorProducto($idProducto)
+    {
+        return GrupoDeProductos::where('ProductoPrincipal_id','=',$idProducto)->get();
     }
 
     //Parametros:Pk tabla de producto($idProducto) Pk tabla de proveedor($idProveedor)
@@ -155,6 +216,15 @@ class ProductoRepositorio
     public function ObtenerProductoProveedorIdproducto($idProducto)
     {
         $productoProvvedor = ProductoPorProveedor::where('Producto_id','=',$idProducto)->get()->first();
+        $productoProvvedor->Producto;
+        return $productoProvvedor;
+    }
+
+    public function ObtenerProdConInventarioTotal($idProducto){
+        $productoProvvedor = ProductoPorProveedor::where('Producto_id','=',$idProducto)->get();
+        $suma =  $productoProvvedor->sum('Cantidad');
+        $productoProvvedor = $productoProvvedor->first();
+        $productoProvvedor->Cantidad = $suma;
         $productoProvvedor->Producto;
         return $productoProvvedor;
     }
@@ -198,7 +268,6 @@ class ProductoRepositorio
     //Parametros:Pk tabla de producto($idProducto)
     //retorna:un producto filtrado por el id o pk del producto de la tabla equivalencias
     public function EsProductoPrincipal($idProducto){
-        //$Producto = Equivalencia::find($idProducto)->count();
         $Producto = Equivalencia::where('ProductoSecundario_id','=',$idProducto)->get()->count();
         if($Producto == 0)
         {
@@ -210,7 +279,6 @@ class ProductoRepositorio
     public function ObtenerProductosSecundarios($idProducto)
     {
         $ListaproductosSecundarios = Equivalencia::where('ProductoPrincipal_id','=',$idProducto)->get();
-
         return $ListaproductosSecundarios;
     }
 

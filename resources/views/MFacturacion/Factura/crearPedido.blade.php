@@ -36,7 +36,7 @@
                 <div class="col-md-4">
                 </div>
                 <div class="col-md-4">
-                    <input type="button" class="form-control btn btn-success" value="Crear" onclick="guardarPedido()">
+                    <input type="button" class="form-control btn btn-success" value="Crear" onclick="guardarPedido(this)">
                 </div>
                 <div class="col-md-4">
                 </div>

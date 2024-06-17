@@ -13,7 +13,11 @@
                         <div class="row">
                             <div class="col-md-1">
                                 Combo
-                                <input type="checkbox" value="1" class="form-control" id="EsCombo" name="EsCombo" onclick="mostrarYOcultarPanelAgregarProductos()" />
+                                @if ($producto->EsCombo)
+                                    <input type="checkbox" value="1" class="form-control" id="EsCombo" name="EsCombo" onclick="mostrarYOcultarPanelAgregarProductos()" checked/>
+                                @else
+                                    <input type="checkbox" value="1" class="form-control" id="EsCombo" name="EsCombo" onclick="mostrarYOcultarPanelAgregarProductos()" />
+                                @endif
                             </div>
                             <div class="col-md-3">
                                 Código
@@ -45,11 +49,11 @@
                                 Categoria
                                 <select id="Categoria_id" name="Categoria_id"  class="form-control">
                                     <option value="">Seleccionar</option>
-                                    @foreach($listCat as $tipo)
-                                        @if ($tipo->id == $producto->Categoria_id)
-                                            <option value="{{ $tipo->id }}" selected>{{ $tipo->Nombre }}</option>
+                                    @foreach($listCat as $cat)
+                                        @if ($cat->id == $producto->Categoria_id)
+                                            <option value="{{ $cat->id }}" selected>{{ $cat->Nombre }}</option>
                                         @else
-                                            <option value="{{ $tipo->id }}">{{ $tipo->Nombre }}</option>
+                                            <option value="{{ $cat->id }}">{{ $cat->Nombre }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -100,22 +104,63 @@
                                 <span class="invalid-feedback" role="alert" id="errorPrecio"></span>
                             </div>
                         </div>
-                        <div class="row" id="divProveedores">
-                            <div class="col-md-12">
-                                Proveedores
-                                <select id="Proveedor_id" name="Proveedor_id"  class="form-control">
-                                    <option value="">Seleccionar</option>
-                                    @foreach($listProv as $proveedor)
-                                        @if ($proveedor->id == $productoXprovedor->Proveedor_id)
-                                            <option value="{{ $proveedor->id }}" selected>{{ $proveedor->Nombre }}</option>
-                                        @else
-                                            <option value="{{ $proveedor->id }}">{{ $proveedor->Nombre }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
+                        @if ($producto->EsCombo)
+                            <div class="row" id="divProductos" >
+
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><h3>Productos</h3></div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <select id="ListaProductos" name="ListaProductos"  class="form-control"  name="language">
+                                                    <option value="">Seleccionar</option>
+                                                    @foreach($listProductos as $productos)
+                                                        <option value="{{ $productos->id }}" data-num="{{ $productos->PrecioSinIva }}">{{ $productos->Nombre }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button onclick="agregarProducto()" type="button" class="btn btn-success">agregar Producto</button>
+                                            </div>
+                                            <div class="row">
+                                                <table style="border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important;" class="table table-bordered" id="tablaProductos">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">Nombre</th>
+                                                        <th scope="col">Cantidad</th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="productosSeleccionados">
+                                                    @foreach($listProdDelCombo as $productosDelCombo)
+                                                        <tr>
+                                                            <td><input id="ProductoSecundario_id" name="ProductoSecundario_id[]" type="hidden" value="{{$productosDelCombo->ProductoSecundario->id}}"/>{{$productosDelCombo->ProductoSecundario->Nombre}}</td>
+                                                            <td><input id="Cantidad" name="Cantidad[]" type="number" class="form-control" data-num="{{$productosDelCombo->ProductoSecundario->Precio}}" onkeyup="MostrarCostoProductoCombo()" value="{{$productosDelCombo->Cantidad}}"/></td>
+                                                            <td><a onclick="RemoverProducto(this)"><span class="glyphicon glyphicon-remove"></span></a></td></tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+                        @else
+                            <div class="row" id="divProveedores">
+                                <div class="col-md-12">
+                                    <select id="Proveedor_id" name="Proveedor_id"  class="form-control">
+                                        <option value="">Seleccionar</option>
+                                        @foreach($listProv as $proveedor)
+                                            @if ($proveedor->id == $productoXprovedor->Proveedor_id)
+                                                <option value="{{ $proveedor->id }}" selected>{{ $proveedor->RazonSocial }}</option>
+                                            @else
+                                                <option value="{{ $proveedor->id }}">{{ $proveedor->RazonSocial }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
+                                </div>
+                            </div>
+                        @endif
                         <div class="row" id="divProductos" hidden>
 
                             <div class="col-md-12">
@@ -123,14 +168,10 @@
                                     <div class="panel-heading"><h3>Productos</h3></div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <select id="TipoDeProducto_id" name="TipoDeProducto_id"  class="form-control">
+                                            <select id="ListaProductos" name="ListaProductos"  class="form-control">
                                                 <option value="">Seleccionar</option>
-                                                @foreach($listProd as $tipo)
-                                                    @if ($tipo->id == $producto->TipoDeProducto_id)
-                                                        <option value="{{ $tipo->id }}" selected>{{ $tipo->Nombre }}</option>
-                                                    @else
-                                                        <option value="{{ $tipo->id }}">{{ $tipo->Nombre }}</option>
-                                                    @endif
+                                                @foreach($listProd as $productos)
+                                                    <option value="{{ $productos->id }}" data-num="{{ $productos->PrecioSinIva }}">{{ $productos->Nombre }}</option>
                                                 @endforeach
                                             </select>
                                             <button onclick="agregarProducto()" type="button" class="btn btn-success">agregar Producto</button>
@@ -171,7 +212,7 @@
             </div>
 
         </div>
-        </div>
+
     </form>
 
     <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css') }}" rel="stylesheet">

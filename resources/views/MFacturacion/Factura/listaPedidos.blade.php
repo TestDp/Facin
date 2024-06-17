@@ -81,7 +81,7 @@
                                     <th scope="col">Id</th>
                                     <th scope="col">Hora Pedido</th>
                                     <th scope="col">Estado</th>
-                                    <th scope="col">Cliente</th>
+                                    <th scope="col">Comentario</th>
                                     <th scope="col">Total</th>
                                 </tr>
                                 </thead>
@@ -91,7 +91,7 @@
                                         <td>{{$pedido->id}}</td>
                                         <td>{{$pedido->created_at}}</td>
                                         <td id="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>
-                                        <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
+                                        <td id="tdComentarioPedido{{$pedido->id}}">{{$pedido->Comentario}}</td>
                                         <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal}}</td>
                                     </tr>
                                 @endforeach

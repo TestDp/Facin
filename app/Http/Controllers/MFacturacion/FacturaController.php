@@ -53,7 +53,7 @@ class FacturaController extends Controller
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $pedido = $request->all();
         $idVendedor = Auth::user()->id;
-        $Pedido =  $this->facturaServicio->CrearFacutra($pedido,$idVendedor);
+        $Pedido =  $this->facturaServicio->CrearFacutra($idEmpreesa,$idVendedor);
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
         $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
         $view = View::make('MFacturacion/Factura/productosPedido',array('listProductos'=>$productos,
@@ -73,9 +73,21 @@ class FacturaController extends Controller
         $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
         $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
+        $mediosPago = $this->ObtenerListaMediosDePagos($request);
+        $listaClientes = $this->clienteServicio->ObtenerListaClientesXEmpresa($idEmpreesa);
         $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
-        $view = View::make('MFacturacion/Factura/editarProductosPedido',array('listProductos'=>$productos,
-            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'productosXPedido'=>$productosXPedido));
+        if($Pedido->EstadoFactura_id == 1){//1:factura en proceso y 2 factura finalizada
+            $view = View::make('MFacturacion/Factura/editarProductosPedido',array('listProductos'=>$productos,
+                'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'productosXPedido'=>$productosXPedido,
+                'mediosPago'=>$mediosPago,'ListClientes'=>$listaClientes));
+        }else{
+            $detallePagoFactura = $this->facturaServicio->ObtenerDetallePagoFactura($idFactura);
+           // $mediosPago = $this->facturaServicio->ObtenerListaMediosDePagos();
+            $view = View::make('MFacturacion/Factura/listaProductosPedido',array('listProductos'=>$productos,
+                'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,
+                'productosXPedido'=>$productosXPedido,'detallePagoFactura'=>$detallePagoFactura,'mediosPago' => $mediosPago));
+        }
+
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json(['vista'=>$sections['contentFormPedido'],'Pedido'=>$Pedido]);
@@ -87,7 +99,7 @@ class FacturaController extends Controller
         $data = json_decode($_POST['array']);
         return $this->facturaServicio->ConfirmarProductosPedido($data);
     }
-
+    //idEstado: 2-> finalizado, 1->En proceso
     public function getVistaListaPedidos(Request $request,$idEstado){
         $urlinfo= $request->getPathInfo();
         $urlinfo = explode('/'.$idEstado,$urlinfo)[0];
@@ -98,66 +110,74 @@ class FacturaController extends Controller
             if(isset($request['page']))
             {
                 return view('MFacturacion/Factura/datosPagFacturas', ['listPedidos' => $listaPedidosEnProceso])->render();
-                // $view = View::make('MFacturacion/Factura/datosPagFacturas',array('listPedidos'=>$listaPedidosEnProceso));
             }else{
-                $view = View::make('MFacturacion/Factura/listaPedidos',array('listPedidos'=>$listaPedidosEnProceso));
+                switch ($idEstado) {
+                    case 1:// en proceso
+                        $view = view('MFacturacion/Factura/listaPedidos',['listPedidos'=>$listaPedidosEnProceso]);
+                        break;
+                    case 2:// finalizado
+                        $view = View::make('MFacturacion/Factura/pedidosFinalizados',array('listPedidos'=>$listaPedidosEnProceso));
+                        break;
+                    case 3:// eliminado
+                        $view = View::make('MFacturacion/Factura/pedidosEliminados',array('listPedidos'=>$listaPedidosEnProceso));
+                        break;
+                    case 4:// Anulados
+                        $view = View::make('MFacturacion/Factura/pedidosAnulados',array('listPedidos'=>$listaPedidosEnProceso));
+                        break;
+                }
+                   // $view =($idEstado == 1)? view('MFacturacion/Factura/listaPedidos',['listPedidos'=>$listaPedidosEnProceso]):View::make('MFacturacion/Factura/pedidosFinalizados',array('listPedidos'=>$listaPedidosEnProceso));
             }
             $sections = $view->renderSections();
             return Response::json($sections['content']);
-        }else return  view('MFacturacion/Factura/listaPedidos',['listPedidos'=>$listaPedidosEnProceso]);
+        }else{
+              return  ($idEstado == 1)? view('MFacturacion/Factura/listaPedidos',['listPedidos'=>$listaPedidosEnProceso]):View::make('MFacturacion/Factura/pedidosFinalizados',array('listPedidos'=>$listaPedidosEnProceso));
+        }
     }
 
     public function ObtenerListaMediosDePagos(Request $request){
-
         $keyCache = "mediosPagos";
         $mediosDePago = Cache::rememberForever($keyCache,function (){
             return $this->facturaServicio->ObtenerListaMediosDePagos();
         });
         return $mediosDePago;
-
-       // return $this->facturaServicio->ObtenerListaMediosDePagos();
     }
     public function PagarPedido(Request $request){
-        $data = json_decode($_POST['array']);
-        return $this->facturaServicio->PagarPedido($data);
+        $array = json_decode($_POST['array']);
+        $respuesta = $this->facturaServicio->PagarPedido($array);
+        $empresa = Auth::user()->Sede->Empresa;
+        $idEmpreesa = $empresa->id;
+        $idFactura = $array[0]->Factura_id;
+        $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
+        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
+        $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
+        $detallePagoFactura = $this->facturaServicio->ObtenerDetallePagoFactura($idFactura);
+        return Response::json(['Respuesta'=>$respuesta,'listProductos'=>$productos,
+            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,
+            'productosXPedido'=>$productosXPedido,'detallePagoFactura'=>$detallePagoFactura,'empresa' => $empresa]);
     }
-    public function ImprimirFactura(Request $request){
-        $data = json_decode($_POST['array']);
-        $nombre_impresora = "facintest";
-        $connector = new WindowsPrintConnector($nombre_impresora);
-        $printer = new Printer($connector);
-        /*
-            Imprimimos un mensaje. Podemos usar
-            el salto de línea o llamar muchas
-            veces a $printer->text()
-        */
-        $printer->text("Hola mundo \nfacin.com");
+    public function ImprimirFactura(Request $request, $idFactura){
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $empresa = Auth::user()->Sede->Empresa;
+        $idEmpreesa = $empresa->id;
+        $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
+        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
+        $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
+        $detallePagoFactura = $this->facturaServicio->ObtenerDetallePagoFactura($idFactura);
+        return Response::json(['listProductos'=>$productos,
+            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,
+            'productosXPedido'=>$productosXPedido,'detallePagoFactura'=>$detallePagoFactura,'empresa' => $empresa]);
+    }
 
-        /*
-            Hacemos que el papel salga. Es como
-            dejar muchos saltos de línea sin escribir nada
-        */
-        $printer->feed();
-
-        /*
-            Cortamos el papel. Si nuestra impresora
-            no tiene soporte para ello, no generará
-            ningún error
-        */
-        $printer->cut();
-
-        /*
-            Por medio de la impresora mandamos un pulso.
-            Esto es útil cuando la tenemos conectada
-            por ejemplo a un cajón
-        */
-        $printer->pulse();
-
-        /*
-            Para imprimir realmente, tenemos que "cerrar"
-            la conexión con la impresora. Recuerda incluir esto al final de todos los archivos
-        */
-        $printer->close();
-        return $this->facturaServicio->PagarPedido($data);
+    public function  CambiarEstadoFactura(Request $request,$idFactura,$idEstado){
+        $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
+        $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $respuesta = $this->facturaServicio->CambiarEstadoFactura($idFactura,$idEstado);
+        return Response::json(['Respuesta'=>$respuesta]);
     }
 }

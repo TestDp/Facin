@@ -80,4 +80,5 @@ class EstadoFacturaController extends Controller
             return Response::json($sections['content']);
         }else return view('MFacturacion/EstadoFactura/listaEstadoFactura');
     }
+
 }

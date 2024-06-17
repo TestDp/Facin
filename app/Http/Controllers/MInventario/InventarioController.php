@@ -43,7 +43,7 @@ class InventarioController extends  Controller
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productos = $this->productoServicio->ObtenerListaProductoPrincipalesPorEmpresa($idEmpreesa);
         $view = View::make('MInventario/Inventario/actualizarInventario',
             array('listProductos'=>$productos));
         if($request->ajax()){

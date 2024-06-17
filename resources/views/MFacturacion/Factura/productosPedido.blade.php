@@ -8,23 +8,24 @@
         <div class="panel-body" id="productosSeleccionados">
             <table style="width:100%">
                 <tr>
-                    <th>Vendedor</th>
+                    <th>Vendedor:</th>
                     <th>Comentario</th>
+
                 </tr>
                 <tr>
                     <td>{{$nombreVendedor}}</td>
-                    <td>{{$pedido->Comentario}}</td>
+                    <td><input id="comentarioPedido" name="comentarioPedido" type="text" class="form-control"></td>
                 </tr>
             </table>  <br/>
             <table style="width:100%">
                 <tr>
-                    <td><select id="Producto_id" name="Producto_id"  class="form-control"  name="language">
+                    <td><select id="Producto_id" name="Producto_id"  class="form-control"  name="language" onchange="agregarProductoPedido()">
                             <option value="">Seleccionar Producto</option>
                             @foreach($listProductos as $producto)
                                 <option value="{{ $producto->id }}" data-num="{{ $producto->Precio}}" data-title="{{ $producto->Nombre}}">{{$producto->Codigo}} - {{ $producto->Nombre }}</option>
                             @endforeach
                         </select></td>
-                    <td><button onclick="agregarProductoPedido()" type="button" class="btn btn-success">agregar</button></td>
+{{--                    <td><button onclick="agregarProductoPedido(this)" type="button" class="btn btn-success">agregar</button></td>--}}
                 </tr>
             </table>
             <br/>
@@ -44,7 +45,7 @@
                 <div class="col-md-4">
                 </div>
                 <div class="col-md-4">
-                    <input type="button" class="form-control btn btn-success" value="Confirmar" onclick="ConfirmarProductosPedido()">
+                    <input id="btnConfirmarPedido" type="button" class="form-control btn btn-success" value="Confirmar" onclick="ConfirmarProductosPedido(this)" disabled>
                 </div>
                 <div class="col-md-4">
                 </div>
@@ -53,12 +54,14 @@
     </div>
     <link href="{{ asset('js/Plugins/fastselect-master/dist/fastselect.min.css')}}" rel="stylesheet">
     <script src="{{ asset('js/Plugins/fastselect-master/dist/fastsearch.js')}}"></script>
+    <script src="{{ asset('js/Plugins/fastselect-master/dist/fastselect.js') }}"></script>
+
     <script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>
     <script type="text/javascript">
         // Material Select Initialization
         $(document).ready(function() {
             $('#Producto_id').fastselect({
-                placeholder: 'Seleccione el cliente',
+                placeholder: 'Seleccione el producto',
                 searchPlaceholder: 'Buscar productos'
             });
         });

@@ -47,27 +47,33 @@ function ajaxRenderSectionVistaListaPedidos(idEstado) {
 }
 
 //function para guardar el pedido solo con el cliente, el vendedor y el comentario
-function guardarPedido() {
+function guardarPedido(element) {
+    element.disabled = true
     var token = $("#_tokenPedido").val();
     var form = $("#formCrearPedido");
     PopupPosition();
     $.ajax({
-        type: 'POST',
+       // type: 'POST',
+        type: 'GET',
         url: urlBase +'guardarPedido',
         dataType: 'json',
         headers: {'X-CSRF-TOKEN': token},
-        data:form.serialize(),
+       // data:form.serialize(),
         success: function (data) {
             OcultarPopupposition();
             $('#panelPedido').empty().append($(data.vista));
+            var comentario = (data.Pedido.Comentario == null) ? '': data.Pedido.Comentario;
+            var fechaPedido = data.Pedido.created_at.split('T')[0];
+            var horaPedido = (data.Pedido.created_at.split('T')[1]).split('.')[0];
             var tr = '<tr style="background: #dff0d8" id="trPedido'+data.Pedido.id+'" onclick="validarEdicionDePedido(this,'+data.Pedido.id+')">';
             tr = tr +'<td scope="col">'+data.Pedido.id +'</td>';
-            tr = tr +'<td scope="col">'+data.Pedido.created_at+'</th>';
+            tr = tr +'<td scope="col">'+fechaPedido +' '+ horaPedido + '</th>';
             tr = tr +'<td scope="col" id="tdEstadoPedido'+data.Pedido.id+'">'+data.Pedido.estado_factura.Nombre+'</td>';
-            tr = tr +'<td scope="col">'+data.Pedido.cliente.Nombre +' '+ data.Pedido.cliente.Apellidos+'</td>';
+            tr = tr +'<td scope="col" id="tdComentarioPedido'+data.Pedido.id+'">'+ comentario  + '</td>';
             tr = tr +'<td scope="col" id="tdTotalPedido'+data.Pedido.id+'">$0</td>';
             tr = tr +'</tr>';
-            $("#tablaPedidos").append(tr);
+            $("#tablaPedidos").prepend(tr);
+
         },
         error: function (data) {
             OcultarPopupposition();
@@ -83,6 +89,7 @@ function guardarPedido() {
 
 //funcion para agregar un producto al pedido
 function agregarProductoPedido() {
+   // element.disabled = true;
     var opcion= $('#Producto_id').find('option:selected');//obtenemos la opcion seleccionada
     if(opcion.val() !=''){
         if(!buscarProductoSecundario(opcion.val()))
@@ -91,9 +98,10 @@ function agregarProductoPedido() {
             var idProducto = $('#Producto_id').val();
             $.ajax({
                 type: 'GET',
-                url: urlBase +'infoProducto/'+idProducto,
+                url: urlBase +'infoProdInvenTtal/'+idProducto,
                 dataType: 'json',
                 success: function (data) {
+                    //element.disabled = false;
                     if(data.Cantidad == 0){
                         swal({
                             title: "Producto sin existencia!",
@@ -104,6 +112,7 @@ function agregarProductoPedido() {
                     }else{
                         agregarHtmlFilProducto(opcion);
                         DeshabilitarBtnDeCerrarPedido();
+                        $("#btnConfirmarPedido").removeAttr('disabled');
                     }
                 },
                 error: function (data) {
@@ -129,7 +138,8 @@ function agregarProductoPedido() {
 function agregarHtmlFilProducto(opcion) {
     var row = '<tr id="rowPrducto" name="rowPrducto">';
         row = row + '<td>';
-        row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/><input id="precioProducto" name="precioProducto" type="hidden" value="'+opcion.data('num')+'"/>';
+       // row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/><input id="esEditarProducto" name="esEditarProducto" type="hidden" value="false"/><input id="precioProducto" name="precioProducto" type="hidden" value="'+opcion.data('num')+'"/>';
+        row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/><input id="esEditarProducto" name="esEditarProducto" type="hidden" value="false"/><input id="precioProducto" name="precioProducto" type="hidden" value="'+opcion.data('num')+'"/>';
         row = row + '<button class="btn boton-menos" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedido(this)"></span></button>';
         row = row + '<label class="cantidad" id="lbCantidad" name="lbCantidad">1</label>';
         row = row + '<button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedido(this)"></span></button></td>';
@@ -165,8 +175,13 @@ function restarCantidadProductoPedido(element) {
     var labelCantidad = row.find("label[name=lbCantidad]").text();
     var labelSubtotal = row.find("label[name=lbsubTotal]");
     var cantidad = parseInt(labelCantidad) - 1;
-    label.html(cantidad);
-    labelSubtotal.html(cantidad * precioProducto);
+    if(cantidad <1){
+        label.html(1);
+        labelSubtotal.html(1 * precioProducto);
+    }else{
+        label.html(cantidad);
+        labelSubtotal.html(cantidad * precioProducto);
+    }
     calcularTotalPedido();
     DeshabilitarBtnDeCerrarPedido();
 }
@@ -204,7 +219,14 @@ function removerProductoPedido(element){
             }},
     }).then((result) => {
         if (result) {
-            $(element).closest("tr[name=rowPrducto]").remove();
+            //$(element).closest("tr[name=rowPrducto]").remove();
+            var trProducto =  $(element).closest("tr[name=rowPrducto]");
+            if(trProducto.find("input[name=esEditarProducto]").val() == true){
+                trProducto.closest("tr[name=rowPrducto]").hide();
+                trProducto.find("label[name=lbCantidad]").text(0);
+            }else{
+                trProducto.closest("tr[name=rowPrducto]").remove();
+            }
             calcularTotalPedido();
             DeshabilitarBtnDeCerrarPedido();
         }
@@ -212,7 +234,8 @@ function removerProductoPedido(element){
 }
 
 //funcion para confirmar los productos del pedido(factura)
-function ConfirmarProductosPedido() {
+function ConfirmarProductosPedido(element) {
+    element.disabled = true;
     var arregloProductosPedido =  new Array();
     $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
             var producto = new Object();
@@ -220,7 +243,9 @@ function ConfirmarProductosPedido() {
                 producto.Cantidad = $(row).find("label[name=lbCantidad]").text();
                 producto.Factura_id =  $("#idPedido").val();
                 producto.Comentario = "prueba comentario";
-                producto.EsEditar = $("#esEditar").val();
+                producto.EsEditar = $(row).find("input[name=esEditarProducto]").val() == true ?'true':'false';
+                producto.comentarioPedido = $("#comentarioPedido").val();
+                //$(row).find("input[name=esEditarProducto]").val(1);
         arregloProductosPedido.push(producto);
     });
 
@@ -232,6 +257,7 @@ function ConfirmarProductosPedido() {
         headers: {'X-CSRF-TOKEN': token},
         data:{'array': JSON.stringify(arregloProductosPedido)},
         success: function (data) {
+            element.disabled = false;
             var mensajeRespuesta="El pedido fue confirmado con exito!"
             if(data.Respuesta){
                 if($("#esEditar").val() =='true'){
@@ -244,12 +270,18 @@ function ConfirmarProductosPedido() {
                     button: "OK",
                 });
                 var stringTdtotalPedido = '#tdTotalPedido'+$("#idPedido").val();
+                var stringTdComentarioPedido = '#tdComentarioPedido'+$("#idPedido").val();
                 $(stringTdtotalPedido).html("$"+data.PrecioTotal);
+                $(stringTdComentarioPedido).html($("#comentarioPedido").val());
                 $(stringTdtotalPedido).closest("tr").attr("onclick","validarEdicionDePedido(this,"+$("#idPedido").val()+")");
                 habilitarBtnDeCerrarPedido();
+              $("#productosSeleccionados").find("tr[name=rowPrducto]").each(function(ind,row){
+                    $(row).find("input[name=esEditarProducto]").val(1);
+                });
                 if($("#esEditar").val() =='false'){
                     $('#panelPedido').empty();
                 }
+
             }else{
                 if(data.SinExistencia){
                     swal({
@@ -270,6 +302,7 @@ function ConfirmarProductosPedido() {
             }
         },
         error: function (data) {
+            element.disabled = false;
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -325,6 +358,96 @@ function finalizarPedido(){
     $("#tdTotalPedido").html('$'+$("#lbTotalPedido").text());
 }
 
+function eliminarPedido(){
+    swal({
+        title: 'Está Seguro?',
+        text: "Esta seguro que desea eliminar el pedido!",
+        icon: 'warning',
+        buttons: {
+            cancel: {
+                text: "Cancelar",
+                value: false,
+                visible: true,
+                className: "",
+                closeModal: true,
+            },
+            confirm: {
+                text: "OK",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: true
+            }},
+    }).then((result) => {
+        if (result) {
+            cambiarEstadoFactura($('#idPedido').val(),3,"El pedido fue eliminado con exito!",'Eliminado');
+        }
+    });
+
+}
+
+function anularFactura(){
+    swal({
+        title: 'Está Seguro?',
+        text: "Esta seguro que desea anular la factura!",
+        icon: 'warning',
+        buttons: {
+            cancel: {
+                text: "Cancelar",
+                value: false,
+                visible: true,
+                className: "",
+                closeModal: true,
+            },
+            confirm: {
+                text: "OK",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: true
+            }},
+    }).then((result) => {
+        if (result) {
+            cambiarEstadoFactura($('#idPedido').val(),4,'La factura fue anulada con exito!','Anulada');
+        }
+    });
+}
+
+function cambiarEstadoFactura(idFactura,idEstadoFactura,mensaje,nombreEstado){
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'cambiarEstadoFactura/' + idFactura + '/' + idEstadoFactura,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            if(data.Respuesta){
+                swal({
+                    title: "Transaccción exitosa!",
+                    text: mensaje,
+                    icon: "success",
+                    button: "OK",
+                });
+                var stringTrtotalPedido = '#trPedido'+idFactura;
+                $(stringTrtotalPedido).removeAttr("onclick");
+                var stringTdEstadoPedido = '#tdEstadoPedido' + idFactura;
+                $(stringTdEstadoPedido).html(nombreEstado);
+                $('#panelPedido').empty();
+
+            }
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
 //funcion para listar los medios de pago en el momento de finalizar el pedido(factura)
 function agregarMedioDePago() {
     $.ajax({
@@ -334,15 +457,18 @@ function agregarMedioDePago() {
         success: function (data) {
         var tr='<tr>';
             tr = tr +'<td>';
-            tr= tr+'<select class="form-control" id="selMedioPago" name="selMedioPago">'
+            tr= tr+'<select class="form-control" id="selMedioPago" name="selMedioPago" onchange="validarMedioDePago(this)">'
+            tr = tr +'<option value="">seleccionar</option>';
             $.each(data, function (i,medioPago){
                 tr = tr +'<option value="'+medioPago.id+'">'+medioPago.Nombre+'</option>';
             });
             tr= tr+'</select></td>';
-            tr= tr+'<td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onkeyup="calcularVuelto()"/></td>';
+            tr= tr+'<td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onkeyup="ValidarFormularioFinalizarPedido()"/></td>';
             tr= tr+'<td><button class="btn btn-default btn-sm"" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>';
             tr= tr+'</tr>';
             $("#TablaMediosPagos").append(tr);
+            $("#cerrarModalFinalizar").attr('disabled','disabled');
+           // $("#cerrarModalFinalizar").removeAttr("disabled");
         },
         error: function (data) {
 
@@ -357,6 +483,48 @@ function agregarMedioDePago() {
 
 }
 
+function validarMedioDePago(element){
+    var cant = 0
+    $("#TablaMediosPagos").find("select[name=selMedioPago]").each(function(ind,selMedioPago){
+       if($(selMedioPago).val() == $(element).val()){
+           cant++;
+       }
+
+    });
+    if( cant > 1){
+        $(element).val("");
+        swal({
+            title: "Operación incorrecta!",
+            text: "El medio de pago ya fue seleccionado!",
+            icon: "error",
+            button: "OK",
+        });
+    }
+
+}
+
+function ValidarFormularioFinalizarPedido(){
+    var vuelto =  calcularVuelto();
+    var respuestaVuelto = false;
+    var cantSelFalse = 0;
+    if(vuelto >= 0){
+        respuestaVuelto = true;
+    }
+    $("#TablaMediosPagos").find("select[name=selMedioPago]").each(function(ind,selMedioPago){
+        if($(selMedioPago).val() == ''){
+            $("#cerrarModalFinalizar").attr('disabled','disabled')
+            $(selMedioPago).after('<label class="error-dinamico">Seleccione un medio de pago</label>');
+            cantSelFalse++;
+        }
+    });
+    if(respuestaVuelto && cantSelFalse == 0){
+        $("#cerrarModalFinalizar").removeAttr("disabled");
+    }else{
+        $("#cerrarModalFinalizar").attr('disabled','disabled');
+    }
+
+}
+
 //funcion para eliminar el medio de pago en el momento de finalizar el pedido(factura)
 function eliminarMedioDePago(element){
     swal({
@@ -365,7 +533,7 @@ function eliminarMedioDePago(element){
         icon: 'warning',
         buttons: {
             cancel: {
-                text: "Cancel",
+                text: "Cancelar",
                 value: false,
                 visible: true,
                 className: "",
@@ -381,6 +549,7 @@ function eliminarMedioDePago(element){
     }).then((result) => {
         if (result) {
             $(element).closest("tr").remove();
+            ValidarFormularioFinalizarPedido();
         }
     });
 }
@@ -394,50 +563,87 @@ function calcularVuelto() {
     });
     var vuelto = totalPagado-totalPedido;
     $("#tdVueltoPedido").html("$"+vuelto);
+    return vuelto;
 }
 
-//funcion para realizar el paggo del pedido(factura)
-function PagarPedido() {
-    var arregloMediosDepago =  new Array();
-    $("#TablaMediosPagos").find("tr").each(function(ind,row){
-        var medioDePagoXPedido = new Object();
-        medioDePagoXPedido.Valor = $(row).find("input[name=inputSubTotalMd]").val();
-        medioDePagoXPedido.MedioDePago_id = $(row).find("select[name=selMedioPago]").val();
-        medioDePagoXPedido.Factura_id =  $("#idPedido").val();
-        arregloMediosDepago.push(medioDePagoXPedido);
-    });
 
-    var token = $("#_tokenProductosPedido").val();
-    $.ajax({
-        type: 'POST',
-        url: urlBase +'pagarPedido',
-        dataType: 'json',
-        headers: {'X-CSRF-TOKEN': token},
-        data:{'array': JSON.stringify(arregloMediosDepago)},
-        success: function (data) {
-            if(data.Respuesta){
-                swal({
-                    title: "Transaccción exitosa!",
-                    text: "El pedido fue pagado con exito!",
-                    icon: "success",
-                    button: "OK",
-                });
-                var stringTrtotalPedido = '#trPedido'+$("#idPedido").val();
-                var stringTdEstadoPedido = '#tdEstadoPedido'+$("#idPedido").val();
-                $(stringTrtotalPedido).removeAttr("onclick");
-                $(stringTdEstadoPedido).html("Finalizada");
-                $('#panelPedido').empty();
-               /* window.onload = function(){
-                    window.print($("#TablasDetallePedido").html());
-                }*/
-                var doc = new jsPDF();
-                doc.text(20, 20, 'Hola mundo');
-                doc.text(20, 30, 'Vamos a generar un pdf desde el lado del cliente');
-                // Save the PDF
-                doc.save('documento.pdf');
+//funcion para realizar el paggo del pedido(factura)
+var estaPagando = true;
+function PagarPedido(element) {
+    element.disabled = true;
+    if(estaPagando){
+        estaPagando = false;
+        var arregloMediosDepago =  new Array();
+        $("#TablaMediosPagos").find("tr").each(function(ind,row){
+            var medioDePagoXPedido = new Object();
+            medioDePagoXPedido.nombreMedioPago = $(row).find("select[name=selMedioPago]").find('option:selected').text();
+            medioDePagoXPedido.Valor = $(row).find("input[name=inputSubTotalMd]").val();
+            medioDePagoXPedido.MedioDePago_id = $(row).find("select[name=selMedioPago]").val();
+            medioDePagoXPedido.Factura_id =  $("#idPedido").val();
+            medioDePagoXPedido.clienteidPedido = $("#Cliente_id").val();
+            arregloMediosDepago.push(medioDePagoXPedido);
+        });
+
+        var token = $("#_tokenProductosPedido").val();
+        $.ajax({
+            type: 'POST',
+            url: urlBase +'pagarPedido',
+            dataType: 'json',
+            headers: {'X-CSRF-TOKEN': token},
+            data:{'array': JSON.stringify(arregloMediosDepago)},
+            success: function (data) {
+                estaPagando = true;
+             /*   $('#modalFinalizarPedido').modal('hide');//cerrar modal
+                $('body').removeClass('modal-open');//cerrar modal
+                $('.modal-backdrop').remove();//cerrar modal*/
+                if(data.Respuesta){
+                    swal({
+                        title: "Transaccción exitosa!",
+                        text: "El pedido fue pagado con exito!",
+                        icon: "success",
+                        button: "OK",
+                    });
+                    var stringTrtotalPedido = '#trPedido'+$("#idPedido").val();
+                    var stringTdEstadoPedido = '#tdEstadoPedido'+$("#idPedido").val();
+                    $(stringTrtotalPedido).removeAttr("onclick");
+                    $(stringTdEstadoPedido).html("Finalizada");
+                    $('#panelPedido').empty();
+                    crearPdfFactura(arregloMediosDepago,data.nombreVendedor,data.productosXPedido,data.pedido,data.empresa);
+
+                }
+            },
+            error: function (data) {
+                estaPagando = true;
+                var errors = data.responseJSON;
+                if (errors) {
+                    $.each(errors, function (i) {
+                        console.log(errors[i]);
+                    });
+                }
             }
+        });
+
+    }
+    element.disabled = false;
+}
+
+function imprimirFactura(){
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'imprimirFactura/' + $('#idPedido').val(),
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            var  arregloMediosDepago = data.detallePagoFactura.map(medio => {
+                var nombreMedioPago = {};
+                nombreMedioPago['nombreMedioPago'] = medio.medio_de_pago.Nombre;
+                return nombreMedioPago
+            });
+            crearPdfFactura(arregloMediosDepago,data.nombreVendedor,data.productosXPedido,data.pedido,data.empresa);
         },
         error: function (data) {
+            OcultarPopupposition();
             var errors = data.responseJSON;
             if (errors) {
                 $.each(errors, function (i) {
@@ -447,6 +653,86 @@ function PagarPedido() {
         }
     });
 }
+
+function crearPdfFactura(arregloMediosDepago,nombreVendedor,productosXPedido,pedido,empresa){
+   var opciones = {
+        orientation: 'p',
+        unit: 'mm',
+        format: [75, 150]
+    };
+    var specialElementHandlers = {
+        // element with id of "bypass" - jQuery style selector
+        '#bypassme': function(element, renderer){
+            // true = "handled elsewhere, bypass text extraction"
+            return true
+        }
+    }
+    var totalLinea = 65;
+    var doc = new jsPDF(opciones);
+    doc.setFontSize(12);
+    doc.text(empresa.RazonSocial, doc.internal.pageSize.width/2, 5, null, null, 'center');
+    doc.text('Nit: ' + empresa.NitEmpresa, doc.internal.pageSize.width/2, 10, null, null, 'center');
+    doc.text('Telefono : ' + empresa.Telefono, doc.internal.pageSize.width/2, 15, null, null, 'center');
+    doc.text(empresa.Direccion, doc.internal.pageSize.width/2, 20, null, null, 'center');
+    doc.text('Rionegro Antioquia', doc.internal.pageSize.width/2, 25, null, null, 'center');
+    doc.setFontSize(8);
+    doc.text('Factura: ' + pedido.id, 2, 35);
+    doc.text('Fecha: ' + new Date(pedido.updated_at).toLocaleString(), 2, 40);
+    doc.text('Cliente: ' + pedido.cliente.Nombre + ' ' +pedido.cliente.Apellidos , 2, 45);
+    doc.text('Vendedor: ' + nombreVendedor, 2, 50);
+    doc.line(1, 55, 74, 55);
+    doc.text('Producto', 2, 60);
+    doc.text('Cantidad', 20, 60);
+    doc.text('Vlr Unitario', 40, 60);
+    doc.text('Vlr Subtotal', 60, 60);
+    doc.line(1, 65, 74, 65);
+
+    productosXPedido.forEach(function(productoPedido, index) {
+        totalLinea = totalLinea + 5;
+        doc.text(productoPedido.producto.Nombre, 2, totalLinea);
+        totalLinea = totalLinea + 5;
+        doc.text(productoPedido.Cantidad.toString(), 20, totalLinea);
+        doc.text(productoPedido.producto.Precio.toString(), 40, totalLinea);
+        doc.text(productoPedido.SubTotal.toString(), 60, totalLinea);
+    });
+
+    totalLinea = totalLinea + 5;
+    doc.line(1, totalLinea, 74, totalLinea);
+    totalLinea = totalLinea + 5;
+    doc.text('Subtotal', 2, totalLinea);
+    doc.text(pedido.VentaTotal.toString(), 60, totalLinea);
+    totalLinea = totalLinea + 5;
+    doc.text('Descuento', 2, totalLinea);
+    doc.text('0', 60, totalLinea);
+    totalLinea = totalLinea + 5;
+    doc.text('Total a pagar', 2, totalLinea);
+    doc.text(pedido.VentaTotal.toString(), 60, totalLinea);
+    totalLinea = totalLinea + 5;
+    doc.line(1, totalLinea, 74, totalLinea);
+    totalLinea = totalLinea + 5;
+    doc.text('Formas de pago', doc.internal.pageSize.width/2, totalLinea, null, null, 'center');
+    totalLinea = totalLinea + 5;
+    doc.line(1, totalLinea, 74, totalLinea);
+    totalLinea = totalLinea + 5;
+    doc.text('Forma de pago: Contado', 2, totalLinea);
+    arregloMediosDepago.forEach(function(medioPago, index) {
+        totalLinea = totalLinea + 5;
+        doc.text('Medio de pago: '+ medioPago.nombreMedioPago, 2, totalLinea);
+    });
+    totalLinea = totalLinea + 5;
+    doc.text('No estoy obligado a facturar articulo 1.6.1.4.3', doc.internal.pageSize.width/2, totalLinea, null, null, 'center');
+    totalLinea = totalLinea + 5;
+    doc.text('del decreto 1625 del 1036', doc.internal.pageSize.width/2, totalLinea, null, null, 'center');
+    totalLinea = totalLinea + 10;
+    doc.text('MUCHAS GRACIAS POR SU COMPRA', doc.internal.pageSize.width/2, totalLinea, null, null, 'center');
+    
+    doc.autoPrint({variant: 'non-conform'});
+    window.open(doc.output('bloburl'), '_blank');
+
+
+
+}
+
 
 //funcion para pintar la fila del pedido en la que se esta trabajando
 function pintarFilaSelecciona(element){
@@ -474,7 +760,7 @@ function validarEdicionDePedido(element,idFactura){
             icon: 'warning',
             buttons: {
                 cancel: {
-                    text: "Cancel",
+                    text: "Cancelar",
                     value: false,
                     visible: true,
                     className: "",
@@ -498,7 +784,8 @@ function validarEdicionDePedido(element,idFactura){
 }
 
 //Funcion para validar si el pedido se esta editando desde el boton de crear pedido
-function validarEdicionDePedidoBtnCrear(element,idFactura){
+//function validarEdicionDePedidoBtnCrear(element,idFactura){
+function validarEdicionDePedidoBtnCrear(){
     if($("#BtnCerrarPedido").is(':disabled')){
         swal({
             title: '¡Un Pedido se esta editando!',
@@ -506,7 +793,7 @@ function validarEdicionDePedidoBtnCrear(element,idFactura){
             icon: 'warning',
             buttons: {
                 cancel: {
-                    text: "Cancel",
+                    text: "Cancelar",
                     value: false,
                     visible: true,
                     className: "",
@@ -521,10 +808,14 @@ function validarEdicionDePedidoBtnCrear(element,idFactura){
                 }},
         }).then((result) => {
             if (result) {
-                ObtenerFormCrearPedido(element,idFactura);
+                //ObtenerFormCrearPedido(element,idFactura);
+               // ObtenerFormCrearPedido();
+                guardarPedido(this)
             }
         });
     }else{
-        ObtenerFormCrearPedido(element,idFactura);
+       // ObtenerFormCrearPedido(element,idFactura);
+        //ObtenerFormCrearPedido();
+        guardarPedido(this)
     }
 }

@@ -34,4 +34,8 @@ class ClienteRepositorio
     public  function ObtenerListaClientesXEmpresa($idEmpresa){
        return  Cliente::where('Empresa_id','=',$idEmpresa)->get();
     }
+
+    public  function ObtenerPrimerClientesXEmpresa($idEmpresa){
+        return  Cliente::where('Empresa_id','=',$idEmpresa)->get()->first();
+    }
 }

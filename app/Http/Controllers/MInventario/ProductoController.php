@@ -84,9 +84,12 @@ class ProductoController extends  Controller
         $tiposProd = $this->tipoProductoServicio->ObtenerListaTipoProductos();
         $producto = $this->productoServicio->ObtenerProducto($idProducto);
         $productoXprovedor = $this->proveedorServicio->ObtenerProveedorXIdProducto($idProducto);
+        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
+        //$productosDelCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaDelCombo($idEmpreesa);
+        $productosDelCombo = $this->productoServicio->ObtenerListaProductoDelComboPorProducto($idProducto);
         $view = View::make('MInventario/Producto/editarProducto', array('producto'=>$producto, 'listProd'=>$tiposProd,
             'listCat'=>$tiposCat, 'listUni'=>$tiposUni, 'listAlma'=>$tiposAlma, 'listProv'=>$tiposProv,
-            'listProd'=>$tiposProd,'productoXprovedor'=>$productoXprovedor));
+            'listProductos'=>$productos,'productoXprovedor'=>$productoXprovedor,'listProdDelCombo'=>$productosDelCombo));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);
@@ -111,8 +114,9 @@ class ProductoController extends  Controller
                 $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
                 $unidades = $this->unidadDeMedidaServicio->ObtenerListaUnidadesEmpresa($idEmpreesa);
                 $productosNoCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
+                $productosCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaCombo($idEmpreesa);
                 $view = View::make('MInventario/Producto/listaProductos',array('listProductos'=>$productos,'listUnidades'=>$unidades,
-                    'listProductosNoCombo'=>$productosNoCombo));
+                    'listProductosNoCombo'=>$productosNoCombo,'listProductosCombo'=>$productosCombo));
                 $sections = $view->renderSections();
                 return Response::json($sections['content']);
             }
@@ -130,8 +134,9 @@ class ProductoController extends  Controller
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
         $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
         $productosNoCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaNoCombo($idEmpreesa);
+        $productosCombo = $this->productoServicio->ObtenerListaProductoPorEmpresaCombo($idEmpreesa);
         $view = View::make('MInventario/Producto/listaProductos',array('listProductos'=>$productos,
-            'listProductosNoCombo'=>$productosNoCombo));
+            'listProductosNoCombo'=>$productosNoCombo,'listProductosCombo'=>$productosCombo));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json($sections['content']);
@@ -141,6 +146,11 @@ class ProductoController extends  Controller
     //Metodo que me retornar una lista de productosPorProveedor filtrado por el id o pk del producto
     public function ObtenerProductoProveedor($idProducto){
         return response()->json($this->productoServicio->ObtenerProductoProveedorIdproducto($idProducto));
+    }
+
+    public function ObtenerProdConInventarioTotal($idProducto){
+        //return response()->json($this->productoServicio->ObtenerProdConInventarioTotal($idProducto));
+        return response()->json($this->productoServicio->ObtenerProdConInvenTotalTodoTipo($idProducto));
     }
 
     public function GuardarEquivalencia($idProductoP,$idProductoS,$cantidad){

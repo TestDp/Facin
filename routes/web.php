@@ -11,6 +11,8 @@
 |
 */
 
+use App\Http\Controllers\MFacturacion\FacturaController;
+use App\Http\Controllers\MReporte\ReporteController;
 use Illuminate\Support\Facades\DB;
 
 DB::listen(function ($query){
@@ -23,6 +25,9 @@ Route::get('/', function () {
 
 Route::get('/welcome', function () {
     return view('welcome');
+});
+Route::get('/pdf', function () {
+    return view('MFacturacion.Factura.facturaPDF');
 });
 
 Auth::routes();
@@ -84,6 +89,7 @@ Route::get('editarProducto/{idProducto}', 'MInventario\ProductoController@Editar
 Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del producto
 Route::get('productos', 'MInventario\ProductoController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los producto
 Route::get('infoProducto/{idProducto}','MInventario\ProductoController@ObtenerProductoProveedor')->name('infoProducto');//obtiene la informacion del producto
+Route::get('infoProdInvenTtal/{idProducto}','MInventario\ProductoController@ObtenerProdConInventarioTotal')->name('infoProdInvenTtal');//obtiene la informacion del producto con inventario total
 Route::get('guardarEquivalencia/{idProductoP}/{idProductoS}/{cantidad}','MInventario\ProductoController@GuardarEquivalencia')->name('guardarEquivalencia');
 
 //CONTROLADOR INVENTARIO
@@ -106,12 +112,15 @@ Route::post('guardarCliente', 'MCliente\ClienteController@GuardarCliente')->name
 
 //CONTROLADOR FACTURA
 Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
-Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
+//Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
+Route::get('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
 Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
 Route::get('editarPedido/{idFactura}', 'MFacturacion\FacturaController@EditarFactura')->name('editarPedido');//Obtiene la vista donde se edita el producto
 Route::get('mediosDePagolist', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePagolist');//obtiene la lista de medios de pagos
 Route::post('pagarPedido', 'MFacturacion\FacturaController@PagarPedido')->name('pagarPedido');//pagar  el pedido
+Route::get('cambiarEstadoFactura/{idFactura}/{idEstadoFactura}', [FacturaController::class,'CambiarEstadoFactura'])->name('cambiarEstadoFactura');//Cambiar el estado de la factura
+Route::get('imprimirFactura/{idFactura}', [FacturaController::class,'ImprimirFactura'])->name('imprimirFactura');// imprimir la factura
 
 
 //CONTROLADOR DE ESTADO FACTURA
@@ -125,3 +134,7 @@ Route::get('vistaCrearMedioDePago', 'MFacturacion\MedioDePagoController@ObtenerV
 Route::get('editarMedioDePago/{idMedio}', 'MFacturacion\MedioDePagoController@ObtenerVistaEditarMedioDePago')->name('vistaEditarMedioDePago');//cargar la vista para editar un estado factura
 Route::post('guardarMedioDePago', 'MFacturacion\MedioDePagoController@GuardarMedioDePago')->name('guardarMedioDePago');//Guardar la informacion del estado
 Route::get('mediosDePago', 'MFacturacion\MedioDePagoController@ObtenerMediosDePago')->name('mediosDePago');//Obtiene la lista de los estados de las facturas
+
+//CONTROLADOR DE INFORME DIARIO
+Route::get('ObtenerVistaInformeDiario/{fechaFiltro}', [ReporteController::class,'ObtenerVistaInformeDiario'])->name('ObtenerVistaInformeDiario');//cargar la vista de informe diario
+Route::get('ObtenerVistaInformeXFechas/{fechaFiltroInicial}/{fechaFiltroFechaFinal}', [ReporteController::class,'ObtenerVistaInformeXFechas'])->name('ObtenerVistaInformeXFechas');//cargar la vista de informe por rango de fechas

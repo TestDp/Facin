@@ -37,7 +37,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <!-- sweet plugins-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
 
 </head>
 <body class="cbp-spmenu-push">
@@ -56,9 +56,19 @@
                                         <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(1)">Pedidos</a>
                                     </li>
                                 @endif
+                                @if(Auth::user()->buscarRecurso('PedidosEliminados'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(3)">Pedidos Eliminados</a>
+                                    </li>
+                                @endif
                                 @if(Auth::user()->buscarRecurso('Facturas'))
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(2)">Facturas</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->buscarRecurso('FacturasAnuladas'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(4)">Facturas Anuladas</a>
                                     </li>
                                 @endif
                             </ul>
@@ -96,6 +106,25 @@
                                 @endif
                             </ul>
                         </li>
+                    @endif
+                    @if(Auth::user()->buscarRecurso('Reportes'))
+                    <li>
+                        <a href="#ulReportes" data-toggle="collapse"><i class="fa fa-dashboard nav_icon"></i>Reportes<span
+                                    class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse" id="ulReportes">
+                            @if(Auth::user()->buscarRecurso('VistaInformeDiario'))
+                                <li>
+                                    <a href="#" onclick="ajaxRenderSectionVisualizarInformeDarios()">Informe Diario</a>
+                                </li>
+                            @endif
+                            @if(Auth::user()->buscarRecurso('VistaInformeXFecha'))
+                                <li>
+                                    <a href="#" onclick="ajaxRenderSectionVisualizarXRangoFechas()">Informe por fechas</a>
+                                </li>
+                                @endif
+                        </ul>
+
+                    </li>
                     @endif
                     @if(Auth::user()->buscarRecurso('Empresa'))
                         <li>
@@ -237,7 +266,7 @@
     </p>
 </div>
 <!--//footer-->
-</div>
+
 <!-- Classie -->
 <script src="{{ asset('js/classie.js') }}"></script>
 
@@ -264,6 +293,7 @@
 <script src="{{ asset('js/MFacturacion/Factura.js') }}"></script>
 <script src="{{ asset('js/MFacturacion/EstadoFactura.js') }}"></script>
 <script src="{{ asset('js/MFacturacion/MedioDePago.js') }}"></script>
+<script src="{{ asset('js/MReporte/Reporte.js') }}"></script>
 
 <script>
     var menuLeft = document.getElementById('cbp-spmenu-s1'),
