@@ -19,7 +19,7 @@ class Producto extends Model
 
     //Cantidad: es la cantidad minimma para mantener en el inventario
     protected $fillable =['Codigo','Nombre','Precio','PrecioSinIva','ImagenProducto',
-                          'Almacen_id','Categoria_id','UnidadDeMedida_id','TipoDeProducto_id','EsCombo','TieneEquivalencia'];
+                          'Almacen_id','Categoria_id','UnidadDeMedida_id','TipoDeProducto_id','EsCombo','EsActivo'];
 
     public function Almacen()
     {

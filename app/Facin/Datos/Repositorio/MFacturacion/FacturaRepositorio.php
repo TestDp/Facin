@@ -11,14 +11,13 @@ namespace Facin\Datos\Repositorio\MFacturacion;
 use App\Facin\Datos\Repositorio\MInventario\InventarioRepositorio;
 use Facin\Datos\Modelos\MFacturacion\Detalle;
 use Facin\Datos\Modelos\MFacturacion\Factura;
-use Facin\Datos\Modelos\MInventario\ProductoPorProveedor;
 use Facin\Datos\Modelos\MFacturacion\MedioDePago;
 use Facin\Datos\Modelos\MFacturacion\MedioDePagoXFactura;
 use Facin\Datos\Modelos\MInventario\Producto;
 use Facin\Datos\Repositorio\MInventario\ProductoRepositorio;
 use Facin\Negocio\Logica\MInventario\InventarioServicio;
 use Illuminate\Support\Facades\DB;
-use mysql_xdevapi\Collection;
+
 
 class FacturaRepositorio
 {
@@ -71,6 +70,36 @@ class FacturaRepositorio
         return $pedidos;
     }
 
+    public function AgregarProductosPedido($idFactura,$idProducto,$cantidad){
+        DB::beginTransaction();
+        try {
+            $descuentoTotal = 0;
+            $producto = Producto::find($idProducto);
+            $detallePedido = Detalle::where('Factura_id','=',$idFactura)->where('Producto_id','=',$idProducto)->first();
+            if(isset($detallePedido)){
+                if( $cantidad < 0 &&  $detallePedido->Cantidad == -$cantidad){
+                    $this->EliminarProductoPedido($detallePedido);
+                }else{
+                    $this->ActulizarProductoPedido($detallePedido,$cantidad,'',$producto->Precio);
+                }
+            }else{
+                $this->CrearProductoPedido($idProducto,$idFactura,$cantidad,'',$producto->Precio);
+            }
+            $this->inventarioRepositorio->ActualizarInventarioProducto($idProducto, $cantidad);
+            $factura = Factura::find($idFactura);
+            $factura->CantidadTotal = $factura->CantidadTotal + $cantidad;
+            $factura->VentaTotal = $factura->VentaTotal + $cantidad*$producto->Precio;
+            $factura->save();
+            DB::commit();
+            return ["Respuesta"=>true,"PrecioTotal"=>$factura->VentaTotal];
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            DB::rollback();
+            return $error;
+        }
+    }
+
+
     public function GuardarListaProductosPedido($arrayDataProductos){
         DB::beginTransaction();
         try {
@@ -116,19 +145,26 @@ class FacturaRepositorio
                     $esPrincipal = $this->productoRepositorio->EsProductoPrincipal($productoDetalle->Producto_id);
                     if ($esPrincipal) {
                         $producto = Producto::find($productoDetalle->Producto_id);
-                        $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
+                       // $cantidadDisponible = $this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
+                        $cantidadDisponible = $this->productoRepositorio->ObtenerProdConInventarioTotal($productoDetalle->Producto_id)->Cantidad;
                         if($productoDetalle->EsEditar == 'true') {
                             $detalleProductoPedido = $detallesPedido->where('Producto_id','=',$productoDetalle->Producto_id)->first();
                             $diferenciaDetalleProducto = $productoDetalle->Cantidad - $detalleProductoPedido->Cantidad;
                             $cantidadInventario = ($cantidadDisponible - $diferenciaDetalleProducto);
                             if($productoDetalle->Cantidad == 0){
-                                $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                                //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+
+                                $this->inventarioRepositorio->ActualizarInventarioProducto($productoDetalle->Producto_id, $diferenciaDetalleProducto);
+
                                 $detalleProductoPedido->delete();
                             }else{
                                 if ($cantidadDisponible >= $diferenciaDetalleProducto) {
                                     $detalleProductoPedido->update(array('Cantidad' => $productoDetalle->Cantidad, 'Comentario' => $productoDetalle->Comentario,
                                         'Descuento' => 0, 'SubTotal' => $productoDetalle->Cantidad * $producto->Precio));
-                                    $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+
+                                    //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                                    $this->inventarioRepositorio->ActualizarInventarioProducto($productoDetalle->Producto_id, $diferenciaDetalleProducto);
+
                                 }else{
                                     return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                                 }
@@ -137,8 +173,11 @@ class FacturaRepositorio
                         } else {
                             if ($cantidadDisponible >= $productoDetalle->Cantidad) {
                                 $this->CrearProductoPedido($productoDetalle,$producto->Precio);
-                                $cantidadInventario = ($cantidadDisponible - $productoDetalle->Cantidad);
-                                $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                                //$cantidadInventario = ($cantidadDisponible - $productoDetalle->Cantidad);
+                                //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+
+                                $this->inventarioRepositorio->ActualizarInventarioProducto($productoDetalle->Producto_id, $productoDetalle->Cantidad);
+
                             }else{
                                 return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                             }
@@ -148,20 +187,28 @@ class FacturaRepositorio
                         $productoPrincipalId = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->ProductoPrincipal_id;
                         $producto = Producto::find($productoPrincipalId);
                         $productoSecundario = Producto::find($productoDetalle->Producto_id);
-                        $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($producto->id)->Cantidad;
+                       // $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($producto->id)->Cantidad;
+                        $cantidadDisponible = $this->productoRepositorio->ObtenerProdConInventarioTotal($producto->id)->Cantidad;
                         $cantidadEquivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->Cantidad;
                         if($productoDetalle->EsEditar == 'true') {
                             $detalleProductoPedido = $detallesPedido->where('Producto_id','=',$productoDetalle->Producto_id)->first();
                             $diferenciaDetalleProducto = ($productoDetalle->Cantidad - $detalleProductoPedido->Cantidad)/$cantidadEquivalencia;
                             $cantidadInventario = ($cantidadDisponible - $diferenciaDetalleProducto);
                             if($productoDetalle->Cantidad == 0){
-                                $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId, $cantidadInventario);
+                                //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId, $cantidadInventario);
+
+                                $this->inventarioRepositorio->ActualizarInventarioProducto($productoPrincipalId, $diferenciaDetalleProducto);
+
                                 $detalleProductoPedido->delete();
                             }else{
                                 if($cantidadDisponible >= $diferenciaDetalleProducto){
                                     $detalleProductoPedido->update(array('Cantidad' => $productoDetalle->Cantidad, 'Comentario' => $productoDetalle->Comentario,
                                         'Descuento' => 0, 'SubTotal' => $productoDetalle->Cantidad * $productoSecundario->Precio));
-                                    $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId, $cantidadInventario);
+                                   // $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId, $cantidadInventario);
+
+                                    $this->inventarioRepositorio->ActualizarInventarioProducto($productoPrincipalId,$diferenciaDetalleProducto);
+
+
                                 }else{
                                     return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                                 }
@@ -170,8 +217,11 @@ class FacturaRepositorio
                         }else{
                             if ($cantidadDisponible >= $productoDetalle->Cantidad/$cantidadEquivalencia) {
                                 $this->CrearProductoPedido($productoDetalle,$productoSecundario->Precio);
-                                $cantidadInventario = $cantidadDisponible - $productoDetalle->Cantidad/$cantidadEquivalencia;
-                                $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadInventario);
+
+                               // $cantidadInventario = $cantidadDisponible - $productoDetalle->Cantidad/$cantidadEquivalencia;
+                                //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadInventario);
+
+                                $this->inventarioRepositorio->ActualizarInventarioProducto($productoPrincipalId,$productoDetalle->Cantidad/$cantidadEquivalencia);
                             }else{
                                 return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                             }
@@ -196,7 +246,7 @@ class FacturaRepositorio
     // cuando viene un producto combo este metodo transforma los productos del combo en array para poder procesarlos
     public function ObtenerArrayDataProductos($idProductoCombo,$facturaid,$cantidadPpal,$arrayDataProductos,$esEditar,$lisDetalles){
         $prodsDelCombo = $this->productoRepositorio->ObtenerListaProductoDelComboPorProducto($idProductoCombo);
-        $listArray = collect($arrayDataProductos);
+       // $listArray = collect($arrayDataProductos);
         $arrayDataProductos = [];
         foreach ($prodsDelCombo as $prodCombo){
             $productoDetallePpal = $lisDetalles->where('Producto_id','=',$prodCombo->ProductoSecundario_id)->first();
@@ -248,20 +298,23 @@ class FacturaRepositorio
             $esPrincipal = $this->productoRepositorio->EsProductoPrincipal($productoDetalle->Producto_id);
             if ($esPrincipal) {
                 $producto = Producto::find($productoDetalle->Producto_id);
-                $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad;
+               // $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($productoDetalle->Producto_id)->Cantidad
+                $cantidadDisponible = $this->productoRepositorio->ObtenerProdConInventarioTotal($productoDetalle->Producto_id)->Cantidad;
                 $detalleProductoPedido = $detallesPedido->where('Producto_id','=',$productoDetalle->Producto_id)->first();
                 if(isset($detalleProductoPedido)) {
                     $diferenciaDetalleProducto = $productoDetalle->Cantidad - $detalleProductoPedido->Cantidad;
                     if ($cantidadDisponible >= $diferenciaDetalleProducto) {
                         $cantidadInventario = ($cantidadDisponible - $diferenciaDetalleProducto);
-                        $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                       // $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                        $this->inventarioRepositorio->ActualizarInventarioProducto($productoDetalle->Producto_id, $diferenciaDetalleProducto);
                     }else{
                         return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                     }
                 } else {
                     if ($cantidadDisponible >= $productoDetalle->Cantidad) {
                         $cantidadInventario = ($cantidadDisponible - $productoDetalle->Cantidad);
-                        $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                        //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoDetalle->Producto_id, $cantidadInventario);
+                        $this->inventarioRepositorio->ActualizarInventarioProducto($productoDetalle->Producto_id, $productoDetalle->Cantidad);
                     }else{
                         return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                     }
@@ -269,21 +322,25 @@ class FacturaRepositorio
             }else{
                 $productoPrincipalId = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->ProductoPrincipal_id;
                 $producto = Producto::find($productoPrincipalId);
-                $cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($producto->id)->Cantidad;
+                $cantidadDisponible = $this->productoRepositorio->ObtenerProdConInventarioTotal($producto->id)->Cantidad;
+                //$cantidadDisponible =$this->productoRepositorio->ObtenerProductoProveedorIdproducto($producto->id)->Cantidad;
                 $cantidadEquivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($productoDetalle->Producto_id)->Cantidad;
                 $detalleProductoPedido = $detallesPedido->where('Producto_id','=',$productoDetalle->Producto_id)->first();
                 if(isset($detalleProductoPedido)) {
-                    $diferenciaDetalleProducto = ($productoDetalle->Cantidad- $detalleProductoPedido->Cantidad)/$cantidadEquivalencia;
+                   // $diferenciaDetalleProducto = ($productoDetalle->Cantidad- $detalleProductoPedido->Cantidad)/$cantidadEquivalencia;
+                    $diferenciaDetalleProducto = ($detalleProductoPedido->Cantidad-$productoDetalle->Cantidad)/$cantidadEquivalencia;
                     if ($cantidadDisponible >= $diferenciaDetalleProducto) {
                         $cantidadInventario = ($cantidadDisponible - $diferenciaDetalleProducto);
-                        $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId, $cantidadInventario);
+                        //$this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId, $cantidadInventario);
+                        $this->inventarioRepositorio->ActualizarInventarioProducto($productoPrincipalId, $diferenciaDetalleProducto);
                     }else{
                         return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                     }
                 }else{
                     if ($cantidadDisponible >= $productoDetalle->Cantidad/$cantidadEquivalencia) {
                         $cantidadInventario = $cantidadDisponible - $productoDetalle->Cantidad/$cantidadEquivalencia;
-                        $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadInventario);
+                       // $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoPrincipalId,$cantidadInventario);
+                        $this->inventarioRepositorio->ActualizarInventarioProducto($productoPrincipalId,$productoDetalle->Cantidad/$cantidadEquivalencia);
                     }else{
                         return ["SinExistencia" => true, "producto" => $producto->Nombre, "cantidad" => $cantidadDisponible];
                     }
@@ -296,16 +353,26 @@ class FacturaRepositorio
         return ["SinExistencia" => false, "producto" => '', "cantidad" => ''];
     }
 
-
-    public function CrearProductoPedido($detalleProducto,$precio){
+    public function CrearProductoPedido($productoId,$facturaId,$cantidad,$comentario,$precio){
         $productoPedido = new Detalle();
-        $productoPedido->Producto_id = $detalleProducto->Producto_id;
-        $productoPedido->Factura_id = $detalleProducto->Factura_id;
-        $productoPedido->Cantidad = $detalleProducto->Cantidad;
-        $productoPedido->Comentario = $detalleProducto->Comentario;
+        $productoPedido->Producto_id = $productoId;
+        $productoPedido->Factura_id = $facturaId;
+        $productoPedido->Cantidad = $cantidad;
+        $productoPedido->Comentario = $comentario;
         $productoPedido->Descuento = 0;
-        $productoPedido ->SubTotal = $detalleProducto->Cantidad * $precio;
+        $productoPedido ->SubTotal = $cantidad * $precio;
         $productoPedido->save();
+    }
+
+    public function ActulizarProductoPedido($detallePedido,$cantidad,$comentario,$precio){
+        $detallePedido->Cantidad = $detallePedido->Cantidad + $cantidad;
+        $detallePedido ->SubTotal = $detallePedido->Cantidad * $precio;
+        $detallePedido->Comentario = $comentario;
+        $detallePedido->save();
+    }
+
+    public function EliminarProductoPedido($detallePedido){
+        $detallePedido->delete();
     }
 
     //Retorna los producto del pedido(Factura)
@@ -325,14 +392,33 @@ class FacturaRepositorio
     public function PagarPedido($arrayDataMediosDepago){
         DB::beginTransaction();
         try {
+            $ajustarPago = false;
+            $factura =$this->ObtenerFactura($arrayDataMediosDepago[0]->Factura_id);
+            $totalMDP = Collect($arrayDataMediosDepago)->sum('Valor');
+            $diferencia = 0;
+            if($totalMDP > $factura->VentaTotal ){
+                $diferencia = $totalMDP - $factura->VentaTotal;
+                $ajustarPago = true;
+            }
             foreach ($arrayDataMediosDepago as $arrayMedioDePagoXPedido){
                 $medioDePagoXPedido = new MedioDePagoXFactura();
-                $medioDePagoXPedido->Valor = $arrayMedioDePagoXPedido->Valor;
+                if($arrayMedioDePagoXPedido->MedioDePago_id == 1 && $ajustarPago){
+                    $medioDePagoXPedido->Valor =  $arrayMedioDePagoXPedido->Valor - $diferencia;
+                    $ajustarPago = false;
+                }else{
+                    $medioDePagoXPedido->Valor =  $arrayMedioDePagoXPedido->Valor;
+                }
                 $medioDePagoXPedido->Factura_id = $arrayMedioDePagoXPedido->Factura_id;
                 $medioDePagoXPedido->MedioDePago_id = $arrayMedioDePagoXPedido->MedioDePago_id;
                 $medioDePagoXPedido->save();
             }
-            $factura =$this->ObtenerFactura($arrayDataMediosDepago[0]->Factura_id);
+            if($ajustarPago){
+                $medioDePagoXPedido = new MedioDePagoXFactura();
+                $medioDePagoXPedido->Valor =  - $diferencia;
+                $medioDePagoXPedido->Factura_id = $arrayMedioDePagoXPedido->Factura_id;
+                $medioDePagoXPedido->MedioDePago_id = 1;
+                $medioDePagoXPedido->save();
+            }
             $factura->Cliente_id = $arrayDataMediosDepago[0]->clienteidPedido;
             $factura->EstadoFactura_id = 2;//se pasa el pedido(factura) al estado de finalizada
             $factura->save();
@@ -345,6 +431,7 @@ class FacturaRepositorio
             return $error;
         }
     }
+
 
     public function ObtenerDetallePagoFactura($idFactura){
         $mdsxf =  MedioDePagoXFactura::where('Factura_id','=',$idFactura)->get();
@@ -360,14 +447,28 @@ class FacturaRepositorio
             $factura = Factura::find($idFactura);
             $factura->EstadoFactura_id = $idEstado;
             $factura->save();
+            $this->RetonarInventarioPedidoOfac($idFactura);
             DB::commit();
             return ["Respuesta"=>true];
-            return $pedido;
         } catch (\Exception $e) {
             $error = $e->getMessage();
             DB::rollback();
             return $error;
         }
+    }
+
+    private function RetonarInventarioPedidoOfac($idFactura){
+        $detallesPedido = Detalle::where('Factura_id','=',$idFactura)->get();
+        foreach ($detallesPedido as $detallePedido){
+            $this->inventarioRepositorio->ActualizarInventarioProducto($detallePedido->Producto_id, -$detallePedido->Cantidad);
+        }
+    }
+
+    public function  GuardarComentario($idFactura,$comentario){
+        $factura = Factura::find($idFactura);
+        $factura->Comentario = $comentario;
+        $factura->save();
+        return ["Respuesta"=>true];
     }
 
 }

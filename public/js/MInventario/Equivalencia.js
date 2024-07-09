@@ -59,13 +59,14 @@ function obtenerStringUnidad(element) {
 function ObtenerEquivalenciasProducto(element,idProducto){
     var contenedorDivModal = $(element).closest('tr');
     var bodyTabla = contenedorDivModal.find('tbody[name=bodytablaEquivalencias]');
+    var selectProduc = contenedorDivModal.find('select[name=ListaProductos]');
     $.ajax({
         type: 'GET',
         url: urlBase +'equivalenciasProducto/'+ idProducto,
         dataType: 'json',
         success: function (data) {
             bodyTabla.html("");
-            $.each(data, function (i,equivalencia) {
+            $.each(data.equivalencias, function (i,equivalencia) {
                 var tr ='<tr>';
                 tr = tr + '<td scope="col">'+ equivalencia.producto_principal.Nombre +'</td>';
                 tr = tr + '<td scope="col">('+ equivalencia.producto_principal.unidad_de_medida.Abreviatura+')'+equivalencia.producto_principal.unidad_de_medida.Unidad+'</td>';
@@ -80,6 +81,15 @@ function ObtenerEquivalenciasProducto(element,idProducto){
                 tr = tr +'</tr>';
                 bodyTabla.append(tr);
             });
+            selectProduc.find('option').remove();
+            var option  = '<option value="">seleccionar</option>';
+            selectProduc.append(option);
+            $.each(data.prodSinEquival, function (i,productos) {
+                option  = '<option value="'+productos.id+'">'+productos.Nombre+'</option>';
+                selectProduc.append(option);
+            });
+
+
         },
         error: function (data) {
             OcultarPopupposition();

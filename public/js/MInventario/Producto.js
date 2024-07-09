@@ -92,13 +92,23 @@ function GuardarProducto() {
         data:form.serialize(),
         success: function (data) {
             OcultarPopupposition();
-            swal({
-                title: "Transaccción exitosa!",
-                text: "El producto fue grabado con exito!",
-                icon: "success",
-                button: "OK",
-            });
-            $('#principalPanel').empty().append($(data));
+            if(data.respuesta){
+                swal({
+                    title: "Transaccción exitosa!",
+                    text: "El producto fue grabado con exito!",
+                    icon: "success",
+                    button: "OK",
+                });
+                $('#principalPanel').empty().append($(data.vista));
+            }else{
+                swal({
+                    title: "Transacción con error!",
+                    text: "No fue posible grabar el producto!",
+                    icon: "error",
+                    button: "OK",
+                });
+            }
+
         },
         error: function (data) {
             OcultarPopupposition();
@@ -248,5 +258,52 @@ function buscarProductoSecundario(idprodcuto){
             respuesta = true;
     });
     return respuesta;
+}
+
+function ajaxRenderSectionDesactivarProducto(idproducto)
+{
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'desactivarProductos' + '/' + idproducto,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
+
+function ajaxRenderSectionActivarProducto(idproducto)
+{
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'activarProductos' + '/' + idproducto,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
 }
 

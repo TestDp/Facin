@@ -26,4 +26,9 @@ class EquivalenciaServicio
     public function EliminarEquivalencia($idproductoP,$idproductoS){
         return $this->equivalenciaRepositorio->EliminarEquivalencia($idproductoP,$idproductoS);
     }
+
+    public function GuardarEquivalencia($idProductoP,$idProductoS,$cantidad)
+    {
+        return $this->equivalenciaRepositorio->GuardarEquivalencia($idProductoP,$idProductoS,$cantidad);
+    }
 }

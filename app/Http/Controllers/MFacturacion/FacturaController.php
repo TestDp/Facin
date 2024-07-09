@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\Printer;
+
 
 class FacturaController extends Controller
 {
@@ -51,18 +50,19 @@ class FacturaController extends Controller
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $pedido = $request->all();
         $idVendedor = Auth::user()->id;
         $Pedido =  $this->facturaServicio->CrearFacutra($idEmpreesa,$idVendedor);
         $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $listaClientes = $this->clienteServicio->ObtenerListaClientesXEmpresa($idEmpreesa);
         $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
+        $mediosPago = $this->ObtenerListaMediosDePagos($request);
         $view = View::make('MFacturacion/Factura/productosPedido',array('listProductos'=>$productos,
-            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido));
+            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago,));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json(['vista'=>$sections['contentFormPedido'],'Pedido'=>$Pedido]);
         }else return  View::make('MFacturacion/Factura/productosPedido',array('listProductos'=>$productos,
-            'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido));
+            'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido,'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago,));
     }
 
     public function EditarFactura(Request $request,$idFactura){
@@ -82,7 +82,6 @@ class FacturaController extends Controller
                 'mediosPago'=>$mediosPago,'ListClientes'=>$listaClientes));
         }else{
             $detallePagoFactura = $this->facturaServicio->ObtenerDetallePagoFactura($idFactura);
-           // $mediosPago = $this->facturaServicio->ObtenerListaMediosDePagos();
             $view = View::make('MFacturacion/Factura/listaProductosPedido',array('listProductos'=>$productos,
                 'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,
                 'productosXPedido'=>$productosXPedido,'detallePagoFactura'=>$detallePagoFactura,'mediosPago' => $mediosPago));
@@ -95,10 +94,23 @@ class FacturaController extends Controller
             'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido,'productosXPedido'=>$productosXPedido));
     }
 
+    public function AgregarProductosPedido(Request $request,$idFactura,$idProducto){
+        return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,1);
+    }
+
+    public function RestarProductosPedido(Request $request,$idFactura,$idProducto){
+        return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,-1);
+    }
+
+    public function EliminarProductosPedido(Request $request,$idFactura,$idProducto,$cantidad){
+        return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,-$cantidad);
+    }
+
     public function ConfirmarProductosPedido(Request $request){
         $data = json_decode($_POST['array']);
         return $this->facturaServicio->ConfirmarProductosPedido($data);
     }
+
     //idEstado: 2-> finalizado, 1->En proceso
     public function getVistaListaPedidos(Request $request,$idEstado){
         $urlinfo= $request->getPathInfo();
@@ -125,7 +137,6 @@ class FacturaController extends Controller
                         $view = View::make('MFacturacion/Factura/pedidosAnulados',array('listPedidos'=>$listaPedidosEnProceso));
                         break;
                 }
-                   // $view =($idEstado == 1)? view('MFacturacion/Factura/listaPedidos',['listPedidos'=>$listaPedidosEnProceso]):View::make('MFacturacion/Factura/pedidosFinalizados',array('listPedidos'=>$listaPedidosEnProceso));
             }
             $sections = $view->renderSections();
             return Response::json($sections['content']);
@@ -148,7 +159,7 @@ class FacturaController extends Controller
         $idEmpreesa = $empresa->id;
         $idFactura = $array[0]->Factura_id;
         $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
-        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
         $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
         $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
         $detallePagoFactura = $this->facturaServicio->ObtenerDetallePagoFactura($idFactura);
@@ -178,6 +189,15 @@ class FacturaController extends Controller
         $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $respuesta = $this->facturaServicio->CambiarEstadoFactura($idFactura,$idEstado);
+        return Response::json(['Respuesta'=>$respuesta]);
+    }
+
+    public function  GuardarComentario(Request $request,$idFactura,$comentario){
+       /* $urlinfo= $request->getPathInfo();
+        $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
+        $urlinfo = explode('/'.$idFactura,$urlinfo)[0];
+        $request->user()->AutorizarUrlRecurso($urlinfo);*/
+        $respuesta = $this->facturaServicio->GuardarComentario($idFactura,$comentario);
         return Response::json(['Respuesta'=>$respuesta]);
     }
 }

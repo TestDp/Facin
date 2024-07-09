@@ -83,18 +83,6 @@
                                 <span class="invalid-feedback" role="alert" id="errorPrecio"></span>
                             </div>
                         </div>
-                        <div class="row" id="divProveedores">
-                            <div class="col-md-12">
-                                Proveedores
-                                <select id="Proveedor_id" name="Proveedor_id"  class="form-control"  name="language">
-                                    <option value="">Seleccionar</option>
-                                    @foreach($listProveedores as $provedor)
-                                        <option value="{{ $provedor->id }}">{{ $provedor->Nombre }}</option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
-                            </div>
-                        </div>
                         <div class="row" id="divProductos" hidden>
 
                             <div class="col-md-12">

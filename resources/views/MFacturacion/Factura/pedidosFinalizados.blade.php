@@ -19,7 +19,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">Id</th>
-                                    <th scope="col">Hora</th>
+                                    <th scope="col">Fecha</th>
                                     <th scope="col">Estado</th>
                                     <th scope="col">Cliente</th>
                                     <th scope="col">Total</th>
@@ -27,9 +27,9 @@
                                 </thead>
                                 <tbody id="tablaPedidos">
                                 @foreach($listPedidos as $pedido)
-                                    <tr onclick="validarEdicionDePedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">
+                                    <tr onclick="editarPedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">
                                         <td>{{$pedido->id}}</td>
-                                        <td>{{$pedido->created_at}}</td>
+                                        <td>{{$pedido->updated_at}}</td>
                                         <td id="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>
                                         <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
                                         <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal}}</td>

@@ -52,16 +52,6 @@ class ReporteRepositorio
             ->where('Tbl_Facturas.updated_at','>',$fechaInicialFiltro)
             ->get();
 
-
-/*        DB::table('tbl_asistentesXeventos')
-            ->join('tbl_asistentes', 'tbl_asistentesXeventos.Asistente_id','=','tbl_asistentes.id')
-            // ->groupBy('tbl_asistentes.Edad')
-            ->select(DB::raw("DATE_FORMAT(tbl_asistentes.created_at, '%Y-%m-%d') as created_at"),DB::raw('count(tbl_asistentes.created_at) as cantidad'))
-            ->groupBy('created_at')
-            ->where('tbl_asistentesXeventos.Evento_id','=',$idEvento)
-            ->get();*/
-
-
     }
 
     public function  ReporteGastosXRangoFechas($idEmpresa,$fechaInicialFiltro,$fechaFinalFiltro){

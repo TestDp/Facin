@@ -144,22 +144,7 @@
                                 </div>
 
                             </div>
-                        @else
-                            <div class="row" id="divProveedores">
-                                <div class="col-md-12">
-                                    <select id="Proveedor_id" name="Proveedor_id"  class="form-control">
-                                        <option value="">Seleccionar</option>
-                                        @foreach($listProv as $proveedor)
-                                            @if ($proveedor->id == $productoXprovedor->Proveedor_id)
-                                                <option value="{{ $proveedor->id }}" selected>{{ $proveedor->RazonSocial }}</option>
-                                            @else
-                                                <option value="{{ $proveedor->id }}">{{ $proveedor->RazonSocial }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <span class="invalid-feedback" role="alert" id="errorProveedor_id"></span>
-                                </div>
-                            </div>
+
                         @endif
                         <div class="row" id="divProductos" hidden>
 
@@ -170,7 +155,7 @@
                                         <div class="row">
                                             <select id="ListaProductos" name="ListaProductos"  class="form-control">
                                                 <option value="">Seleccionar</option>
-                                                @foreach($listProd as $productos)
+                                                @foreach($listProductos as $productos)
                                                     <option value="{{ $productos->id }}" data-num="{{ $productos->PrecioSinIva }}">{{ $productos->Nombre }}</option>
                                                 @endforeach
                                             </select>

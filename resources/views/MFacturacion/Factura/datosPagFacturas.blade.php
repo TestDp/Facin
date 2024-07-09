@@ -10,7 +10,7 @@
     </thead>
     <tbody id="tablaPedidos">
     @foreach($listPedidos as $pedido)
-        <tr onclick="validarEdicionDePedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">
+        <tr onclick="editarPedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">
             <td>{{$pedido->id}}</td>
             <td>{{$pedido->created_at}}</td>
             <td id="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>

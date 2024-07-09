@@ -11,6 +11,7 @@ namespace Facin\Negocio\Logica\MInventario;
 
 use App\Facin\Datos\Repositorio\MInventario\InventarioRepositorio;
 use Facin\Datos\Modelos\MInventario\PrecioDeCompra;
+use Facin\Datos\Modelos\MInventario\ProductoPorProveedor;
 use Facin\Datos\Repositorio\MInventario\ProductoRepositorio;
 
 class InventarioServicio
@@ -30,11 +31,53 @@ class InventarioServicio
         $productoXProveedor->Cantidad = $productoXProveedor->Cantidad + $request->Cantidad;
         $precioDeCompra->ProductoPorProveedor_id = $productoXProveedor->id;
         $producto->Precio = $request->PrecioVenta;
-        $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($request->Producto_id,$productoXProveedor->Cantidad);
+        $this->inventarioRepositorio->ActualizarInventarioProducto($request->Producto_id,$productoXProveedor->Cantidad);
         return $this->inventarioRepositorio->GuardarInventario($precioDeCompra,$productoXProveedor,$producto);
     }
 
-    public function ActualizarProductosSecundarios($productoPrincipal, $cantidadPrincipal, $productoSecundario){
+    public  function GuardarCompra($request){
+        try {
+                $cantidadProductos = count($request['Cantidad']);
+                for($i=0;$i<$cantidadProductos;$i++){
+                    $productoXProveedor = $this->productoRepositorio->ObtenerProductoXProveedor($request['Producto_id'][$i],$request['Proveedor_id']);
+                    $precioDeCompra = new PrecioDeCompra();
+                    $precioDeCompra->Cantidad = $request['Cantidad'][$i];
+                    $precioDeCompra->Precio = $request['PrecioCompra'][$i];
+                    $precioDeCompra->NumFacturaProvedor = $request['NumFacturaProvedor'];
+                    $precioDeCompra->Comentarios = $request['Comentarios'];
+                    if(isset($productoXProveedor)){
+                        $productoXProveedor->Cantidad = $productoXProveedor->Cantidad + $request['Cantidad'][$i];
+                    }else{
+                        $productoXProveedor = new ProductoPorProveedor();
+                        $productoXProveedor->Cantidad = $request['Cantidad'][$i];
+                        $productoXProveedor->Producto_id = $request['Producto_id'][$i];
+                        $productoXProveedor->Proveedor_id = $request['Proveedor_id'];
+                        $productoXProveedor->CantidadMinima = 0;
+                    }
+                    $producto = null;
+                    if(isset($request['PrecioVenta'][$i])){
+                        $producto = $this->productoRepositorio->ObtenerProducto($request['Producto_id'][$i]);
+                        $producto->Precio = $request['PrecioVenta'][$i];
+                    }
+                    $this->inventarioRepositorio->GuardarInventario($precioDeCompra,$productoXProveedor,$producto!= null ? $producto : null);
+                }
+            return true;
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            return $error;
+        }
+
+    }
+
+
+    public  function ObtenerCompras($idEmpresa){
+        return  $this->inventarioRepositorio->ObtenerCompras($idEmpresa);
+    }
+
+    public function ConsultarCompra($idEmpresa,$fecha,$numFactura){
+        return  $this->inventarioRepositorio->ConsultarCompra($idEmpresa,$fecha,$numFactura);
+    }
+/*    public function ActualizarProductosSecundarios($productoPrincipal, $cantidadPrincipal, $productoSecundario){
 
         $arrayProductosSecundarios = $this->productoRepositorio->ObtenerProductosSecundarios($productoPrincipal);
 
@@ -48,7 +91,7 @@ class InventarioServicio
                 $this->inventarioRepositorio->ActualizarInventarioProductoPrincipal($productoSecunDetalle->ProductoSecundario_id, $cantidadActualizarSecu);
              }
         }
-    }
+    }*/
 
 
 }

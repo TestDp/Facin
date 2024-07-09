@@ -25,11 +25,26 @@ class InventarioValidaciones
         ],$mensajes);
     }
 
+    public function ValidarFormularioCrearCompra(array $data)
+    {
+        $mensajes = $this->mensajesFormularioCrearCompra();
+        return Validator::make($data, [
+            'Proveedor_id' => 'required|string|max:255',
+            'NumFacturaProvedor' => 'required|max:255'
+
+        ],$mensajes);
+    }
     public  function  mensajesFormularioCrear(){
         return ['Producto_id.required' => 'El producto es obligatorio',
             'Precio.required' => 'El precio de compra es obligatorio',
             'Cantidad.required' => 'La cantidad minima es obligatoria',
             'NumFacturaProvedor.required' => 'El número de factura es obligatoria'
             ];
+    }
+
+    public  function  mensajesFormularioCrearCompra(){
+        return ['Proveedor_id.required' => 'El proveedor es obligatorio',
+            'NumFacturaProvedor.required' => 'El número de factura es obligatoria'
+        ];
     }
 }

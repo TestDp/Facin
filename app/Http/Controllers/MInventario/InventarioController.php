@@ -75,4 +75,68 @@ class InventarioController extends  Controller
             }
         }else return view('MInventario/Producto/listaProductos');
     }
+
+
+
+    //Metodo para obtener todas las compras por empresa
+    public  function ObtenerCompras(Request $request){
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpresa = Auth::user()->Sede->Empresa->id;
+        $compras = $this->inventarioServicio->ObtenerCompras($idEmpresa);
+        $view = View::make('MInventario/Inventario/listaCompras',['listCompras'=>$compras]);
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }
+        return view('MInventario/Inventario/listaCompras',['listCompras'=>$compras]);
+    }
+
+    //Metodo para cargar  la vista de para acutalizar la cantidad del producto
+    public function RegistrarCompra(Request $request)
+    {
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $proveedores = $this->proveedorServicio->ObtenerListaProveedores($idEmpreesa);
+        $productos = $this->productoServicio->ObtenerListaProductoPrincipalesPorEmpresa($idEmpreesa);
+        $view = View::make('MInventario/Inventario/registrarCompra',
+            array('listProductos'=>$productos,'listProveedores'=>$proveedores));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return view('MInventario/Inventario/registrarCompra');
+    }
+
+    //Metodo para guarda la compra
+    public  function GuardarCompra(Request $request)
+    {
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $this->inventarioValidaciones->ValidarFormularioCrearCompra($request->all())->validate();
+        if($request->ajax()){
+            $repuesta = $this->inventarioServicio->GuardarCompra($request);
+            if($repuesta == true){
+                $idEmpresa = Auth::user()->Sede->Empresa->id;
+                $compras = $this->inventarioServicio->ObtenerCompras($idEmpresa);
+                $view = View::make('MInventario/Inventario/listaCompras',
+                    array('listCompras'=>$compras));
+                $sections = $view->renderSections();
+                return Response::json($sections['content']);
+            }
+        }else return view('MInventario/Inventario/listaCompras');
+    }
+
+    public function ConsultarCompra(Request $request,$fecha,$numFactura){
+        /*$urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);*/
+        $idEmpresa = Auth::user()->Sede->Empresa->id;
+        $productosCompras = $this->inventarioServicio->ConsultarCompra($idEmpresa,$fecha,$numFactura);
+       $view = View::make('MInventario/Inventario/listaProductosCompra',array('listaProductosCompra'=>$productosCompras));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['contentFormPedido']);
+        }
+        return view('MInventario/Inventario/listProductosCompra',['listaProductosCompra'=>$productosCompras]);
+    }
 }

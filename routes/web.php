@@ -11,7 +11,11 @@
 |
 */
 
+use App\Http\Controllers\MCliente\ClienteController;
 use App\Http\Controllers\MFacturacion\FacturaController;
+use App\Http\Controllers\MInventario\EquivalenciaController;
+use App\Http\Controllers\MInventario\InventarioController;
+use App\Http\Controllers\MInventario\ProductoController;
 use App\Http\Controllers\MReporte\ReporteController;
 use Illuminate\Support\Facades\DB;
 
@@ -26,9 +30,7 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
-Route::get('/pdf', function () {
-    return view('MFacturacion.Factura.facturaPDF');
-});
+
 
 Auth::routes();
 
@@ -87,15 +89,23 @@ Route::get('almacenes', 'MInventario\AlmacenController@ObtenerAlmacenes')->name(
 Route::get('crearProducto', 'MInventario\ProductoController@CrearProducto')->name('crearProducto');//cargar la vista para crear un producto
 Route::get('editarProducto/{idProducto}', 'MInventario\ProductoController@EditarProducto')->name('editarProducto');//cargar la vista para editar una producto
 Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del producto
-Route::get('productos', 'MInventario\ProductoController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los producto
+Route::get('guardarProducto', [ProductoController::class,'ObtenerProductosEmpresa'])->name('guardarProducto');//Obtiene la lista de los producto cuando viene por get
+Route::get('productos', [ProductoController::class,'ObtenerProductosEmpresa'])->name('productos');//Obtiene la lista de los producto
 Route::get('infoProducto/{idProducto}','MInventario\ProductoController@ObtenerProductoProveedor')->name('infoProducto');//obtiene la informacion del producto
 Route::get('infoProdInvenTtal/{idProducto}','MInventario\ProductoController@ObtenerProdConInventarioTotal')->name('infoProdInvenTtal');//obtiene la informacion del producto con inventario total
-Route::get('guardarEquivalencia/{idProductoP}/{idProductoS}/{cantidad}','MInventario\ProductoController@GuardarEquivalencia')->name('guardarEquivalencia');
+Route::get('desactivarProductos/{idProducto}', [ProductoController::class,'DesactivarProducto'])->name('desactivarProductos');//desactiva los productos
+Route::get('activarProductos/{idProducto}', [ProductoController::class,'ActivarProducto'])->name('activarProductos');//activa los productos
 
-//CONTROLADOR INVENTARIO
+
+//CONTROLADOR INVENTARIO/COMPRAS
 Route::get('actualizarInventario', 'MInventario\InventarioController@ActualizarInvetario')->name('actualizarInventario');//cargar la vista para actulizar el inventario o la cantidad de un producto
 Route::post('guardarInventario', 'MInventario\InventarioController@GuardarInventario')->name('guardarInventario');//actualizar el inventario de en la base de datos
-//Route::get('productos', 'MInventario\InventarioController@ObtenerProductosEmpresa')->name('productos');//Obtiene la lista de los almacenes
+Route::get('compras', [InventarioController::class ,'ObtenerCompras'])->name('compras');//retorna las lista de compras realizadas
+Route::get('registrarCompra', [InventarioController::class ,'RegistrarCompra'])->name('registrarCompra');//carga la vista de registrar compra
+Route::post('guardarCompra', [InventarioController::class ,'GuardarCompra'])->name('guardarCompra');//actualizar la compra  en la base de datos
+Route::get('guardarCompra', [InventarioController::class ,'ObtenerCompras'])->name('guardarCompra');//retorna las lista de compras realizadas cuando viene por get
+Route::get('consultarCompra/{fecha}/{numFactura}', [InventarioController::class ,'ConsultarCompra'])->name('consultarCompra');//retorna las lista de compras realizadas
+
 
 //CONTROLADOR SEDES
 Route::get('crearSede', 'MEmpresa\SedeController@CrearSede')->name('crearSede');//cargar la vista para crear una sede
@@ -104,11 +114,12 @@ Route::post('guardarSede', 'MEmpresa\SedeController@GuardarSede')->name('guardar
 Route::get('sedes', 'MEmpresa\SedeController@ObtenerSedes')->name('sedes');//Obtiene la lista de sedes
 
 //CONTROLADOR DE EQUIVALENCIAS
-Route::get('equivalenciasProducto/{idProducto}','MInventario\EquivalenciaController@ObtenerEquivalenciasProducto')->name('equivalenciasProducto');//obtiene la informacion de las equivalencias
-Route::get('eliminarEquivalencia/{idProductoP}/{idProductoS}','MInventario\EquivalenciaController@EliminarEquivalencia')->name('EliminarEquivalencia');//Elimina las equivalencias asosiadas a un producto
+Route::get('equivalenciasProducto/{idProducto}',[EquivalenciaController::class,'ObtenerEquivalenciasProducto'])->name('equivalenciasProducto');//obtiene la informacion de las equivalencias
+Route::get('eliminarEquivalencia/{idProductoP}/{idProductoS}',[EquivalenciaController::class,'EliminarEquivalencia'])->name('EliminarEquivalencia');//Elimina las equivalencias asosiadas a un producto
+Route::get('guardarEquivalencia/{idProductoP}/{idProductoS}/{cantidad}',[EquivalenciaController::class,'GuardarEquivalencia'])->name('guardarEquivalencia');
 
 //CONTROLADOR DE CLIENTE
-Route::post('guardarCliente', 'MCliente\ClienteController@GuardarCliente')->name('guardarCliente');//Guardar la informacion del cliente
+Route::post('guardarCliente', [ClienteController::class,'GuardarCliente'])->name('guardarCliente');//Guardar la informacion del cliente
 
 //CONTROLADOR FACTURA
 Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
@@ -118,10 +129,13 @@ Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@Confirma
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
 Route::get('editarPedido/{idFactura}', 'MFacturacion\FacturaController@EditarFactura')->name('editarPedido');//Obtiene la vista donde se edita el producto
 Route::get('mediosDePagolist', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePagolist');//obtiene la lista de medios de pagos
-Route::post('pagarPedido', 'MFacturacion\FacturaController@PagarPedido')->name('pagarPedido');//pagar  el pedido
+Route::post('pagarPedido', [FacturaController::class,'PagarPedido'])->name('pagarPedido');//pagar  el pedido
 Route::get('cambiarEstadoFactura/{idFactura}/{idEstadoFactura}', [FacturaController::class,'CambiarEstadoFactura'])->name('cambiarEstadoFactura');//Cambiar el estado de la factura
 Route::get('imprimirFactura/{idFactura}', [FacturaController::class,'ImprimirFactura'])->name('imprimirFactura');// imprimir la factura
-
+Route::get('agregarProductosPedido/{idFactura}/{idProducto}',[FacturaController::class,'AgregarProductosPedido'])->name('agregarProductosPedido');//agrega productos al pedido.
+Route::get('restarProductosPedido/{idFactura}/{idProducto}',[FacturaController::class,'RestarProductosPedido'])->name('agregarProductosPedido');//restar cantidad productos al pedido.
+Route::get('eliminarProductosPedido/{idFactura}/{idProducto}/{cantidad}',[FacturaController::class,'EliminarProductosPedido'])->name('eliminarProductosPedido');//restar cantidad productos al pedido.
+Route::get('guardarComentario/{idFactura}/{comentario}', [FacturaController::class,'GuardarComentario'])->name('guardarComentario');//guardar comentario
 
 //CONTROLADOR DE ESTADO FACTURA
 Route::get('vistaCrearEstadoFactura', 'MFacturacion\EstadoFacturaController@ObtenerVistaCrearEstadoFactura')->name('vistaCrearEstadoFactura');//cargar la vista para crear un estado factura

@@ -6,7 +6,7 @@
             background-color: #dff0d8;
         }
     </style>
-    <div class="container">
+
         <div class="row">
             <div class="col-md-3">
                 <button  type="button" class="btn btn-success" data-toggle="modal" data-target="#modalCrearCliente">Nuevo Cliente</button>
@@ -71,7 +71,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <button onclick="validarEdicionDePedidoBtnCrear()" type="button" class="btn btn-success">Nuevo Pedido</button>
+                                <button onclick="guardarPedido(this)" type="button" class="btn btn-success">Nuevo Pedido</button>
                             </div>
                         </div>
                         <div class="row" id="tablaPedidosCompleta">
@@ -87,7 +87,8 @@
                                 </thead>
                                 <tbody id="tablaPedidos">
                                 @foreach($listPedidos as $pedido)
-                                    <tr onclick="validarEdicionDePedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">
+<!--                                <tr onclick="validarEdicionDePedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">-->
+                                    <tr onclick="editarPedido(this,{{$pedido->id}})" id="trPedido{{$pedido->id}}">
                                         <td>{{$pedido->id}}</td>
                                         <td>{{$pedido->created_at}}</td>
                                         <td id="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>
@@ -106,7 +107,7 @@
                 @yield('contentFormPedido')
             </div>
         </div>
-    </div>
+
     <script type="text/javascript">
 
         $(document).ready(function() {

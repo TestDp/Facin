@@ -15,7 +15,7 @@
                 </tr>
                 <tr>
                     <td>{{$nombreVendedor}}</td>
-                    <td><input id="comentarioPedido" name="comentarioPedido" type="text" class="form-control"></td>
+                    <td><input id="comentarioPedido" name="comentarioPedido" type="text" class="form-control" value="{{$pedido->Comentario}}" onchange="guadarComentario()"></td>
                 </tr>
             </table>
             <br/>
@@ -44,7 +44,7 @@
                         <td><label class="nombre-producto"><p class="nombre-pedido-p" id="pNombreProducto" name="pNombreProducto">{{$productoPedido->Producto->Nombre}}</p></label></td>
                         <td><span class="glyphicon glyphicon-usd"></span>
                             <label class="precio-pedido" id="lbsubTotal" name="lbsubTotal">{{$productoPedido->SubTotal}}</label></td>
-                        <td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button></td>
+{{--                        <td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button></td>--}}
                         <td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button></td>
                     </tr>
 
@@ -62,11 +62,8 @@
         </div>
         <div class="panel-footer">
             <div class="row">
-                <div class="col-md-4">
-                    <input type="button" class="form-control btn btn-success" value="Guardar" onclick="ConfirmarProductosPedido(this)">
-                </div>
-                <div class="col-md-4">
-                    <input type="button" id="BtnCerrarPedido"  class="form-control btn btn-info" value="facturar" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()">
+                <div class="col-md-6">
+                    <input type="button" id="BtnCerrarPedido"  class="form-control btn btn-info" value="facturar" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()" disabled>
                     <!-- inicio modal finalizar  Pedido-->
                         <div id="modalFinalizarPedido" name="modalFinalizarPedido"   class="modal fade">
                             <div class="modal-dialog modal-lg" >
@@ -156,14 +153,13 @@
 
 
                                     </div>
-
                                 </div>
                             </div>
                         </div>
 
                     <!-- fin modal finalizar  Pedido-->
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <input type="button" class="form-control btn btn-danger" value="Eliminar" onclick="eliminarPedido()">
                 </div>
             </div>

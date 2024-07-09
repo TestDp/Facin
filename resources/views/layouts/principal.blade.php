@@ -79,11 +79,16 @@
                             <a href="#ulInventario" data-toggle="collapse"><i class="fa fa-archive nav_icon"></i>Inventario
                                 <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" id="ulInventario">
-                                @if(Auth::user()->buscarRecurso('ActualizarInventario'))
+                        <!--  @if(Auth::user()->buscarRecurso('ActualizarInventario'))
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionActualizarInventario()" >Ajustar inventario</a>
                                     </li>
-                                @endif
+                                @endif-->
+                                    @if(Auth::user()->buscarRecurso('Compras'))
+                                        <li>
+                                            <a href="#" onclick="ajaxRenderSectionListaCompras()" >Compras</a>
+                                        </li>
+                                    @endif
                                 @if(Auth::user()->buscarRecurso('Productos'))
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionListaProductos()">Productos</a>
@@ -248,15 +253,16 @@
     </div>
 
     <div id="page-wrapper">
-        <div class="main-page">
-
+        <div class="main-page" id="principalPanel">
+            @yield('content')
+<!--
             <div id="_loading" class="_loading" style="display:none;">
                 <div id="capa_loading" class="capa_loading" style="display:none;">Procesando...</div>
                 <img class="img_loading" src="{{ asset('images/loader.gif') }}" /><br>
-            </div>
-            <div id="principalPanel">
-                @yield('content')
-            </div>
+            </div>-->
+<!--            <div id="principalPanel">
+
+            </div>-->
         </div>
     </div>
 </div>
@@ -294,7 +300,7 @@
 <script src="{{ asset('js/MFacturacion/EstadoFactura.js') }}"></script>
 <script src="{{ asset('js/MFacturacion/MedioDePago.js') }}"></script>
 <script src="{{ asset('js/MReporte/Reporte.js') }}"></script>
-
+<script src="{{ asset('js/Plugins/JsPDF/dist/jspdf.min.js') }}"></script>
 <script>
     var menuLeft = document.getElementById('cbp-spmenu-s1'),
         showLeftPush = document.getElementById('showLeftPush'),
