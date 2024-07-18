@@ -162,7 +162,7 @@ function GuardarProducto() {
 }
 
 
-//Funcion para mostrar la lista de categorias
+//Funcion para mostrar la lista de productos
 function ajaxRenderSectionListaProductos() {
     PopupPosition();
     $.ajax({
@@ -307,3 +307,25 @@ function ajaxRenderSectionActivarProducto(idproducto)
     });
 }
 
+function buscarProducto(){
+    var strinBus = $("#buscarProducto").val() =='' ?"*":$("#buscarProducto").val();
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'busProductos'+ '/'+ strinBus,
+        dataType: 'json',
+        success: function (data) {
+            OcultarPopupposition();
+            $('#rowTablaProductos').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}

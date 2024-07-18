@@ -37,7 +37,8 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            {!!$listPedidos->links()!!}
+                            {!!$listPedidos->onEachSide(2)->links()!!}
+                            {!! $listPedidos->count() !!}
                         </div>
                     </div>
                 </div>
@@ -70,6 +71,8 @@
                     alert('Articles could not be loaded.');
                 });
             }
+
+
         });
     </script>
 

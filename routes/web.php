@@ -91,6 +91,8 @@ Route::get('editarProducto/{idProducto}', 'MInventario\ProductoController@Editar
 Route::post('guardarProducto', 'MInventario\ProductoController@GuardarProducto')->name('guardarProducto');//Guardar la informacion del producto
 Route::get('guardarProducto', [ProductoController::class,'ObtenerProductosEmpresa'])->name('guardarProducto');//Obtiene la lista de los producto cuando viene por get
 Route::get('productos', [ProductoController::class,'ObtenerProductosEmpresa'])->name('productos');//Obtiene la lista de los producto
+Route::get('busProductos/{strBusq}', [ProductoController::class,'BuscarProductosEmpresa'])->name('busProductos');//Busca los productos por empresa
+Route::get('datable', [ProductoController::class,'ObtenerProductosEmpresaDatable'])->name('datable');//Obtiene la lista de los producto
 Route::get('infoProducto/{idProducto}','MInventario\ProductoController@ObtenerProductoProveedor')->name('infoProducto');//obtiene la informacion del producto
 Route::get('infoProdInvenTtal/{idProducto}','MInventario\ProductoController@ObtenerProdConInventarioTotal')->name('infoProdInvenTtal');//obtiene la informacion del producto con inventario total
 Route::get('desactivarProductos/{idProducto}', [ProductoController::class,'DesactivarProducto'])->name('desactivarProductos');//desactiva los productos

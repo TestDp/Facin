@@ -117,7 +117,7 @@ class ProductoController extends  Controller
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
-        $productos = $this->productoServicio->ObtenerTodosLosProductosConStock($idEmpreesa);
+        $productos = $this->productoServicio->ObtenerTodosLosProductosConStock($idEmpreesa,'');
         $view = View::make('MInventario/Producto/listaProductos',array('listProductos'=>$productos));
         if($request->ajax()){
             $sections = $view->renderSections();
@@ -125,6 +125,30 @@ class ProductoController extends  Controller
         }else return $view;
 
     }
+
+    public  function BuscarProductosEmpresa(Request $request,$strBusqueda){
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $productos = $this->productoServicio->ObtenerTodosLosProductosConStock($idEmpreesa,$strBusqueda);
+        if($request->ajax()){
+            $view = View::make('MInventario/Producto/tablaProductos',array('listProductos'=>$productos));
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else{
+            return View::make('MInventario/Producto/listaProductos',array('listProductos'=>$productos));
+        }
+    }
+
+ /*   public  function ObtenerProductosEmpresaDatable(Request $request){
+        return Response::json(array(
+            "draw"            => intval(1),
+            "recordsTotal"    => intval(10),
+            "recordsFiltered" => intval(40),
+            "data"            => [[010,'Cafe',12000,9,'NO','']]
+           // "data"            => ['Codigo'=>'010','Nombre'=>'Cafe','PrecioUnidad'=>12000,'Cantidad'=>8,'ProdCombo'=>'NO','Action'=>'']
+        ));
+
+
+    }*/
 
     //Metodo que me retornar una lista de productosPorProveedor filtrado por el id o pk del producto
     public function ObtenerProductoProveedor($idProducto){

@@ -44,8 +44,8 @@ class ProductoServicio
         return $this->productoRepositorio->ObtenerListaProductoPrincipalesPorEmpresa($idEmpreesa);
     }
 
-    public function  ObtenerTodosLosProductosConStock($idEmpresa){
-        $productosSinStock = $this->productoRepositorio->ObtenerTodosLosProductosSinStock($idEmpresa);
+    public function  ObtenerTodosLosProductosConStock($idEmpresa,$strBusq = ''){
+        $productosSinStock = $this->productoRepositorio->ObtenerTodosLosProductosSinStock($idEmpresa,$strBusq);
         foreach ($productosSinStock as $producto){
             $producto->Cantidad =  $this->ObtenerProdConInvenTotalTodoTipo($producto->id)->Cantidad;
         }
