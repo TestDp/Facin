@@ -260,16 +260,17 @@ function buscarProductoSecundario(idprodcuto){
     return respuesta;
 }
 
-function ajaxRenderSectionDesactivarProducto(idproducto)
+function ajaxRenderSectionDesactivarProducto(element,idproducto)
 {
-    PopupPosition();
+
     $.ajax({
         type: 'GET',
         url: urlBase +'desactivarProductos' + '/' + idproducto,
         dataType: 'json',
         success: function (data) {
-            OcultarPopupposition();
-            $('#principalPanel').empty().append($(data));
+            $(element).find("span").attr('class','glyphicon glyphicon-check');
+            $(element).attr('onclick','ajaxRenderSectionActivarProducto(this,'+ idproducto +')');
+
         },
         error: function (data) {
             OcultarPopupposition();
@@ -284,16 +285,17 @@ function ajaxRenderSectionDesactivarProducto(idproducto)
 }
 
 
-function ajaxRenderSectionActivarProducto(idproducto)
+function ajaxRenderSectionActivarProducto(element,idproducto)
 {
-    PopupPosition();
+
     $.ajax({
         type: 'GET',
         url: urlBase +'activarProductos' + '/' + idproducto,
         dataType: 'json',
         success: function (data) {
-            OcultarPopupposition();
-            $('#principalPanel').empty().append($(data));
+            $(element).find("span").attr('class','glyphicon glyphicon-ban-circle');
+            $(element).attr('onclick','ajaxRenderSectionDesactivarProducto(this,'+ idproducto +')');
+
         },
         error: function (data) {
             OcultarPopupposition();

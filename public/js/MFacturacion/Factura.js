@@ -708,8 +708,10 @@ function ValidarFormularioFinalizarPedido(){
     });
     if(respuestaVuelto && cantSelFalse == 0){
         $("#cerrarModalFinalizar").removeAttr("disabled");
+        return true;
     }else{
         $("#cerrarModalFinalizar").attr('disabled','disabled');
+        return false;
     }
 
 }
@@ -761,58 +763,58 @@ var estaPagando = true;
 function PagarPedido(element) {
     element.disabled = true;
     if(estaPagando){
-        estaPagando = false;
-        var arregloMediosDepago =  new Array();
-        $("#TablaMediosPagos").find("tr").each(function(ind,row){
-            var medioDePagoXPedido = new Object();
-            medioDePagoXPedido.nombreMedioPago = $(row).find("select[name=selMedioPago]").find('option:selected').text();
-            medioDePagoXPedido.Valor = $(row).find("input[name=inputSubTotalMd]").val();
-            medioDePagoXPedido.MedioDePago_id = $(row).find("select[name=selMedioPago]").val();
-            medioDePagoXPedido.Factura_id =  $("#idPedido").val();
-            medioDePagoXPedido.clienteidPedido = $("#Cliente_id").val();
-            arregloMediosDepago.push(medioDePagoXPedido);
-        });
+    estaPagando = false;
+    var arregloMediosDepago =  new Array();
+    $("#TablaMediosPagos").find("tr").each(function(ind,row){
+        var medioDePagoXPedido = new Object();
+        medioDePagoXPedido.nombreMedioPago = $(row).find("select[name=selMedioPago]").find('option:selected').text();
+        medioDePagoXPedido.Valor = $(row).find("input[name=inputSubTotalMd]").val();
+        medioDePagoXPedido.MedioDePago_id = $(row).find("select[name=selMedioPago]").val();
+        medioDePagoXPedido.Factura_id =  $("#idPedido").val();
+        medioDePagoXPedido.clienteidPedido = $("#Cliente_id").val();
+        arregloMediosDepago.push(medioDePagoXPedido);
+    });
 
-        var token = $("#_tokenProductosPedido").val();
-        $.ajax({
-            type: 'POST',
-            url: urlBase +'pagarPedido',
-            dataType: 'json',
-            headers: {'X-CSRF-TOKEN': token},
-            data:{'array': JSON.stringify(arregloMediosDepago)},
-            success: function (data) {
-                estaPagando = true;
-             /*   $('#modalFinalizarPedido').modal('hide');//cerrar modal
-                $('body').removeClass('modal-open');//cerrar modal
-                $('.modal-backdrop').remove();//cerrar modal*/
-                if(data.Respuesta){
-                    swal({
-                        title: "Transaccción exitosa!",
-                        text: "El pedido fue pagado con exito!",
-                        icon: "success",
-                        button: "OK",
-                    });
-                    var stringTrtotalPedido = '#trPedido'+$("#idPedido").val();
-                    var stringTdEstadoPedido = '#tdEstadoPedido'+$("#idPedido").val();
-                    $(stringTrtotalPedido).removeAttr("onclick");
-                    $(stringTdEstadoPedido).html("Finalizada");
-                    $('#panelPedido').empty();
-                    crearPdfFactura(arregloMediosDepago,data.nombreVendedor,data.productosXPedido,data.pedido,data.empresa);
+    var token = $("#_tokenProductosPedido").val();
+    $.ajax({
+        type: 'POST',
+        url: urlBase +'pagarPedido',
+        dataType: 'json',
+        headers: {'X-CSRF-TOKEN': token},
+        data:{'array': JSON.stringify(arregloMediosDepago)},
+        success: function (data) {
+            estaPagando = true;
+         /*   $('#modalFinalizarPedido').modal('hide');//cerrar modal
+            $('body').removeClass('modal-open');//cerrar modal
+            $('.modal-backdrop').remove();//cerrar modal*/
+            if(data.Respuesta){
+                swal({
+                    title: "Transaccción exitosa!",
+                    text: "El pedido fue pagado con exito!",
+                    icon: "success",
+                    button: "OK",
+                });
+                var stringTrtotalPedido = '#trPedido'+$("#idPedido").val();
+                var stringTdEstadoPedido = '#tdEstadoPedido'+$("#idPedido").val();
+                $(stringTrtotalPedido).removeAttr("onclick");
+                $(stringTdEstadoPedido).html("Finalizada");
+                $('#panelPedido').empty();
+                crearPdfFactura(arregloMediosDepago,data.nombreVendedor,data.productosXPedido,data.pedido,data.empresa);
 
-                }
-            },
-            error: function (data) {
-                estaPagando = true;
-                var errors = data.responseJSON;
-                if (errors) {
-                    $.each(errors, function (i) {
-                        console.log(errors[i]);
-                    });
-                }
             }
-        });
+        },
+        error: function (data) {
+            estaPagando = true;
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
 
-    }
+}
     element.disabled = false;
 }
 

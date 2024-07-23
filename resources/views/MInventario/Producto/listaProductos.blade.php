@@ -120,14 +120,15 @@
                                             <button onclick="ajaxRenderSectionEditarProducto({{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
                                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
                                             </button>
-
-<!--                                          <button onclick="ajaxRenderSectionDesactivarProducto({{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
-                                                <span class="glyphicon glyphicon-ban-circle" aria-hidden="true" ></span>
-                                            </button>
-
-                                            <button onclick="ajaxRenderSectionActivarProducto({{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Editar Producto">
-                                                <span class="glyphicon glyphicon-align-center" aria-hidden="true" ></span>
-                                            </button>-->
+                                                @if($producto->EsActivo == 1)
+                                                    <button onclick="ajaxRenderSectionDesactivarProducto(this,{{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Desacttivar Producto">
+                                                        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true" style="color:red"></span>
+                                                    </button>
+                                                @else
+                                                    <button onclick="ajaxRenderSectionActivarProducto(this,{{$producto->id}})"  type="button" class="btn btn-default" aria-label="Left Align" title="Activar Producto">
+                                                        <span class="glyphicon glyphicon-check" aria-hidden="true" style="color:green"></span>
+                                                    </button>
+                                                @endif
                                         </td>
                                     </tr>
                                 @endforeach

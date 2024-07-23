@@ -120,6 +120,7 @@ class ProductoRepositorio
             ->join('Tbl_Unidades_De_Medidas','Tbl_Productos.UnidadDeMedida_id','=','Tbl_Unidades_De_Medidas.id')
             ->select('Tbl_Productos.*','Tbl_Unidades_De_Medidas.Unidad',)
             ->where('Tbl_Sedes.Empresa_id', '=', $idEmpresa)
+            ->where('Tbl_Productos.EsActivo', '=', 1)
             ->orderBy('Tbl_Productos.Codigo')
             ->get();
     }
@@ -135,8 +136,8 @@ class ProductoRepositorio
             ->join('Tbl_Almacenes','Tbl_Almacenes.Sede_id','=','Tbl_Sedes.id')
             ->join('Tbl_Productos','Tbl_Productos.Almacen_id','=','Tbl_Almacenes.id')
             ->join('Tbl_Unidades_De_Medidas','Tbl_Productos.UnidadDeMedida_id','=','Tbl_Unidades_De_Medidas.id')
-            ->select('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo',DB::raw('"0" as Cantidad'))
-            ->groupBy('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo','Cantidad')
+            ->select('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo','Tbl_Productos.EsActivo',DB::raw('"0" as Cantidad'))
+            ->groupBy('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo','Tbl_Productos.EsActivo','Cantidad')
             ->where('Tbl_Sedes.Empresa_id', '=', $idEmpresa)
             ->where(function($q)use ($strBusq){
                 $q->orWhere('Tbl_Productos.Codigo', 'like', '%'.$strBusq.'%')
@@ -150,8 +151,8 @@ class ProductoRepositorio
             ->join('Tbl_Almacenes','Tbl_Almacenes.Sede_id','=','Tbl_Sedes.id')
             ->join('Tbl_Productos','Tbl_Productos.Almacen_id','=','Tbl_Almacenes.id')
             ->join('Tbl_Unidades_De_Medidas','Tbl_Productos.UnidadDeMedida_id','=','Tbl_Unidades_De_Medidas.id')
-            ->select('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo',DB::raw('"0" as Cantidad'))
-            ->groupBy('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo','Cantidad')
+            ->select('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo','Tbl_Productos.EsActivo',DB::raw('"0" as Cantidad'))
+            ->groupBy('Tbl_Productos.id','Tbl_Productos.Codigo','Tbl_Productos.Nombre','Tbl_Productos.Precio','Tbl_Unidades_De_Medidas.Unidad','Tbl_Productos.EsCombo','Tbl_Productos.EsActivo','Cantidad')
             ->where('Tbl_Sedes.Empresa_id', '=', $idEmpresa)
             ->orderBy('Tbl_Productos.Codigo')
             ->paginate(10);
