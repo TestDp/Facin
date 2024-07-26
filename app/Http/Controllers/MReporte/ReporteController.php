@@ -63,5 +63,18 @@ class ReporteController extends Controller
         }else return view('MReporte/informeXFechas');
     }
 
+    public function ObtenerVistaVentasXProducto(Request $request,$fechaFiltroInicial,$fechaFiltroFechaFinal){
+        //  $urlinfo= $request->getPathInfo();
+        //$urlinfo = explode('/'.$fechaFiltroInicial,$urlinfo)[0];
+        //$request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpresa = Auth::user()->Sede->Empresa->id;
+        $ventasXProducto = $this->reporteServicio->ObtenerVentasXProducto($idEmpresa,$fechaFiltroInicial,$fechaFiltroFechaFinal);
+        $view = View::make('MReporte/ventasXProducto',array('ventasXProducto'=>$ventasXProducto));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json(['vista'=>$sections['content'],'ventasXProducto'=>$ventasXProducto]);
+        }else return view('MReporte/ventasXProducto');
+    }
+
 
 }

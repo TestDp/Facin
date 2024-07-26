@@ -70,6 +70,34 @@ function ajaxRenderSectionVisualizarXRangoFechas(fechaFiltroInicial, fechaFiltro
     });
 }
 
+function ajaxRenderSectionVisualizarVentasXProducto(fechaFiltroInicial, fechaFiltroFechaFinal){
+    PopupPosition();
+    var fechaFiltroInicial = fechaFiltroInicial ? fechaFiltroInicial:getFechaActual();
+    var fechaFiltroFechaFinal = fechaFiltroFechaFinal ? fechaFiltroFechaFinal:getSumarDiasFecha(fechaFiltroInicial,7);
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'ObtenerVistaVentasXProducto/' + fechaFiltroInicial + '/' + fechaFiltroFechaFinal,
+        dataType: 'json',
+        success: function (data) {
+            $('#principalPanel').empty().append($(data.vista));
+            $("#filtrofechaInicio").val(fechaFiltroInicial);
+            $("#filtrofechaFinal").val(fechaFiltroFechaFinal);
+            construirGraficoVentasXProducto(data.ventasXProducto);
+            OcultarPopupposition();
+        },
+        error: function (data) {
+            OcultarPopupposition();
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+}
+
+
 function getFechaActual(){
     var fecha =  new Date(Date.now());
     var anio = fecha.getFullYear() ;
@@ -176,3 +204,27 @@ var myBarChart = new Chart(ctx, {
 });
 }
 
+
+function construirGraficoVentasXProducto(ventasXProductos) {
+    var arrayValoresVentas = new Array();
+    var arrayLabelProductos = new Array();
+    ventasXProductos.forEach(function(ventaXProducto) {
+        arrayValoresVentas.push(ventaXProducto.Total);
+        arrayLabelProductos.push(ventaXProducto.Nombre);
+    });
+
+    var ctx = document.getElementById("ventasXProducto");
+    var data = {
+        labels: arrayLabelProductos,
+        datasets: [
+            {
+                data: arrayValoresVentas,
+                backgroundColor: arrayColores,
+                hoverBackgroundColor: arrayColores
+            }]
+    }
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: data
+    });
+}

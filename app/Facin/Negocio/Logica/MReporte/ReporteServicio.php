@@ -27,4 +27,7 @@ class ReporteServicio
     public function  ReporteGastosXRangoFechas($idEmpresa,$fechaInicialFiltro,$fechaFinalFiltro){
         return $this-> reporteRepositorio->ReporteGastosXRangoFechas($idEmpresa,$fechaInicialFiltro,$fechaFinalFiltro);
     }
+    public function ObtenerVentasXProducto($idEmpresa,$fechaFiltroInicial,$fechaFiltroFechaFinal){
+        return $this-> reporteRepositorio->ObtenerVentasXProducto($idEmpresa,$fechaFiltroInicial,$fechaFiltroFechaFinal);
+    }
 }

@@ -58,27 +58,36 @@ function validarCamposFormCrearProducto()
 {
     if( $('#EsCombo').prop( "checked" ))//Preguntamos si el checkbo EsCombo esta seleccionado para eliminar el contenido para que no se vaya en request
     {
-        if(validarCamposDinamicos($('#productosSeleccionados'),'Cantidad','input','*'))
-        {
-            $("#divProveedores").html('');
-            GuardarProducto();
-        }else{
-            swal({
-                title: "Transacción con error!",
-                text: "No fue posible grabar el producto!",
-                icon: "error",
-                button: "OK",
-            });
-        }
+       if( $('#productosSeleccionados').find('input[name*=Cantidad]').length > 0)
+       {
+            if(validarCamposDinamicos($('#productosSeleccionados'),'Cantidad','input','*'))
+            {
+                GuardarProducto();
+            }else{
+                swal({
+                    title: "Transacción con error!",
+                    text: "No fue posible grabar el producto!",
+                    icon: "error",
+                    button: "OK",
+                });
+            }
+       }else{
+           swal({
+               title: "Transacción con error!",
+               text: "Seleccione los productos  combo/compuesto!",
+               icon: "error",
+               button: "OK",
+           });
+       }
 
     }
     else{
-        $("#divProductos").html('');
+       $("#divProductos").html('');
         GuardarProducto();
     }
 }
 
-//Metodo para guarda la informacion del producto retorna la vista con todos los provedores
+//Metodo para guarda la informacion del producto retorna la vista con todos los productos
 function GuardarProducto() {
 
     var form = $("#formProducto");

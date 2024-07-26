@@ -58,7 +58,7 @@
                                 @endif
                                 @if(Auth::user()->buscarRecurso('PedidosEliminados'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(3)">Pedidos Eliminados</a>
+                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(3)">Pedidos eliminados</a>
                                     </li>
                                 @endif
                                 @if(Auth::user()->buscarRecurso('Facturas'))
@@ -68,7 +68,7 @@
                                 @endif
                                 @if(Auth::user()->buscarRecurso('FacturasAnuladas'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(4)">Facturas Anuladas</a>
+                                        <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(4)">Facturas anuladas</a>
                                     </li>
                                 @endif
                             </ul>
@@ -119,14 +119,19 @@
                         <ul class="nav nav-second-level collapse" id="ulReportes">
                             @if(Auth::user()->buscarRecurso('VistaInformeDiario'))
                                 <li>
-                                    <a href="#" onclick="ajaxRenderSectionVisualizarInformeDarios()">Informe Diario</a>
+                                    <a href="#" onclick="ajaxRenderSectionVisualizarInformeDarios()">Informe diario</a>
                                 </li>
                             @endif
                             @if(Auth::user()->buscarRecurso('VistaInformeXFecha'))
                                 <li>
                                     <a href="#" onclick="ajaxRenderSectionVisualizarXRangoFechas()">Informe por fechas</a>
                                 </li>
-                                @endif
+                            @endif
+                            @if(Auth::user()->buscarRecurso('VistaVentasXProducto'))
+                                <li>
+                                    <a href="#" onclick="ajaxRenderSectionVisualizarVentasXProducto()">Ventas por producto</a>
+                                </li>
+                            @endif
                         </ul>
 
                     </li>
@@ -166,7 +171,7 @@
                             <ul class="nav nav-second-level collapse" id="ulAdministrador">
                                 @if(Auth::user()->buscarRecurso('TiposDeDocumentos'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de Documentos</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaTiposDocumentos()" >Tipos de documentos</a>
                                     </li>
                                 @endif
                                 @if(Auth::user()->buscarRecurso('TiposProductos'))
@@ -176,7 +181,7 @@
                                 @endif
                                 @if(Auth::user()->buscarRecurso('EstadosFacturas'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaEstadoFactura()">Estados de Factura</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaEstadoFactura()">Estados de factura</a>
                                     </li>
                                 @endif
                                <!-- @if(Auth::user()->buscarRecurso('TiposdeFacturas'))
@@ -186,7 +191,7 @@
                                 @endif
                                 @if(Auth::user()->buscarRecurso('MediosDePago'))
                                     <li>
-                                        <a href="#" onclick="ajaxRenderSectionListaMediosDePago()">Medios de Pago</a>
+                                        <a href="#" onclick="ajaxRenderSectionListaMediosDePago()">Medios de pago</a>
                                     </li>
                                 @endif
                             </ul>

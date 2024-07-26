@@ -66,4 +66,20 @@ class ReporteRepositorio
             ->where('Tbl_Precios_De_Compra.updated_at','>',$fechaInicialFiltro)
             ->get();
     }
+
+    public function ObtenerVentasXProducto($idEmpresa,$fechaFiltroInicial,$fechaFiltroFechaFinal){
+        return DB::table('Tbl_Facturas')
+            ->join('users', 'Tbl_Facturas.user_id','=','users.id')
+            ->join('Tbl_Sedes', 'users.Sede_id','=','Tbl_Sedes.id')
+            ->join('Tbl_Detalles_Facturas','Tbl_Facturas.id','=','Tbl_Detalles_Facturas.Factura_id')
+            ->join('Tbl_Productos','Tbl_Productos.id','=','Tbl_Detalles_Facturas.Producto_id')
+            ->select('Tbl_Productos.Nombre', DB::raw('sum(Tbl_Detalles_Facturas.SubTotal) as Total'), DB::raw('sum(Tbl_Detalles_Facturas.Cantidad) as cantidad'))
+            ->groupBy('Tbl_Detalles_Facturas.Producto_id','Tbl_Productos.Nombre')
+            ->where('Tbl_Sedes.Empresa_id', '=', $idEmpresa)
+            ->where('Tbl_Facturas.EstadoFactura_id', '=', 2)//estado de factura finalizada
+            ->where('Tbl_Facturas.updated_at','<',$fechaFiltroFechaFinal)
+            ->where('Tbl_Facturas.updated_at','>',$fechaFiltroInicial)
+            ->orderBy('total', 'desc')
+            ->get();
+    }
 }

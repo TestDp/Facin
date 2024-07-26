@@ -85,7 +85,7 @@
                         </div>
                         <div class="row" id="divProductos" hidden>
 
-                            <div class="col-md-12">
+                            <div class="col-md-12" id="colProductos">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading"><h3>Productos</h3></div>
                                     <div class="panel-body">

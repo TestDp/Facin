@@ -154,3 +154,4 @@ Route::get('mediosDePago', 'MFacturacion\MedioDePagoController@ObtenerMediosDePa
 //CONTROLADOR DE INFORME DIARIO
 Route::get('ObtenerVistaInformeDiario/{fechaFiltro}', [ReporteController::class,'ObtenerVistaInformeDiario'])->name('ObtenerVistaInformeDiario');//cargar la vista de informe diario
 Route::get('ObtenerVistaInformeXFechas/{fechaFiltroInicial}/{fechaFiltroFechaFinal}', [ReporteController::class,'ObtenerVistaInformeXFechas'])->name('ObtenerVistaInformeXFechas');//cargar la vista de informe por rango de fechas
+Route::get('ObtenerVistaVentasXProducto/{fechaFiltroInicial}/{fechaFiltroFechaFinal}', [ReporteController::class,'ObtenerVistaVentasXProducto'])->name('ObtenerVistaVentasXProducto');//carga la vista de las ventas por producto por rango de fechas
