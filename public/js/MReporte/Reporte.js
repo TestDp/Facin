@@ -72,8 +72,9 @@ function ajaxRenderSectionVisualizarXRangoFechas(fechaFiltroInicial, fechaFiltro
 
 function ajaxRenderSectionVisualizarVentasXProducto(fechaFiltroInicial, fechaFiltroFechaFinal){
     PopupPosition();
-    var fechaFiltroInicial = fechaFiltroInicial ? fechaFiltroInicial:getFechaActual();
-    var fechaFiltroFechaFinal = fechaFiltroFechaFinal ? fechaFiltroFechaFinal:getSumarDiasFecha(fechaFiltroInicial,7);
+    var fechaFiltroFechaFinal = fechaFiltroFechaFinal ? fechaFiltroFechaFinal:getFechaActual();
+    var fechaFiltroInicial = fechaFiltroInicial ? fechaFiltroInicial:getRestarDiasFecha(fechaFiltroFechaFinal,7);
+    
     $.ajax({
         type: 'GET',
         url: urlBase +'ObtenerVistaVentasXProducto/' + fechaFiltroInicial + '/' + fechaFiltroFechaFinal,
@@ -109,6 +110,15 @@ function getFechaActual(){
 function getSumarDiasFecha(fecha,days){
     var fecha =  new Date(fecha);
     fecha.setDate(fecha.getDate() + days);
+    var anio = fecha.getFullYear() ;
+    var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth();
+    var dia = fecha.getDate().toString().length == 1 ? '0' + fecha.getDate() : fecha.getDate();
+    return anio + '-' +  mes + '-' + dia;
+}
+
+function getRestarDiasFecha(fecha,days){
+    var fecha =  new Date(fecha);
+    fecha.setDate(fecha.getDate() - days);
     var anio = fecha.getFullYear() ;
     var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth();
     var dia = fecha.getDate().toString().length == 1 ? '0' + fecha.getDate() : fecha.getDate();
@@ -208,10 +218,21 @@ var myBarChart = new Chart(ctx, {
 function construirGraficoVentasXProducto(ventasXProductos) {
     var arrayValoresVentas = new Array();
     var arrayLabelProductos = new Array();
+    var i = 0;
+    var total = 0;
     ventasXProductos.forEach(function(ventaXProducto) {
-        arrayValoresVentas.push(ventaXProducto.Total);
-        arrayLabelProductos.push(ventaXProducto.Nombre);
+        if(i < 10){ //top 10 de productos
+            arrayValoresVentas.push(ventaXProducto.Total);
+            arrayLabelProductos.push(ventaXProducto.Nombre);
+        }else{
+            total = total + ventaXProducto.Total;
+        }
+        i++;
     });
+    if(total > 0){
+        arrayValoresVentas.push(total);
+        arrayLabelProductos.push('otros productos');
+    }
 
     var ctx = document.getElementById("ventasXProducto");
     var data = {
@@ -225,6 +246,12 @@ function construirGraficoVentasXProducto(ventasXProductos) {
     }
     var myPieChart = new Chart(ctx, {
         type: 'pie',
-        data: data
+        data: data,
+        options:{
+            title:{
+                display: true,
+                text: 'Top 10 de productos más vendidos'
+            }
+        }
     });
 }
