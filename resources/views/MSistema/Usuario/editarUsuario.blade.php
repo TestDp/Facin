@@ -3,43 +3,22 @@
 @section('content')
     <form id="formUsuario">
         <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" id="id" name="id" value="{{$usuario->id}}">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="panel panel-success">
                     <div class="panel-heading"><h3>Editar Usuario</h3></div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label>Nombre</label>
                                 <input id="name" name="name" type="text" class="form-control" value="{{$usuario->name}}">
                                 <span class="invalid-feedback" role="alert" id="errorname"></span>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label>Apellidos</label>
                                 <input id="last_name" name="last_name" type="text" class="form-control"value="{{$usuario->last_name}}">
                                 <span class="invalid-feedback" role="alert" id="errorlast_name"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Usuario</label>
-                                <input id="username" name="username" type="text" class="form-control"value="{{$usuario->username}}">
-                                <span class="invalid-feedback" role="alert" id="errorusername"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Correo Electrónico</label>
-                                <input id="email" name="email" type="text" class="form-control"value="{{$usuario->email}}">
-                                <span class="invalid-feedback" role="alert" id="erroremail"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Contraseña</label>
-                                <input id="password" name="password" type="password" class="form-control">
-                                <span class="invalid-feedback" role="alert" id="errorpassword"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Confirmar Contraseña</label>
-                                <input id="password_confirmation" name="password_confirmation" type="password" class="form-control">
-                                <span class="invalid-feedback" role="alert" id="errorpassword_confirmation"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -48,7 +27,11 @@
                                 <select id="Sede_id" name="Sede_id"  class="form-control"  name="language">
                                     <option value="">Seleccionar</option>
                                     @foreach($listSedes as $sede)
-                                        <option value="{{ $sede->id }}">{{ $sede->Nombre }}</option>
+                                        @if ($sede->id  == $usuario->Sede_id)
+                                            <option value="{{ $sede->id }}" selected>{{ $sede->Nombre }}</option>
+                                        @else
+                                            <option value="{{ $sede->id }}">{{ $sede->Nombre }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback" role="alert" id="errorSede_id"></span>
@@ -58,7 +41,18 @@
                                 <select id="Roles_id" name="Roles_id[]"  class="form-control" multiple name="language">
                                     <option value="">Seleccionar</option>
                                     @foreach($listRoles as $rol)
-                                        <option value="{{ $rol->id }}">{{ $rol->Nombre }}</option>
+                                        @php ($b = false)
+                                        @foreach($rolesUsuario as $rolUsuario)
+                                            @if($rolUsuario->Rol_id == $rol->id)
+                                                @php ($b = true)
+                                                @break
+                                            @endif
+                                        @endforeach
+                                        @if($b)
+                                            <option value="{{ $rol->id }}" selected>{{ $rol->Nombre }}</option>
+                                        @else
+                                            <option value="{{ $rol->id }}" >{{ $rol->Nombre }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback" role="alert" id="errorRoles_id"></span>
@@ -67,7 +61,7 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <button onclick="GuardarUsuario()" type="button" class="btn btn-success">Crear Usuario</button>
+                                <button onclick="ModificarUsuario()" type="button" class="btn btn-success">Editar usuario</button>
                             </div>
                         </div>
 

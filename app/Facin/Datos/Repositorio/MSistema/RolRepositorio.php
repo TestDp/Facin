@@ -11,6 +11,7 @@ namespace Facin\Datos\Repositorio\MSistema;
 
 use Facin\Datos\Modelos\MSistema\RecursoSistemaPorRol;
 use Facin\Datos\Modelos\MSistema\Rol;
+use Facin\Datos\Modelos\MSistema\Rol_Por_Usuario;
 use Illuminate\Support\Facades\DB;
 
 class RolRepositorio
@@ -64,6 +65,12 @@ class RolRepositorio
     public function ObtenerRolesSupeAdmin($idEmpreesa){
         return Rol::where('Empresa_id', '=', $idEmpreesa)
                     ->OrWhere('Empresa_id','=',null) ->get();
+    }
+
+    //funcion para devolver los registros de la tabla roles x usuario
+    public  function ObtenerRolesUsuario($idUsuario)
+    {
+        return Rol_Por_Usuario::where('user_id','=',$idUsuario)->get();
     }
 
 }

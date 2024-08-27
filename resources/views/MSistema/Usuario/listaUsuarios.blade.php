@@ -34,6 +34,45 @@
                                         <td> <button onclick="ajaxRenderSectionEditarUsuario({{$usuario->id}})" type="button" class="btn btn-default" aria-label="Left Align" title="Editar Usuario">
                                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
                                             </button>
+                                            <button   type="button" class="btn btn-default" data-toggle="modal" data-target="#modalContrasena{{$usuario->id}}" title="Cambiar contraseña">
+                                                <span class="glyphicon glyphicon-lock" aria-hidden="true" ></span>
+                                            </button>
+                                            <!--modal cambio de contraseña-->
+                                            <form id="formContrasena" name="formContrasena">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+                                                <input type="hidden" id="id" name="id" value="{{$usuario->id}}">
+                                                <div class="modal fade" id="modalContrasena{{$usuario->id}}" role="dialog">
+                                                    <div class="modal-dialog">
+                                                        <!-- Modal content-->
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                <h4 class="modal-title">Cambiar Contraseña a {{$usuario->name}}</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        Contraseña
+                                                                        <input id="password" name="password" type="password" class="form-control">
+                                                                        <span class="invalid-feedback" role="alert" id="errorpassword"></span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        Confirmar Contraseña
+                                                                        <input id="password_confirmation" name="password_confirmation" type="password" class="form-control">
+                                                                        <span class="invalid-feedback" role="alert" id="errorpassword_confirmation"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button onclick="CambiarContrasena(this)" type="button" class="btn btn-success" data-dismiss="modal">Cambiar</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!--modal cambio de contraseña-->
                                         </td>
                                     </tr>
                                 @endforeach

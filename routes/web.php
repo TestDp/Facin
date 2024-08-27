@@ -17,6 +17,7 @@ use App\Http\Controllers\MInventario\EquivalenciaController;
 use App\Http\Controllers\MInventario\InventarioController;
 use App\Http\Controllers\MInventario\ProductoController;
 use App\Http\Controllers\MReporte\ReporteController;
+use App\Http\Controllers\MSistema\UsuarioController;
 use Illuminate\Support\Facades\DB;
 
 DB::listen(function ($query){
@@ -57,9 +58,11 @@ Route::get('roles', 'MSistema\RolController@ObtenerRoles')->name('roles');//Obti
 //CONTROLADOR USUARIOS
 Route::get('crearUsuario', 'MSistema\UsuarioController@CrearUsuarioEmpresa')->name('crearUsuario');//cargar la vista para crear un usuario
 Route::get('editarUsuario/{idUsuario}','MSistema\UsuarioController@EditarUsuarioEmpresa')->name('editarUsuario');//Cargar la vista para editar un usuario
-Route::post('guardarUsuario', 'MSistema\UsuarioController@GuardarUsuarioEmpresa')->name('guardarUsuario');//Guardar la informacion del usuario
+Route::post('guardarUsuario',[UsuarioController::class,'GuardarUsuarioEmpresa'])->name('guardarUsuario');//Guardar la informacion del usuario
+Route::post('modificarUsuario',[UsuarioController::class,'ModificarUsuarioEmpresa'])->name('modificarUsuario');//Modificar la informacion del usuario
 Route::get('usuarios', 'MSistema\UsuarioController@ObtenerUsuarios')->name('usuarios');//Obtiene la lista de usuarios
 Route::get('/register/verify/{code}', 'MSistema\UsuarioController@verifarCorreo'); //verificar correo electronico
+Route::post('cambiarContrasena', [UsuarioController::class,'CambiarContrasenaUsuario'])->name('cambiarContrasena');
 
 //CONTROLADOR TIPODEPRODUCTOS
 Route::get('crearTipoProducto', 'MSistema\TipoDeProductoController@CrearTipoDeProducto')->name('crearTipoProducto');//cargar la vista para crear un tipo de producto

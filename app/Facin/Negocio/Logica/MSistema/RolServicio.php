@@ -18,16 +18,15 @@ class RolServicio
         $this->rolRepositorio = $rolRepositorio;
     }
 
-    public  function GuardarRol($rol){
+    public function GuardarRol($rol){
         return $this->rolRepositorio->GuardarRol($rol);
     }
 
-    public  function  ObtenerListaRoles($idEmpreesa){
+    public function  ObtenerListaRoles($idEmpreesa){
         return $this->rolRepositorio->ObtenerListaRoles($idEmpreesa);
     }
 
-    public  function  ObtenerRol($idRol)
-    {
+    public function  ObtenerRol($idRol){
         return $this->rolRepositorio->ObtenerRol($idRol);
     }
 
@@ -37,5 +36,9 @@ class RolServicio
 
     public function ObtenerRolesSupeAdmin($idEmpreesa){
         return $this->rolRepositorio->ObtenerRolesSupeAdmin($idEmpreesa);
+    }
+
+    public function ObtenerRolesUsuario($idUsuario){
+        return $this->rolRepositorio->ObtenerRolesUsuario($idUsuario);
     }
 }

@@ -25,6 +25,25 @@ class UsuarioValidaciones
         ],$mensajes);
     }
 
+    public function ValidarFormularioEditar(array $data)
+    {
+        $mensajes = $this->mensajesFormularioCrear();
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|max:255',
+            'Roles_id' => 'required|max:255',
+            'Sede_id' => 'required|string|max:255'
+        ],$mensajes);
+    }
+
+    public function ValidarFormularioContrasena(array $data)
+    {
+        $mensajes = $this->mensajesFormularioContrasena();
+        return Validator::make($data, [
+            'password' => 'required|string|min:6|confirmed'
+        ],$mensajes);
+    }
+
     public  function  mensajesFormularioCrear(){
         return ['name.required' => 'El nombre es obligatorio',
                 'last_name.required' => 'El apellido es obligatorio',
@@ -38,5 +57,12 @@ class UsuarioValidaciones
                 'Sede_id.required' => 'La sede es obligatoria',
 
                 ];
+    }
+
+    public  function  mensajesFormularioContrasena(){
+        return [
+            'password.required' => 'La contraseña es obligatoria',
+            'password.confirmed' => 'Las contraseñas no son iguales'
+        ];
     }
 }
