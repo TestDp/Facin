@@ -32,13 +32,12 @@
                                         <td>{{$pedido->updated_at}}</td>
                                         <td id="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>
                                         <td>{{$pedido->Nombre}} {{$pedido->Apellidos}}</td>
-                                        <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal}}</td>
+                                        <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal - $pedido->DescuentoTotal}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                             {!!$listPedidos->onEachSide(2)->links()!!}
-                            {!! $listPedidos->count() !!}
                         </div>
                     </div>
                 </div>

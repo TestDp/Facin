@@ -132,7 +132,7 @@ Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearP
 Route::get('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
 Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
-Route::get('editarPedido/{idFactura}', 'MFacturacion\FacturaController@EditarFactura')->name('editarPedido');//Obtiene la vista donde se edita el producto
+Route::get('editarPedido/{idFactura}', [FacturaController::class,'EditarFactura'])->name('editarPedido');//Obtiene la vista donde se edita el producto
 Route::get('mediosDePagolist', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePagolist');//obtiene la lista de medios de pagos
 Route::post('pagarPedido', [FacturaController::class,'PagarPedido'])->name('pagarPedido');//pagar  el pedido
 Route::get('cambiarEstadoFactura/{idFactura}/{idEstadoFactura}', [FacturaController::class,'CambiarEstadoFactura'])->name('cambiarEstadoFactura');//Cambiar el estado de la factura

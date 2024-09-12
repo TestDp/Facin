@@ -27,6 +27,7 @@
                     <th>Producto</th>
                     <th>Cantidad</th>
                     <th>Vlr Unitario</th>
+                    <th>Vlr descuento</th>
                     <th>Vlr Subtotal</th>
                 </tr>
                 </thead>
@@ -36,34 +37,44 @@
                             <td>{{$productoPedido->Producto->Nombre}}</td>
                             <td>{{$productoPedido->Cantidad}}</td>
                             <td>{{$productoPedido->Producto->Precio}}</td>
-                            <td>${{$productoPedido->SubTotal}}</td>
+                            <td>{{$productoPedido->Descuento}}</td>
+                            <td>${{$productoPedido->SubTotal - $productoPedido->Descuento}}</td>
                         </tr>
                     </tbody>
                 @endforeach
                 <tfoot>
-                <tr>
-                    <th colspan="4" >Forma de pago</th>
-                </tr>
-
-                @foreach($detallePagoFactura as $detallePago)
                     <tr>
-                        <td colspan="3">
-                            @foreach($mediosPago as $medioPago)
-                                @if($medioPago->id == $detallePago->MedioDePago_id)
-                                    {{$medioPago->Nombre}}
-                                @endif
-                            @endforeach
-                        </td>
-                        <td colspan="2">
-                           $ {{$detallePago->Valor}}
-                        </td>
-
+                        <th colspan="4">SubTotal</th>
+                        <td id="tdSubTotalPedido">$ {{$pedido->VentaTotal}}</td>
                     </tr>
-                @endforeach
-                <tr>
-                    <th colspan="3">Total</th>
-                    <td colspan="2">$ {{$pedido->VentaTotal}}</td>
-                </tr>
+                    <tr>
+                        <th colspan="4">Descuentos</th>
+                        <td id="tdDescuentos">{{$pedido->DescuentoTotal}}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Total</th>
+                        <td id="tdTotalPedido">$ {{$pedido->VentaTotal - $pedido->DescuentoTotal}}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="5" >Forma de pago</th>
+                    </tr>
+
+                    @foreach($detallePagoFactura as $detallePago)
+                        <tr>
+                            <td colspan="4">
+                                @foreach($mediosPago as $medioPago)
+                                    @if($medioPago->id == $detallePago->MedioDePago_id)
+                                        {{$medioPago->Nombre}}
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>
+                               $ {{$detallePago->Valor}}
+                            </td>
+
+                        </tr>
+                    @endforeach
+
                 </tfoot>
             </table>
 

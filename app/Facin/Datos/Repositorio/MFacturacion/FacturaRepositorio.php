@@ -389,18 +389,18 @@ class FacturaRepositorio
         return MedioDePago::all();
     }
 
-    public function PagarPedido($arrayDataMediosDepago){
+    public function PagarPedido($arrayDataPagoPedido){
         DB::beginTransaction();
         try {
             $ajustarPago = false;
-            $factura =$this->ObtenerFactura($arrayDataMediosDepago[0]->Factura_id);
-            $totalMDP = Collect($arrayDataMediosDepago)->sum('Valor');
+            $factura =$this->ObtenerFactura($arrayDataPagoPedido->Factura_id);
+            $totalMDP = Collect($arrayDataPagoPedido->mediosDePago)->sum('Valor');
             $diferencia = 0;
             if($totalMDP > $factura->VentaTotal ){
                 $diferencia = $totalMDP - $factura->VentaTotal;
                 $ajustarPago = true;
             }
-            foreach ($arrayDataMediosDepago as $arrayMedioDePagoXPedido){
+            foreach ($arrayDataPagoPedido->mediosDePago as $arrayMedioDePagoXPedido){
                 $medioDePagoXPedido = new MedioDePagoXFactura();
                 if($arrayMedioDePagoXPedido->MedioDePago_id == 1 && $ajustarPago){
                     $medioDePagoXPedido->Valor =  $arrayMedioDePagoXPedido->Valor - $diferencia;
@@ -408,20 +408,22 @@ class FacturaRepositorio
                 }else{
                     $medioDePagoXPedido->Valor =  $arrayMedioDePagoXPedido->Valor;
                 }
-                $medioDePagoXPedido->Factura_id = $arrayMedioDePagoXPedido->Factura_id;
+                $medioDePagoXPedido->Factura_id = $arrayDataPagoPedido->Factura_id;
                 $medioDePagoXPedido->MedioDePago_id = $arrayMedioDePagoXPedido->MedioDePago_id;
                 $medioDePagoXPedido->save();
             }
             if($ajustarPago){
                 $medioDePagoXPedido = new MedioDePagoXFactura();
                 $medioDePagoXPedido->Valor =  - $diferencia;
-                $medioDePagoXPedido->Factura_id = $arrayMedioDePagoXPedido->Factura_id;
+                $medioDePagoXPedido->Factura_id = $arrayDataPagoPedido->Factura_id;
                 $medioDePagoXPedido->MedioDePago_id = 1;
                 $medioDePagoXPedido->save();
             }
-            $factura->Cliente_id = $arrayDataMediosDepago[0]->clienteidPedido;
+            $factura->Cliente_id = $arrayDataPagoPedido->clienteidPedido;
+            $factura->DescuentoTotal = $arrayDataPagoPedido->descuentoTotal;
             $factura->EstadoFactura_id = 2;//se pasa el pedido(factura) al estado de finalizada
             $factura->save();
+            $this->AgregarDescuentoDetallaFactura($factura->id,$arrayDataPagoPedido->descuentosXproductos);
             DB::commit();
             return ["Respuesta"=>true];
         } catch (\Exception $e) {
@@ -431,7 +433,6 @@ class FacturaRepositorio
             return $error;
         }
     }
-
 
     public function ObtenerDetallePagoFactura($idFactura){
         $mdsxf =  MedioDePagoXFactura::where('Factura_id','=',$idFactura)->get();
@@ -469,6 +470,19 @@ class FacturaRepositorio
         $factura->Comentario = $comentario;
         $factura->save();
         return ["Respuesta"=>true];
+    }
+
+    public function ObtenerDetalleFactura($idFactura){
+        return  Detalle::where('Factura_id','=',$idFactura)->get();
+    }
+
+    public function AgregarDescuentoDetallaFactura($idFactura,$arrayDescuentos){
+        $detallesfac =  $this->ObtenerDetalleFactura($idFactura);
+        foreach ($arrayDescuentos as $descuento){
+            $prodDetalle = $detallesfac->where('Producto_id','=',$descuento->idProdDtllPedido)->first();
+            $prodDetalle->Descuento = $descuento->valorDescuento;
+            $prodDetalle->save();
+        }
     }
 
 }

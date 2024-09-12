@@ -66,7 +66,7 @@
                     <input type="button" id="BtnCerrarPedido"  class="form-control btn btn-info" value="facturar" data-toggle="modal" data-target="#modalFinalizarPedido" onclick="finalizarPedido()" disabled>
                     <!-- inicio modal finalizar  Pedido-->
                         <div id="modalFinalizarPedido" name="modalFinalizarPedido"   class="modal fade">
-                            <div class="modal-dialog modal-lg" >
+                            <div class="modal-dialog modal-dialog-centered" >
                                 <!-- Modal content-->
                                 <div class="modal-content" >
                                     <div class="modal-header">
@@ -84,68 +84,80 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="panel panel-success">
-                                                <div class="panel-heading clearfix" >
-                                                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Detalle Pedido</h4>
-                                                </div>
-                                                <div class="panel-body" id="tblExporFactura">
-                                                    <table style="width:100%" class="table table-bordered">
-                                                        <thead>
-                                                            <tr >
-                                                                <th>Cantidad</th>
-                                                                <th>Producto</th>
-                                                                <th>Vlr Unitario</th>
-                                                                <th>Vlr total</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="TablasDetallePedido">
-                                                        </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th colspan="3">Total</th>
-                                                                <td id="tdTotalPedido"></td>
-                                                            </tr>
-                                                        </tfoot>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="panel panel-info">
-                                                <div class="panel-heading clearfix">
-                                                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Medios de Pago</h4>
-                                                    <div class="btn-group pull-right">
-                                                        <button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-plus" onclick="agregarMedioDePago()"></span></button>
+                                            <div class="col-md-12">
+                                                <div class="panel panel-success">
+                                                    <div class="panel-heading clearfix" >
+                                                        <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Detalle Pedido</h4>
+                                                    </div>
+                                                    <div class="panel-body" id="tblExporFactura">
+                                                        <table style="width:100%" class="table table-bordered">
+                                                            <thead>
+                                                                <tr >
+                                                                    <th>Cantidad</th>
+                                                                    <th>Producto</th>
+                                                                    <th>Vlr unitario</th>
+                                                                    <th>Vlr descuento</th>
+                                                                    <th>Vlr total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="TablasDetallePedido">
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th colspan="4">SubTotal</th>
+                                                                    <td id="tdSubTotalPedido"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="4">Descuentos</th>
+                                                                    <td id="tdDescuentos">0</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="4">Total</th>
+                                                                    <td id="tdTotalPedido"></td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
                                                     </div>
                                                 </div>
-                                                <div class="panel-body">
-                                                    <table style="width:100%" class="table table-bordered">
-                                                        <tbody id="TablaMediosPagos">
-                                                        <tr>
-                                                            <td>
-                                                                <select class="form-control" id="selMedioPago" name="selMedioPago" onchange="validarMedioDePago(this),ValidarFormularioFinalizarPedido()">
-                                                                    <option value="">seleccionar</option>
-                                                                        @foreach($mediosPago as $medioPago)
-                                                                            <option value="{{$medioPago->id}}">{{$medioPago->Nombre}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                            </td>
-                                                            <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onchange="ValidarFormularioFinalizarPedido()" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
-                                                            <td><button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-heading clearfix">
+                                                        <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Medios de Pago</h4>
+                                                        <div class="btn-group pull-right">
+                                                            <button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-plus" onclick="agregarMedioDePago()"></span></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <table style="width:100%" class="table table-bordered">
+                                                            <tbody id="TablaMediosPagos">
+                                                            <tr>
+                                                                <td>
+                                                                    <select class="form-control" id="selMedioPago" name="selMedioPago" onchange="validarMedioDePago(this),ValidarFormularioFinalizarPedido()">
+                                                                        <option value="">seleccionar</option>
+                                                                            @foreach($mediosPago as $medioPago)
+                                                                                <option value="{{$medioPago->id}}">{{$medioPago->Nombre}}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                </td>
+                                                                <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onchange="ValidarFormularioFinalizarPedido()" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
+                                                                <td><button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                            <tr>
+                                                                <th >Vuelto</th>
+                                                                <td id="tdVueltoPedido"></td>
                                                             </tr>
-                                                        </tbody>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <th >Vuelto</th>
-                                                            <td id="tdVueltoPedido"></td>
-                                                        </tr>
-                                                        </tfoot>
-                                                    </table>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        </div>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button id="cerrarModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

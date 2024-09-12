@@ -157,7 +157,7 @@ class FacturaController extends Controller
         $respuesta = $this->facturaServicio->PagarPedido($array);
         $empresa = Auth::user()->Sede->Empresa;
         $idEmpreesa = $empresa->id;
-        $idFactura = $array[0]->Factura_id;
+        $idFactura = $array->Factura_id;
         $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
         $productos = $this->productoServicio->ObtenerProductoPorEmpresaYProveedor($idEmpreesa);
         $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);

@@ -26,6 +26,7 @@
                                     <tr>
                                         <th scope="col">Producto</th>
                                         <th scope="col">Ventas</th>
+                                        <th scope="col">Descuentos</th>
                                         <th scope="col">Cantidad</th>
 
                                     </tr>
@@ -35,6 +36,7 @@
                                         <tr>
                                             <td>{{$producto->Nombre}}</td>
                                             <td>{{$producto->Total}}</td>
+                                            <td>{{$producto->descuentos}}</td>
                                             <td>{{$producto->cantidad}}</td>
 
                                         </tr>

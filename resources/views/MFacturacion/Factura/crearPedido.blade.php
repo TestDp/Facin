@@ -57,7 +57,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="panel panel-success">
                                                 <div class="panel-heading clearfix" >
                                                     <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Detalle Pedido</h4>
@@ -68,7 +68,8 @@
                                                         <tr >
                                                             <th>Cantidad</th>
                                                             <th>Producto</th>
-                                                            <th>Vlr Unitario</th>
+                                                            <th>Vlr unitario</th>
+                                                            <th>Vlr descuento</th>
                                                             <th>Vlr total</th>
                                                         </tr>
                                                         </thead>
@@ -76,7 +77,7 @@
                                                         </tbody>
                                                         <tfoot>
                                                         <tr>
-                                                            <th colspan="3">Total</th>
+                                                            <th colspan="4">Total</th>
                                                             <td id="tdTotalPedido"></td>
                                                         </tr>
                                                         </tfoot>
@@ -84,7 +85,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <div class="panel panel-info">
                                                 <div class="panel-heading clearfix">
                                                     <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Medios de Pago</h4>
@@ -104,7 +107,7 @@
                                                                     @endforeach
                                                                 </select>
                                                             </td>
-                                                            <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
+                                                            <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onchange="ValidarFormularioFinalizarPedido()" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
                                                             <td><button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>
                                                         </tr>
                                                         </tbody>

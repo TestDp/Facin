@@ -93,7 +93,7 @@
                                         <td>{{$pedido->created_at}}</td>
                                         <td id="tdEstadoPedido{{$pedido->id}}">{{$pedido->nombreEstado}}</td>
                                         <td id="tdComentarioPedido{{$pedido->id}}">{{$pedido->Comentario}}</td>
-                                        <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal}}</td>
+                                        <td id="tdTotalPedido{{$pedido->id}}">${{$pedido->VentaTotal- $pedido->DescuentoTotal}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

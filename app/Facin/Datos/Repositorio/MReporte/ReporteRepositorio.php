@@ -73,7 +73,9 @@ class ReporteRepositorio
             ->join('Tbl_Sedes', 'users.Sede_id','=','Tbl_Sedes.id')
             ->join('Tbl_Detalles_Facturas','Tbl_Facturas.id','=','Tbl_Detalles_Facturas.Factura_id')
             ->join('Tbl_Productos','Tbl_Productos.id','=','Tbl_Detalles_Facturas.Producto_id')
-            ->select('Tbl_Productos.Nombre', DB::raw('sum(Tbl_Detalles_Facturas.SubTotal) as Total'), DB::raw('sum(Tbl_Detalles_Facturas.Cantidad) as cantidad'))
+            ->select('Tbl_Productos.Nombre', DB::raw('sum(Tbl_Detalles_Facturas.SubTotal - Tbl_Detalles_Facturas.Descuento) as Total'),
+                DB::raw('sum(Tbl_Detalles_Facturas.Descuento) as descuentos'),
+                DB::raw('sum(Tbl_Detalles_Facturas.Cantidad) as cantidad'))
             ->groupBy('Tbl_Detalles_Facturas.Producto_id','Tbl_Productos.Nombre')
             ->where('Tbl_Sedes.Empresa_id', '=', $idEmpresa)
             ->where('Tbl_Facturas.EstadoFactura_id', '=', 2)//estado de factura finalizada
