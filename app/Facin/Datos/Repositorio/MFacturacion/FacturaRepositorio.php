@@ -99,8 +99,7 @@ class FacturaRepositorio
         }
     }
 
-
-    public function GuardarListaProductosPedido($arrayDataProductos){
+   /* public function GuardarListaProductosPedido($arrayDataProductos){
         DB::beginTransaction();
         try {
             $precioTotal = 0;
@@ -241,10 +240,10 @@ class FacturaRepositorio
             DB::rollback();
             return $error;
         }
-    }
+    }*/
 
     // cuando viene un producto combo este metodo transforma los productos del combo en array para poder procesarlos
-    public function ObtenerArrayDataProductos($idProductoCombo,$facturaid,$cantidadPpal,$arrayDataProductos,$esEditar,$lisDetalles){
+   /* public function ObtenerArrayDataProductos($idProductoCombo,$facturaid,$cantidadPpal,$arrayDataProductos,$esEditar,$lisDetalles){
         $prodsDelCombo = $this->productoRepositorio->ObtenerListaProductoDelComboPorProducto($idProductoCombo);
        // $listArray = collect($arrayDataProductos);
         $arrayDataProductos = [];
@@ -272,11 +271,11 @@ class FacturaRepositorio
 
         }
         return $arrayDataProductos;
-    }
+    }*/
 
     // cuando viene un producto combo este metodo transforma los productos del combo en una lista de productos detalles
     // o detalle de la factura
-    public function ObtenerListaProductosDetalle($idProductoCombo,$facturaid,$cantidadPpal,$productosDetallePpal,$esEditar){
+  /*  public function ObtenerListaProductosDetalle($idProductoCombo,$facturaid,$cantidadPpal,$productosDetallePpal,$esEditar){
         $prodsDelCombo = $this->productoRepositorio->ObtenerListaProductoDelComboPorProducto($idProductoCombo);
         $detalleProductos = Collect();
         foreach ($prodsDelCombo as $prodCombo){
@@ -291,9 +290,9 @@ class FacturaRepositorio
 
         }
         return $detalleProductos;
-    }
+    }*/
 
-    public function GuardarListaProductosPedidoCombo($arrayDataProductos,$detallesPedido){
+   /* public function GuardarListaProductosPedidoCombo($arrayDataProductos,$detallesPedido){
         foreach ($arrayDataProductos as $productoDetalle){
             $esPrincipal = $this->productoRepositorio->EsProductoPrincipal($productoDetalle->Producto_id);
             if ($esPrincipal) {
@@ -351,7 +350,7 @@ class FacturaRepositorio
 
         }
         return ["SinExistencia" => false, "producto" => '', "cantidad" => ''];
-    }
+    }*/
 
     public function CrearProductoPedido($productoId,$facturaId,$cantidad,$comentario,$precio){
         $productoPedido = new Detalle();

@@ -127,10 +127,10 @@ Route::get('guardarEquivalencia/{idProductoP}/{idProductoS}/{cantidad}',[Equival
 Route::post('guardarCliente', [ClienteController::class,'GuardarCliente'])->name('guardarCliente');//Guardar la informacion del cliente
 
 //CONTROLADOR FACTURA
-Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
+//Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
 //Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
 Route::get('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
-Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
+//Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
 Route::get('editarPedido/{idFactura}', [FacturaController::class,'EditarFactura'])->name('editarPedido');//Obtiene la vista donde se edita el producto
 Route::get('mediosDePagolist', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePagolist');//obtiene la lista de medios de pagos

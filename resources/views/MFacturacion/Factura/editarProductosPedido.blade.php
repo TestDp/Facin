@@ -142,7 +142,7 @@
                                                                             @endforeach
                                                                         </select>
                                                                 </td>
-                                                                <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" onchange="ValidarFormularioFinalizarPedido()" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
+                                                                <td><span class="glyphicon glyphicon-usd"></span><input type="number" class="precio-pedido" id="inputSubTotalMd" name="inputSubTotalMd" value="0" onchange="ValidarFormularioFinalizarPedido()" onkeyup="ValidarFormularioFinalizarPedido()"/></td>
                                                                 <td><button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-remove" onclick="eliminarMedioDePago(this)"></span></button></td>
                                                                 </tr>
                                                             </tbody>

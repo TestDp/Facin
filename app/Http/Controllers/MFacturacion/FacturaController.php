@@ -33,7 +33,7 @@ class FacturaController extends Controller
         $this->facturaServicio = $facturaServicio;
         $this->productoServicio = $productoServicio;
     }
-    public  function ObtenerFormularioCrearPedido(Request $request){
+/*    public  function ObtenerFormularioCrearPedido(Request $request){
         $urlinfo= $request->getPathInfo();
         $request->user()->AutorizarUrlRecurso($urlinfo);
         $idEmpreesa = Auth::user()->Sede->Empresa->id;
@@ -44,7 +44,7 @@ class FacturaController extends Controller
             $sections = $view->renderSections();
             return Response::json($sections['contentFormPedido']);
         }else return  view('MFacturacion/Factura/crearPedido',['ListClientes'=>$listaClientes]);
-    }
+    }*/
 
     public  function CrearFactura(Request $request){
         $urlinfo= $request->getPathInfo();
@@ -106,10 +106,10 @@ class FacturaController extends Controller
         return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,-$cantidad);
     }
 
-    public function ConfirmarProductosPedido(Request $request){
+/*    public function ConfirmarProductosPedido(Request $request){
         $data = json_decode($_POST['array']);
         return $this->facturaServicio->ConfirmarProductosPedido($data);
-    }
+    }*/
 
     //idEstado: 2-> finalizado, 1->En proceso
     public function getVistaListaPedidos(Request $request,$idEstado){

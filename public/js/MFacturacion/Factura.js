@@ -104,7 +104,7 @@ function agregarProductoPedido() {
                 dataType: 'json',
                 success: function (data) {
                     //element.disabled = false;
-                    if(data.Cantidad == 0){
+                    if(data.Cantidad <= 1){
                         swal({
                             title: "Producto sin existencia!",
                             text: "El producto  seleccionado no tiene existencia en inventario!",
@@ -590,7 +590,7 @@ function calcularVuelto() {
     var totalPedido = calcularTotalPedido();
     var totalPagado = 0;
     $("#TablaMediosPagos").find("input[name=inputSubTotalMd]").each(function(ind,lbSubtotal){
-        totalPagado = totalPagado + parseInt($(lbSubtotal).val());
+        totalPagado = totalPagado + parseInt($(lbSubtotal).val() !="" ? $(lbSubtotal).val() : 0);
     });
     var vuelto = totalPagado-totalPedido;
     $("#tdVueltoPedido").html("$"+vuelto);
@@ -616,8 +616,6 @@ function PagarPedido(element) {
             medioDePagoXPedido.nombreMedioPago = $(row).find("select[name=selMedioPago]").find('option:selected').text();
             medioDePagoXPedido.Valor = $(row).find("input[name=inputSubTotalMd]").val();
             medioDePagoXPedido.MedioDePago_id = $(row).find("select[name=selMedioPago]").val();
-           // medioDePagoXPedido.Factura_id =  $("#idPedido").val();
-           // medioDePagoXPedido.clienteidPedido = $("#Cliente_id").val();
             arregloMediosDepago.push(medioDePagoXPedido);
         });
         var dataPagoPedido = new Object();
@@ -697,10 +695,11 @@ function imprimirFactura(){
 }
 
 function crearPdfFactura(arregloMediosDepago,nombreVendedor,productosXPedido,pedido,empresa){
+    var cantidadProductos = productosXPedido.length * 5;
    var opciones = {
         orientation: 'p',
         unit: 'mm',
-        format: [75, 180]
+        format: [75, 160 + cantidadProductos]
     };
     var specialElementHandlers = {
         // element with id of "bypass" - jQuery style selector
@@ -775,6 +774,9 @@ function crearPdfFactura(arregloMediosDepago,nombreVendedor,productosXPedido,ped
     doc.text('del decreto 1625 del 1036', doc.internal.pageSize.width/2, totalLinea, null, null, 'center');
     totalLinea = totalLinea + 10;
     doc.text('MUCHAS GRACIAS POR SU COMPRA', doc.internal.pageSize.width/2, totalLinea, null, null, 'center');
+
+
+
     doc.save('factura'+ pedido.id +'.pdf');
     doc.autoPrint({variant: 'non-conform'});
     //window.open(doc.output('bloburl'), '_blank'); NO BORRAR
@@ -865,17 +867,23 @@ function guadarComentario(){
 
 function ActualizarPrecioPedido(element){
     var tr = $(element).closest('tr');
-    var valorSuTotal = parseFloat(tr.find("input[name=inputSubttalDtllPedido]").val()) - $(element).val();
+    var elementSubTotal = tr.find("input[name=inputSubttalDtllPedido]").val()
+    var valorSuTotal = parseFloat(elementSubTotal) - $(element).val();
+    if(valorSuTotal < 0){
+        valorSuTotal = 0;
+        $(element).val(elementSubTotal)
+    }
     tr.find("td[name=tdSubttalDtllPedido]").html('$'+ valorSuTotal);
     var valorTotal = parseFloat($("#lbTotalPedido").text()) - CalcularDescuentoTotal();
     $("#tdTotalPedido").html('$'+ valorTotal);
     $("#tdDescuentos").html('$'+ CalcularDescuentoTotal());
+    calcularVuelto();
 }
 
 function CalcularDescuentoTotal(){
     var descuentoTotal = 0;
     $("#TablasDetallePedido").find("input[name=inputDescuento]").each(function(ind,row){
-        descuentoTotal =  descuentoTotal + parseFloat($(row).val());
+        descuentoTotal =  descuentoTotal + parseFloat($(row).val() != ""? $(row).val() : 0);
     });
     return descuentoTotal;
 }

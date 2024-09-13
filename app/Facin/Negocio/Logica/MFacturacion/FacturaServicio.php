@@ -55,9 +55,9 @@ class FacturaServicio
 
     }
 
-    public function ConfirmarProductosPedido($arrayDataProductos){
+/*    public function ConfirmarProductosPedido($arrayDataProductos){
         return $this->facturaRepositorio->GuardarListaProductosPedido($arrayDataProductos);
-    }
+    }*/
 
     public function ObtenerListaProductosXPedido($idFactura){
         return $this->facturaRepositorio->ObtenerListaProductosXPedido($idFactura);
