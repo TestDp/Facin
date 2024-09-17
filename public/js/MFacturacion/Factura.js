@@ -540,9 +540,10 @@ function ValidarFormularioFinalizarPedido(){
         respuestaVuelto = true;
     }
     $("#TablaMediosPagos").find("select[name=selMedioPago]").each(function(ind,selMedioPago){
+        $(selMedioPago).closest('td').find("label[name=errorDianmico]").remove();
         if($(selMedioPago).val() == ''){
-            $("#cerrarModalFinalizar").attr('disabled','disabled')
-            $(selMedioPago).after('<label class="error-dinamico">Seleccione un medio de pago</label>');
+            $("#cerrarModalFinalizar").attr('disabled','disabled');
+            $(selMedioPago).after('<label name="errorDianmico" class="error-dinamico">Seleccione un medio de pago</label>');
             cantSelFalse++;
         }
     });

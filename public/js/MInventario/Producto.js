@@ -278,6 +278,7 @@ function ajaxRenderSectionDesactivarProducto(element,idproducto)
         dataType: 'json',
         success: function (data) {
             $(element).find("span").attr('class','glyphicon glyphicon-check');
+            $(element).find("span").attr('style','color:green');
             $(element).attr('onclick','ajaxRenderSectionActivarProducto(this,'+ idproducto +')');
 
         },
@@ -303,6 +304,7 @@ function ajaxRenderSectionActivarProducto(element,idproducto)
         dataType: 'json',
         success: function (data) {
             $(element).find("span").attr('class','glyphicon glyphicon-ban-circle');
+            $(element).find("span").attr('style','color:red');
             $(element).attr('onclick','ajaxRenderSectionDesactivarProducto(this,'+ idproducto +')');
 
         },
