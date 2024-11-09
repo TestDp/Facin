@@ -101,9 +101,9 @@
                                 @php
                                     $totaltransferencias = 0;
                                     foreach($ventasXDiaXMDD as $ventaXDiaMDD)
-                                       {    if($ventaXDiaMDD->MedioDePago_id == 2)
+                                       {    if($ventaXDiaMDD->MedioDePago_id != 1)
                                               {
-                                                  $totaltransferencias = $ventaXDiaMDD->Total;
+                                                  $totaltransferencias += $ventaXDiaMDD->Total;
                                               }
                                         }
 

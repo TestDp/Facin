@@ -102,7 +102,7 @@ function ajaxRenderSectionVisualizarVentasXProducto(fechaFiltroInicial, fechaFil
 function getFechaActual(){
     var fecha =  new Date(Date.now());
     var anio = fecha.getFullYear() ;
-    var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth();
+    var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth() + 1;
     var dia = fecha.getDate().toString().length == 1 ? '0' + fecha.getDate() : fecha.getDate();
     return anio + '-' +  mes + '-' + dia;
 }
@@ -111,7 +111,7 @@ function getSumarDiasFecha(fecha,days){
     var fecha =  new Date(fecha);
     fecha.setDate(fecha.getDate() + days);
     var anio = fecha.getFullYear() ;
-    var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth();
+    var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth() + 1;
     var dia = fecha.getDate().toString().length == 1 ? '0' + fecha.getDate() : fecha.getDate();
     return anio + '-' +  mes + '-' + dia;
 }
@@ -120,7 +120,7 @@ function getRestarDiasFecha(fecha,days){
     var fecha =  new Date(fecha);
     fecha.setDate(fecha.getDate() - days);
     var anio = fecha.getFullYear() ;
-    var mes = fecha.getMonth().toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth();
+    var mes = (fecha.getMonth() + 1).toString().length == 1? '0' + (fecha.getMonth() + 1) : fecha.getMonth() + 1;
     var dia = fecha.getDate().toString().length == 1 ? '0' + fecha.getDate() : fecha.getDate();
     return anio + '-' +  mes + '-' + dia;
 }
@@ -138,16 +138,20 @@ function construirGraficoVentasXFecha(fechaInicial,fechaFinal,mediosPago,ventasX
 
     var arrayValoresVentas = new Array();
     var arrayValoresGastos = new Array();
+    var ventasTotales = 0;
+    var gastosTotales = 0;
     arrayLabelFechas.forEach(function(labelFecha) {
         var ventaXfecha = ventasXfecha.find(ventaXfecha => ventaXfecha.created_at === labelFecha);
         var gastoProveedorXFecha = gastosProveedorXFecha.find(gastoXfecha => gastoXfecha.created_at === labelFecha);
         if(ventaXfecha){
             arrayValoresVentas.push(ventaXfecha.Total);
+            ventasTotales += ventaXfecha.Total;
         }else{
             arrayValoresVentas.push(0);
         }
         if(gastoProveedorXFecha){
             arrayValoresGastos.push(gastoProveedorXFecha.Total);
+            gastosTotales += gastoProveedorXFecha.Total;
         }else{
             arrayValoresGastos.push(0);
         }
@@ -169,12 +173,12 @@ var data = {
     datasets: [
         {
             data:arrayValoresVentas,
-            label: "Ventas",
+            label: "Ventas: " + ventasTotales,
             backgroundColor: arrayColores
         },
         {
             data:arrayValoresGastos,
-            label: "Gastos",
+            label: "Gastos: " +  gastosTotales,
             backgroundColor: arrayColores
         }
     ]
