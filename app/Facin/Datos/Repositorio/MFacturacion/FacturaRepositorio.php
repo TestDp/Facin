@@ -76,6 +76,7 @@ class FacturaRepositorio
             $descuentoTotal = 0;
             $producto = Producto::find($idProducto);
             $detallePedido = Detalle::where('Factura_id','=',$idFactura)->where('Producto_id','=',$idProducto)->first();
+            $cantAnt = (isset($detallePedido))? $detallePedido->Cantidad : 0;
             if(isset($detallePedido)){
                 if( $cantidad < 0 &&  $detallePedido->Cantidad == -$cantidad){
                     $this->EliminarProductoPedido($detallePedido);
@@ -87,8 +88,9 @@ class FacturaRepositorio
             }
             $this->inventarioRepositorio->ActualizarInventarioProducto($idProducto, $cantidad);
             $factura = Factura::find($idFactura);
-            $factura->CantidadTotal = $factura->CantidadTotal + $cantidad;
-            $factura->VentaTotal = $factura->VentaTotal + $cantidad*$producto->Precio;
+            $factura->CantidadTotal = ($cantidad == 1 || $cantidad == -1) ?  $factura->CantidadTotal + $cantidad :(($cantidad > 0) ? $factura->CantidadTotal + $cantidad - $cantAnt : $factura->CantidadTotal + $cantidad);
+            $factura->VentaTotal = ($cantidad == 1 || $cantidad == -1) ? $factura->VentaTotal + $cantidad * $producto->Precio :
+                                    (($cantidad > 0) ? $factura->VentaTotal + ($cantidad * $producto->Precio) - ($cantAnt * $producto->Precio):$factura->VentaTotal + ($cantidad * $producto->Precio));
             $factura->save();
             DB::commit();
             return ["Respuesta"=>true,"PrecioTotal"=>$factura->VentaTotal];
@@ -364,7 +366,7 @@ class FacturaRepositorio
     }
 
     public function ActulizarProductoPedido($detallePedido,$cantidad,$comentario,$precio){
-        $detallePedido->Cantidad = $detallePedido->Cantidad + $cantidad;
+        $detallePedido->Cantidad = ($cantidad == 1 ||  $cantidad == -1) ? $detallePedido->Cantidad + $cantidad : $cantidad;
         $detallePedido ->SubTotal = $detallePedido->Cantidad * $precio;
         $detallePedido->Comentario = $comentario;
         $detallePedido->save();

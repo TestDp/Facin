@@ -10,6 +10,7 @@ namespace App\Http\Controllers\MFacturacion;
 
 
 use App\Http\Controllers\Controller;
+use App\Jobs\FactElectronicamente;
 use Facin\Negocio\Logica\MCliente\ClienteServicio;
 use Facin\Negocio\Logica\MFacturacion\FacturaServicio;
 use Facin\Negocio\Logica\MInventario\ProductoServicio;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use stdClass;
 
 
 class FacturaController extends Controller
@@ -57,12 +59,45 @@ class FacturaController extends Controller
         $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
         $mediosPago = $this->ObtenerListaMediosDePagos($request);
         $view = View::make('MFacturacion/Factura/productosPedido',array('listProductos'=>$productos,
-            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago,));
+            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago));
         if($request->ajax()){
             $sections = $view->renderSections();
             return Response::json(['vista'=>$sections['contentFormPedido'],'Pedido'=>$Pedido]);
         }else return  View::make('MFacturacion/Factura/productosPedido',array('listProductos'=>$productos,
             'nombreVendedor'=>$nombreVendedor,'$pedido'=>$Pedido,'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago,));
+    }
+
+    public function ObtenerVistaPos(Request $request){
+        $urlinfo= $request->getPathInfo();
+        $request->user()->AutorizarUrlRecurso($urlinfo);
+        $idEmpreesa = Auth::user()->Sede->Empresa->id;
+        $idVendedor = Auth::user()->id;
+        $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
+        $productos = $this->productoServicio->ObtenerListaProductoPorEmpresa($idEmpreesa);
+        $listaClientes = $this->clienteServicio->ObtenerListaClientesXEmpresa($idEmpreesa);
+        $mediosPago = $this->ObtenerListaMediosDePagos($request);
+        if(session()->has('idPedido')){
+            $idFactura = session('idPedido');
+            $Pedido =  $this->facturaServicio->ObtenerFactura($idFactura);
+            if($Pedido->EstadoFactura_id == 1){
+                $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
+            }else{
+                $Pedido =  $this->facturaServicio->CrearFacutra($idEmpreesa,$idVendedor);
+                session(['idPedido' => $Pedido->id]);
+            }
+
+        }else{
+            $Pedido =  $this->facturaServicio->CrearFacutra($idEmpreesa,$idVendedor);
+            session(['idPedido' => $Pedido->id]);
+        }
+        $view = View::make('MFacturacion/Factura/posPedidos',array('listProductos'=>$productos,
+            'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago,
+            'productosXPedido'=>$productosXPedido));
+        if($request->ajax()){
+            $sections = $view->renderSections();
+            return Response::json($sections['content']);
+        }else return  View::make('MFacturacion/Factura/posPedidos',array('nombreVendedor'=>$nombreVendedor,
+            'ListClientes'=>$listaClientes,'mediosPago'=>$mediosPago,));
     }
 
     public function EditarFactura(Request $request,$idFactura){
@@ -98,6 +133,9 @@ class FacturaController extends Controller
         return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,1);
     }
 
+    public function AgregarProductosPedidoPos(Request $request,$idFactura,$idProducto,$cantidad){
+        return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,$cantidad);
+    }
     public function RestarProductosPedido(Request $request,$idFactura,$idProducto){
         return $this->facturaServicio->AgregarProductosPedido($idFactura,$idProducto,-1);
     }
@@ -163,6 +201,9 @@ class FacturaController extends Controller
         $productosXPedido = $this->facturaServicio->ObtenerListaProductosXPedido($idFactura);
         $nombreVendedor = Auth::user()->name .' '. Auth::user()->last_name;
         $detallePagoFactura = $this->facturaServicio->ObtenerDetallePagoFactura($idFactura);
+        $Pedido->fechafactura = $Pedido->updated_at->setTimezone('America/Bogota')->format('Y-m-d H:i:s');
+        FactElectronicamente::dispatch(json_encode(['nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,
+            'productosXPedido'=>$productosXPedido,'detallePagoFactura'=>$detallePagoFactura,'empresa' => $empresa]));
         return Response::json(['Respuesta'=>$respuesta,'listProductos'=>$productos,
             'nombreVendedor'=>$nombreVendedor,'pedido'=>$Pedido,
             'productosXPedido'=>$productosXPedido,'detallePagoFactura'=>$detallePagoFactura,'empresa' => $empresa]);

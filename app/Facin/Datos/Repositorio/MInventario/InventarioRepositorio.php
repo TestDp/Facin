@@ -59,7 +59,6 @@ class InventarioRepositorio
                $this->ActualizarInventarioProductoPrincipal($idProducto,$cantidad);
            }else{
                $equivalencia = $this->productoRepositorio->ObtenerProductoEquivalencia($idProducto);
-              // $this->ActualizarInventarioProductoPrincipal($equivalencia->ProductoPrincipal_id,$cantidad/$equivalencia->Cantidad);
                $this->ActualizarInventarioProducto($equivalencia->ProductoPrincipal_id,$cantidad/$equivalencia->Cantidad);
            }
        }

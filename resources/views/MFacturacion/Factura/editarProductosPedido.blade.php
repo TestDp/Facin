@@ -45,7 +45,7 @@
                         <td><span class="glyphicon glyphicon-usd"></span>
                             <label class="precio-pedido" id="lbsubTotal" name="lbsubTotal">{{$productoPedido->SubTotal}}</label></td>
 {{--                        <td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button></td>--}}
-                        <td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button></td>
+                        <td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" style="color:red" onclick="removerProductoPedido(this)"></span></button></td>
                     </tr>
 
                 @endforeach

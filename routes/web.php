@@ -129,8 +129,9 @@ Route::post('guardarCliente', [ClienteController::class,'GuardarCliente'])->name
 //CONTROLADOR FACTURA
 //Route::get('formPedido', 'MFacturacion\FacturaController@ObtenerFormularioCrearPedido')->name('formPedido');//cargar la vista para crear un pedido
 //Route::post('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
-Route::get('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
 //Route::post('confirmarProductosPedido', 'MFacturacion\FacturaController@ConfirmarProductosPedido')->name('confirmarProductosPedido');//Guardar el pedido
+Route::get('guardarPedido', 'MFacturacion\FacturaController@CrearFactura')->name('guardarPedido');//Guardar el pedido
+Route::get('vistaPos', [FacturaController::class,'ObtenerVistaPos'])->name('vistaPos');//Guardar el pedido
 Route::get('listaPedidos/{idEstado}', 'MFacturacion\FacturaController@getVistaListaPedidos')->name('listaPedidos');//Obtiene la lista de los pedidos
 Route::get('editarPedido/{idFactura}', [FacturaController::class,'EditarFactura'])->name('editarPedido');//Obtiene la vista donde se edita el producto
 Route::get('mediosDePagolist', 'MFacturacion\FacturaController@ObtenerListaMediosDePagos')->name('mediosDePagolist');//obtiene la lista de medios de pagos
@@ -138,6 +139,7 @@ Route::post('pagarPedido', [FacturaController::class,'PagarPedido'])->name('paga
 Route::get('cambiarEstadoFactura/{idFactura}/{idEstadoFactura}', [FacturaController::class,'CambiarEstadoFactura'])->name('cambiarEstadoFactura');//Cambiar el estado de la factura
 Route::get('imprimirFactura/{idFactura}', [FacturaController::class,'ImprimirFactura'])->name('imprimirFactura');// imprimir la factura
 Route::get('agregarProductosPedido/{idFactura}/{idProducto}',[FacturaController::class,'AgregarProductosPedido'])->name('agregarProductosPedido');//agrega productos al pedido.
+Route::get('agregarProductosPedidoPos/{idFactura}/{idProducto}/{cantidad}',[FacturaController::class,'AgregarProductosPedidoPos'])->name('agregarProductosPedidoPos');//agrega productos al pedido pos.
 Route::get('restarProductosPedido/{idFactura}/{idProducto}',[FacturaController::class,'RestarProductosPedido'])->name('agregarProductosPedido');//restar cantidad productos al pedido.
 Route::get('eliminarProductosPedido/{idFactura}/{idProducto}/{cantidad}',[FacturaController::class,'EliminarProductosPedido'])->name('eliminarProductosPedido');//restar cantidad productos al pedido.
 Route::get('guardarComentario/{idFactura}/{comentario}', [FacturaController::class,'GuardarComentario'])->name('guardarComentario');//guardar comentario

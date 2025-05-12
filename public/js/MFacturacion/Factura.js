@@ -8,7 +8,7 @@ try {
 };
 
 //function para mostar la vista donde se crea el pedido
-function ObtenerFormCrearPedido() {
+/*function ObtenerFormCrearPedido() {
     var token = $("#_token").val();
     PopupPosition();
     $.ajax({
@@ -20,6 +20,26 @@ function ObtenerFormCrearPedido() {
             $("#tablaPedidos").find('tr').removeAttr('style');
             OcultarPopupposition();
             $('#panelPedido').empty().append($(data));
+        },
+        error: function (data) {
+            OcultarPopupposition();
+        }
+    });
+}*/
+
+
+//function para mostar la vista donde se crea el pedido
+function ajaxRenderSectionVistaPos() {
+    var token = $("#_token").val();
+    PopupPosition();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'vistaPos',
+        dataType: 'json',
+        headers: {'X-CSRF-TOKEN': token},
+        success: function (data) {
+            OcultarPopupposition();
+            $('#principalPanel').empty().append($(data));
         },
         error: function (data) {
             OcultarPopupposition();
@@ -90,8 +110,8 @@ function guardarPedido(element) {
 }
 
 //funcion para agregar un producto al pedido
-function agregarProductoPedido() {
-    // element.disabled = true;
+function agregarProductoPedido(esPos) {
+
     var opcion= $('#Producto_id').find('option:selected');//obtenemos la opcion seleccionada
     if(opcion.val() !=''){
         if(!buscarProductoSecundario(opcion.val()))
@@ -103,7 +123,7 @@ function agregarProductoPedido() {
                 url: urlBase +'agregarProductosPedido/'+ idFactura + '/'+ idProducto ,
                 dataType: 'json',
                 success: function (data) {
-                    //element.disabled = false;
+
                     if(data.Cantidad <= 1){
                         swal({
                             title: "Producto sin existencia!",
@@ -113,7 +133,11 @@ function agregarProductoPedido() {
                         });
 
                     }else{
-                        agregarHtmlFilProducto(opcion);
+                        if(esPos){
+                            agregarHtmlFilProductoPos(opcion);
+                        }else{
+                            agregarHtmlFilProducto(opcion);
+                        }
                         habilitarBtnDeCerrarPedido();
                         var stringTdtotalPedido = '#tdTotalPedido'+ idFactura;
                         $(stringTdtotalPedido).html("$"+data.PrecioTotal);
@@ -139,6 +163,8 @@ function agregarProductoPedido() {
     }
 }
 
+
+
 function agregarHtmlFilProducto(opcion) {
     var row = '<tr id="rowPrducto" name="rowPrducto">';
         row = row + '<td>';
@@ -151,8 +177,27 @@ function agregarHtmlFilProducto(opcion) {
         row = row + '<td><span class="glyphicon glyphicon-usd"></span>';
         row = row + '<label class="precio-pedido" id="lbsubTotal" name="lbsubTotal">'+opcion.data('num')+'</label></td>';
         //row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-comment"></span></button></td>';
-        row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)"></span></button></td>';
+        row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" style="color:red" onclick="removerProductoPedido(this)"></span></button></td>';
         row = row + '</tr>';
+    $('#tablaProductosSeleccionados').append(row);
+    calcularTotalPedido();
+}
+
+function agregarHtmlFilProductoPos(opcion) {
+    var row = '<tr id="rowPrducto" name="rowPrducto">';
+    row = row + '<td>';
+    row = row + '<input id="ProductoSecundario_id" name="ProductoSecundario_id" type="hidden" value="'+opcion.val()+'"/><input id="esEditarProducto" name="esEditarProducto" type="hidden" value="false"/><input id="precioProducto" name="precioProducto" type="hidden" value="'+opcion.data('num')+'"/>';
+    row = row + '<button class="btn boton-menos" type="button"><span class="glyphicon glyphicon-minus" onclick="restarCantidadProductoPedidoPos(this)"></span></button>';
+    row = row + '<input type="number" class="cantidad" id="lbCantidad" name="lbCantidad" value="1" onchange="sumarCantEspeProdPedidoPos(this)"/>';
+    row = row + '<button class="btn boton-mas" type="button"><span class="glyphicon glyphicon-plus" onclick="sumarCantidadProductoPedidoPos(this)"></span></button></td>';
+    row = row + '<td><label class="nombre-producto"><p class="nombre-pedido-p" id="pNombreProducto" name="pNombreProducto">'+opcion.data('title')+'</p></label></td>';
+    row = row + '<td>$'+ opcion.data('num') +'</td>';
+    row = row + '<td><span class="glyphicon glyphicon-usd"></span><input type="number" value="0" class="precio-pedido" id="inputDescuento" name="inputDescuento" onkeyup="ActualizarPrecioPedido(this)"/>' +
+        '<input type="hidden" value="'+opcion.data('num')+'"  id="inputSubttalDtllPedido" name="inputSubttalDtllPedido"/>' +
+        '<input type="hidden" value="'+opcion.val()+'"  id="inputIdProdDtllPedido" name="inputIdProdDtllPedido"/></td>';
+    row = row + '<td><label name="lbsubTotal">'+opcion.data('num')+'</label></td>';
+    row = row + '<td><button class="extras-pedido" type="button"><span class="glyphicon glyphicon-remove" onclick="removerProductoPedido(this)" style="color:red"></span></button></td>';
+    row = row + '</tr>';
     $('#tablaProductosSeleccionados').append(row);
     calcularTotalPedido();
 }
@@ -205,6 +250,98 @@ function sumarCantidadProductoPedido(element) {
 
 }
 
+//funcion para sumar 1 a la cantidad del producto del pedido en el pos
+function sumarCantidadProductoPedidoPos(element) {
+    var row = $(element).closest("tr[name=rowPrducto]");
+    var label = row.find("input[name=lbCantidad]");
+    var labelCantidad = row.find("input[name=lbCantidad]").val();
+    var cantidad = parseInt(labelCantidad) + 1;
+    label.val(cantidad);
+    var idProducto = $(element).closest("tr[name=rowPrducto]").find("input[name=ProductoSecundario_id]").val();
+    var idFactura = $("#idPedido").val();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'agregarProductosPedido/'+ idFactura + '/'+ idProducto ,
+        dataType: 'json',
+        success: function (data) {
+
+            if(data.Cantidad <= 1){
+                label.val(cantidad - 1);
+                swal({
+                    title: "Producto sin existencia!",
+                    text: "El producto  seleccionado no tiene existencia en inventario!",
+                    icon: "error",
+                    button: "OK",
+                });
+
+            }else{
+                var precioProducto = parseInt(row.find("input[name=precioProducto]").val());
+                var labelSubtotal = row.find("label[name=lbsubTotal]");
+                labelSubtotal.html(cantidad * precioProducto);
+                var valortotalConDescuentos = calcularTotalPedido();
+                $("#tdTotalPedido").html(valortotalConDescuentos)
+                habilitarBtnDeCerrarPedido();
+            }
+        },
+        error: function (data) {
+            label.html(cantidad - 1);
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+
+
+}
+
+//funcion para sumar una  cantidad especifica del producto del pedido pos
+function sumarCantEspeProdPedidoPos(element) {
+    var row = $(element).closest("tr[name=rowPrducto]");
+    var inputCantidad = $(element);
+    var idProducto = $(element).closest("tr[name=rowPrducto]").find("input[name=ProductoSecundario_id]").val();
+    var idFactura = $("#idPedido").val();
+    $.ajax({
+        type: 'GET',
+        url: urlBase +'agregarProductosPedidoPos/'+ idFactura + '/'+ idProducto  + '/' + $(element).val(),
+        dataType: 'json',
+        success: function (data) {
+
+            if(data.Cantidad <= 1){
+                inputCantidad.val($(inputCantidad).val());
+                swal({
+                    title: "Producto sin existencia!",
+                    text: "El producto  seleccionado no tiene existencia en inventario!",
+                    icon: "error",
+                    button: "OK",
+                });
+
+            }else{
+                var precioProducto = parseInt(row.find("input[name=precioProducto]").val());
+                var labelSubtotal = row.find("label[name=lbsubTotal]");
+                labelSubtotal.html(cantidad * precioProducto);
+                var valortotalConDescuentos = calcularTotalPedido();
+                $("#tdTotalPedido").html(valortotalConDescuentos)
+                habilitarBtnDeCerrarPedido();
+
+            }
+        },
+        error: function (data) {
+            label.html(cantidad - 1);
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+
+
+}
+
 //funcion para restar 1 a la cantidad del producto del pedido
 function restarCantidadProductoPedido(element) {
     element.disabled = true;
@@ -229,6 +366,56 @@ function restarCantidadProductoPedido(element) {
                     $(stringTdtotalPedido).html("$"+data.PrecioTotal);
                     labelSubtotal.html(cantidad * precioProducto);
                     calcularTotalPedido();
+                }else{
+                    label.html(cantidad + 1);
+                    swal({
+                        title: "Operación incorrecta!",
+                        text: "no fue posible restar la cantidad, intenta de nuevo!",
+                        icon: "error",
+                        button: "OK",
+                    });
+                }
+
+            },
+            error: function (data) {
+                element.disabled = false;
+                var errors = data.responseJSON;
+                if (errors) {
+                    $.each(errors, function (i) {
+                        console.log(errors[i]);
+                    });
+                }
+            }
+        });
+    }
+
+}
+
+//funcion para restar 1 a la cantidad del producto del pedido Pos
+function restarCantidadProductoPedidoPos(element) {
+    element.disabled = true;
+    var row = $(element).closest("tr[name=rowPrducto]");
+    var labelCantidad = row.find("input[name=lbCantidad]").val();
+    var cantidad = parseInt(labelCantidad) - 1;
+    if(cantidad >= 1){
+        var label = row.find("input[name=lbCantidad]");
+        label.val(cantidad);
+        var idProducto = $(element).closest("tr[name=rowPrducto]").find("input[name=ProductoSecundario_id]").val();
+        var idFactura = $("#idPedido").val();
+        $.ajax({
+            type: 'GET',
+            url: urlBase +'restarProductosPedido/'+ idFactura + '/'+ idProducto ,
+            dataType: 'json',
+            success: function (data) {
+                element.disabled = false;
+                if(data.Respuesta){
+                    var precioProducto = parseInt(row.find("input[name=precioProducto]").val());
+                    var labelSubtotal = row.find("label[name=lbsubTotal]");
+                    var stringTdtotalPedido = '#tdTotalPedido'+ idFactura;
+                    $(stringTdtotalPedido).html("$"+data.PrecioTotal);
+                    labelSubtotal.html(cantidad * precioProducto);
+                    var valortotalConDescuentos = calcularTotalPedido();
+                    $("#tdTotalPedido").html(valortotalConDescuentos)
                 }else{
                     label.html(cantidad + 1);
                     swal({

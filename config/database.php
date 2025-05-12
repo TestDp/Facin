@@ -77,6 +77,20 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
+        // Conexión a la base de datos para las colas
+        'queue_mysql' => [
+            'driver' => 'mysql',
+            'host' => env('QUEUE_DB_HOST', '127.0.0.1'),
+            'port' => env('QUEUE_DB_PORT', '3306'),
+            'database' => env('QUEUE_DB_DATABASE', 'base_de_datos_colas'),
+            'username' => env('QUEUE_DB_USERNAME', 'usuario'),
+            'password' => env('QUEUE_DB_PASSWORD', 'contraseña'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
 
     ],
 

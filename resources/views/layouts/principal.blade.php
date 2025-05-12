@@ -56,6 +56,11 @@
                                         <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(1)">Pedidos</a>
                                     </li>
                                 @endif
+                                @if(Auth::user()->buscarRecurso('POS'))
+                                    <li>
+                                        <a href="#" onclick="ajaxRenderSectionVistaPos(1)">Pos</a>
+                                    </li>
+                                @endif
                                 @if(Auth::user()->buscarRecurso('PedidosEliminados'))
                                     <li>
                                         <a href="#" onclick="ajaxRenderSectionVistaListaPedidos(3)">Pedidos eliminados</a>
